@@ -69,7 +69,7 @@ class AdminController extends Controller
     //=================================================================
     public function edit($id)
     {
-        $data = User::find($id);
+        $data = User::where('id',$id)->firstOrFail();
         return view('backend.admin.edit',['data'=>$data]);
     }
 
@@ -154,6 +154,5 @@ class AdminController extends Controller
             File::delete('img/admin/'.$data->gambar);
         }
         User::destroy($id);
-        return redirect('/admin')->with('status','Sukses menghapus data');
     }
 }

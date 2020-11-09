@@ -9,6 +9,13 @@
              <a href="{{url('/admin')}}" class="nav-link">Admin</a>
           </li>
           <li class="nav-item dropdown">
+            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Master Data</a>
+            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+              <li><a href="{{url('/barang')}}" class="dropdown-item">Barang </a></li>
+              <li><a href="{{url('/barang-keyword')}}" class="dropdown-item">Barang Keyword</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Dropdown</a>
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
               <li><a href="#" class="dropdown-item">Some action </a></li>
