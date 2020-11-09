@@ -16,7 +16,7 @@ class CreateBarangkeyTable extends Migration
         Schema::create('barangkey', function (Blueprint $table) {
             $table->id();
             $table->text('kode_barang')->nullable();
-            $table->text('key')->nullable();
+            $table->text('key_barang')->nullable();
         });
     }
 
