@@ -16,7 +16,7 @@ $(function () {
             { data: 'key_barang', name: 'key_barang' },
             {
                 render: function (data, type, row) {
-                    return '<a href="/barang/' + row['id'] + '/edit" class="btn btn-success"><i class="fa fa-wrench"></i></a> <button class="btn btn-danger" onclick="hapusdata(' + row['id'] + ')"><i class="fa fa-trash"></i></button>'
+                    return '<a href="/barang-keyword/' + row['id'] + '/edit" class="btn btn-success"><i class="fa fa-wrench"></i></a> <button class="btn btn-danger" onclick="hapusdata(' + row['id'] + ')"><i class="fa fa-trash"></i></button>'
                 },
                 "className": 'text-center',
                 "orderable": false,

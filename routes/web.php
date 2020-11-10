@@ -16,6 +16,8 @@ Route::get('/data-admin','backend\AdminController@listdata');
 Route::resource('/admin','backend\AdminController');
 
 Route::get('/data-barang','backend\BarangController@listdata');
+Route::post('/import-barang','backend\BarangController@importbarang');
+Route::get('/export-barang','backend\BarangController@exportbarang');
 Route::resource('/barang','backend\BarangController');
 
 Route::get('/data-barang-keyword','backend\BarangKeyController@listdata');

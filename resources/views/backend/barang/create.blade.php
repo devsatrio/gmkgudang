@@ -27,11 +27,10 @@
                     <div class="card-header">
                         <h3 class="card-title">Tambah Data</h3>
                     </div>
-                    <form method="POST" role="form" enctype="multipart/form-data"
-                        action="{{url('/barang')}}">
+                    <form method="POST" role="form" enctype="multipart/form-data" action="{{url('/barang')}}">
                         @csrf
                         <div class="card-body">
-                        <div class="form-group">
+                            <div class="form-group">
                                 <label for="exampleInputEmail1">Kode</label>
                                 <input type="text" class="form-control" name="kode_barang" required autofocus>
                             </div>
@@ -54,8 +53,27 @@
                         </div>
 
                         <div class="card-footer">
-                            <button type="reset" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>
                             <button type="submit" class="btn btn-primary float-right">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Import Data</h3>
+                    </div>
+                    <form method="POST" role="form" enctype="multipart/form-data" action="{{url('/import-barang')}}">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Upload File</label>
+                                <input type="file" class="form-control" name="filenya"
+                                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="reset" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>
+                            <button type="submit" class="btn btn-success float-right">Upload</button>
                         </div>
                     </form>
                 </div>

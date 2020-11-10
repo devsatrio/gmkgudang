@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Imports\BarangImport;
 use Illuminate\Http\Request;
-use DataTables;
 use App\models\Barang;
+use App\Exports\BarangExport;
+use DataTables;
+use Excel;
 use DB;
 
 class BarangController extends Controller
@@ -51,12 +54,28 @@ class BarangController extends Controller
     {
         //
     }
-
+    
     //=================================================================
     public function edit($id)
     {
         $data = Barang::where('id',$id)->firstOrFail();
         return view('backend/barang/edit',['data'=>$data]);
+    }
+
+    //=================================================================
+    public function exportbarang()
+    {
+        $namafile = "Data_Barang.xlsx";   
+        return Excel::download(new BarangExport(),$namafile);
+    }
+
+    //=================================================================
+    public function importbarang(Request $request)
+    {
+        if($request->hasFile('filenya')){
+            Excel::import(new BarangImport, request()->file('filenya'));
+        }
+        return redirect('/barang')->with('status', 'Import data sukses');
     }
 
     //=================================================================

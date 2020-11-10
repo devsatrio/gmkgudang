@@ -39,6 +39,11 @@
                                     Data
                                 </button>
                             </a>
+                            <a href="{{url('/export-barang')}}">
+                                <button type="button" class="btn btn-default btn-sm">
+                                    <i class="fas fa-file-excel"></i> Export Data
+                                </button>
+                            </a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -73,7 +78,7 @@
                 </div>
             </div>
         </div>
-    </div><!-- /.container-fluid -->
+    </div>
 </div>
 @endsection
 

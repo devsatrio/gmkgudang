@@ -37,14 +37,14 @@ class BarangkeyController extends Controller
     //=================================================================
     public function store(Request $request)
     {
-        $data = $request->key_barangbarang;
+        $data = $request->keybarang;
         for($i=0; $i < count($data) ; $i++){
                 $datanya[] = [
                 'kode_barang'     => $request->barang,
-                'key_barang'      => $request->key_barangbarang[$i]
+                'key_barang'      => $request->keybarang[$i]
             ];
            }
-        Barangkey_barang::insert($datanya);
+        BarangKey::insert($datanya);
         return redirect('barang-keyword')->with('statusmanual','Input Data Sukses');
     }
 
@@ -57,13 +57,19 @@ class BarangkeyController extends Controller
     //=================================================================
     public function edit($id)
     {
-        //
+        $barang = BarangKey::where('id',$id)->firstOrFail();
+        return view('backend/barangkeyword/edit',['data'=>$barang]);
     }
 
     //=================================================================
     public function update(Request $request, $id)
     {
-        //
+        BarangKey::find($id)
+            ->update([
+                'key_barang'=>$request->keybarang,
+            ]);
+
+        return redirect('barang-keyword')->with('status','Sukses memperbarui data');
     }
 
     //=================================================================
