@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Auth::routes(['register'=>false]);
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', 'backend\HomeController@index')->name('home');
 Route::get('/edit-profile', 'backend\HomeController@editprofile')->name('editprofile');
