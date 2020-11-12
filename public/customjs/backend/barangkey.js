@@ -10,10 +10,10 @@ $(function () {
             {extend: 'pdf', title:'Data Barang Keyword',exportOptions: {
                 columns: [0,1,2,3]
             }},
-            {extend: 'excel', title: 'Data Barang Keyword',exportOptions: {
+            {extend: 'excel', title: 'Data Barang Keyword                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ',exportOptions: {
                 columns: [0,1,2,3]
             }},
-            {extend:'print',title: 'Data Barang Keyword',exportOptions: {
+            {extend:'print',title: 'Data Barang Keyword                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ',exportOptions: {
                 columns: [0,1,2,3]
             }},
         ],
