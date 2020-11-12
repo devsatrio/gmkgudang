@@ -4,6 +4,19 @@ $(function () {
         processing: true,
         serverSide: true,
         order: [[0, "desc"]],
+        dom: 'Blfrtip',
+        pageLength: 20,
+        buttons : [
+            {extend: 'pdf', title:'Data Barang Keyword',exportOptions: {
+                columns: [0,1,2,3]
+            }},
+            {extend: 'excel', title: 'Data Barang Keyword                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ',exportOptions: {
+                columns: [0,1,2,3]
+            }},
+            {extend:'print',title: 'Data Barang Keyword                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ',exportOptions: {
+                columns: [0,1,2,3]
+            }},
+        ],
         ajax: '/data-barang-keyword',
         columns: [
             {

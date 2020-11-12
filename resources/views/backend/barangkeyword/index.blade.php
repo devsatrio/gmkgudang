@@ -7,6 +7,7 @@
 @section('customcss')
 <link rel="stylesheet" href="{{asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
 <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
 @endsection
 
 @section('content')
@@ -76,9 +77,19 @@
 @endsection
 
 @push('customjs')
+<script src="{{asset('assets/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/jquery.dataTables.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
-<script src="{{asset('assets/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+
+<script src="{{asset('assets/plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables/buttons.flash.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables/jszip.min.js')}}"></script>
+
+<script src="{{asset('assets/plugins/datatables/pdfmake.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables/vfs_fonts.js')}}"></script>
+
+<script src="{{asset('assets/plugins/datatables/buttons.html5.min.js')}}"></script>
+<script src="{{asset('assets/plugins/datatables/buttons.print.min.js')}}"></script>
 @endpush
 
 @push('customscripts')

@@ -55,6 +55,26 @@
                         </div>
                     </form>
                 </div>
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Import Data</h3>
+                    </div>
+                    <form method="POST" role="form" enctype="multipart/form-data" action="{{url('/import-barang-keyword')}}">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Upload File</label>
+                                <input type="file" class="form-control" name="filenya"
+                                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="reset" onclick="history.go(-1)" class="btn btn-danger">Kembali</button>
+                            <button type="submit" class="btn btn-success float-right">Upload</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

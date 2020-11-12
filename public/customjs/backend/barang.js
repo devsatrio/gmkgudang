@@ -4,6 +4,19 @@ $(function () {
         processing: true,
         serverSide: true,
         order: [[0, "desc"]],
+        dom: 'Blfrtip',
+        pageLength: 20,
+        buttons : [
+            {extend: 'pdf', title:'Data Barang',exportOptions: {
+                columns: [0,1,2,3,4]
+            }},
+            {extend: 'excel', title: 'Data Barang',exportOptions: {
+                columns: [0,1,2,3,4]
+            }},
+            {extend:'print',title: 'Data Barang',exportOptions: {
+                columns: [0,1,2,3,4]
+            }},
+        ],
         ajax: '/data-barang',
         columns: [
             {
@@ -13,8 +26,18 @@ $(function () {
             },
             { data: 'kode_barang', name: 'kode_barang' },
             { data: 'nama', name: 'nama' },
-            { data: 'stok', name: 'stok' },
-            { data: 'harga', name: 'harga' },
+            {
+                render: function (data, type, row) {
+                    return row['stok'] +" Pcs";
+                },
+                "className": 'text-center',
+            },
+            {
+                render: function (data, type, row) {
+                    return "Rp. " + rupiah(row['harga']);
+                },
+                "className": 'text-right',
+            },
             {
                 render: function (data, type, row) {
                     return '<a href="/barang/' + row['id'] + '/edit" class="btn btn-success"><i class="fa fa-wrench"></i></a> <button class="btn btn-danger" onclick="hapusdata(' + row['id'] + ')"><i class="fa fa-trash"></i></button>'
@@ -72,3 +95,17 @@ function hapusdata(kode) {
     })
 }
 window.hapusdata = hapusdata;
+
+function rupiah(bilangan) {
+    var number_string = bilangan.toString(),
+        sisa = number_string.length % 3,
+        rupiah = number_string.substr(0, sisa),
+        ribuan = number_string.substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+        separator = sisa ? '.' : '';
+        rupiah += separator + ribuan.join('.');
+    }
+
+    return rupiah;
+}
