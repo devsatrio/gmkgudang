@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Imports\BarangKeyImport;
+use App\Exports\BarangKeyExport;
 use Illuminate\Http\Request;
 use App\models\Barang;
 use App\models\BarangKey;
+use Excel;
 use DataTables;
 use DB;
 
@@ -46,6 +49,15 @@ class BarangkeyController extends Controller
            }
         BarangKey::insert($datanya);
         return redirect('barang-keyword')->with('statusmanual','Input Data Sukses');
+    }
+
+    //=================================================================
+    public function importbarangkey(Request $request)
+    {
+        if($request->hasFile('filenya')){
+            Excel::import(new BarangKeyImport, request()->file('filenya'));
+        }
+        return redirect('barang-keyword')->with('status', 'Import data sukses');
     }
 
     //=================================================================

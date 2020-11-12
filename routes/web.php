@@ -21,4 +21,5 @@ Route::get('/export-barang','backend\BarangController@exportbarang');
 Route::resource('/barang','backend\BarangController');
 
 Route::get('/data-barang-keyword','backend\BarangKeyController@listdata');
+Route::post('/import-barang-keyword','backend\BarangKeyController@importbarangkey');
 Route::resource('/barang-keyword','backend\BarangKeyController');

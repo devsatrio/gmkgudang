@@ -4,9 +4,9 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Imports\BarangImport;
+use App\Exports\BarangExport;
 use Illuminate\Http\Request;
 use App\models\Barang;
-use App\Exports\BarangExport;
 use DataTables;
 use Excel;
 use DB;
