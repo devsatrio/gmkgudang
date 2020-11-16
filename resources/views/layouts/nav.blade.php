@@ -19,7 +19,7 @@
             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Transaksi</a>
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
               <li><a href="{{url('/barang')}}" class="dropdown-item">Trx Lazada </a></li>
-              <li><a href="{{url('/barang')}}" class="dropdown-item">Trx Shopee </a></li>
+              <li><a href="{{route('im.shopee')}}" class="dropdown-item">Trx Shopee </a></li>
               <li><a href="{{url('/barang')}}" class="dropdown-item">Trx Toped </a></li>
             </ul>
           </li>

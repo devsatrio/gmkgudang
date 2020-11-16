@@ -13,7 +13,7 @@ class CreateBarangTrxesTable extends Migration
      */
     public function up()
     {
-        Schema::create('barang_trxes', function (Blueprint $table) {
+        Schema::create('barang_trx', function (Blueprint $table) {
             $table->id();
             $table->string('noresi', 100);
             $table->string('sku', 100)->default('0');

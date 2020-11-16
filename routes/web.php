@@ -24,3 +24,9 @@ Route::resource('/barang','backend\BarangController');
 Route::get('/data-barang-keyword','backend\BarangKeyController@listdata');
 Route::post('/import-barang-keyword','backend\BarangKeyController@importbarangkey');
 Route::resource('/barang-keyword','backend\BarangKeyController');
+
+Route::prefix('import-data')->group(function(){
+    Route::get('v-shopee','backend\TrxController@importshopee')->name('im.shopee');
+    Route::post('import-shopee','backend\TrxController@actimportshopee')->name('importshopee');
+    Route::get('sp-nonstok','backend\TrxController@spnonstok')->name('sp.nonstok');
+});
