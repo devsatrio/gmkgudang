@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 class ShopeeImport implements ToCollection
 {
     /**
@@ -65,6 +66,9 @@ class ShopeeImport implements ToCollection
                                     'admin'=>$admin,
                                     'total'=>$total,
                                     'sts_valid'=>$valid,
+                                    'jenis'=>'shopee',
+                                    'created_at'=>date('Y-m-d H:i:s'),
+                                    'updated_at'=>date('Y-m-d H:i:s'),
                                 ];
                             
                     }

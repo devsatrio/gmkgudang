@@ -29,4 +29,12 @@ Route::prefix('import-data')->group(function(){
     Route::get('v-shopee','backend\TrxController@importshopee')->name('im.shopee');
     Route::post('import-shopee','backend\TrxController@actimportshopee')->name('importshopee');
     Route::get('sp-nonstok','backend\TrxController@spnonstok')->name('sp.nonstok');
+    // import lazada
+    Route::get('v-lazada','backend\TrxController@importLazada')->name('im.lazada');
+    Route::post('import-lazada','backend\TrxController@actimportlazada')->name('importlazada');
+    Route::get('data-lazada/{jns}','backend\TrxController@datalazada')->name('datalazada');
+    // export barang non stok
+    Route::get('export-nonstok-lazada/{jns}','backend\TrxController@exportNonStok')->name('exp.nostok.lazada');
+    // barang Tidak lengkap
+    Route::get('barang-nonlengkap','backend\TrxController@NonLengkap')->name('brgnonlengkap');
 });
