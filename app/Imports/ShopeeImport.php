@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\models\Barang;
 use App\models\temp_import;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -38,22 +39,29 @@ class ShopeeImport implements ToCollection
                                     $valid="belum";
                                 }else{
                                     $sku = $data_sku[1];
-                                    $valid="valid";
+                                    $valid="belum";
                                 }
                             }elseif($jumlahdata==7){
                                 $data_sku =  explode(':',$datatext[4]);
                                 $data_sku_induk = explode(':',$datatext[5]);
                                 $sku = $data_sku[1];
-                                
+
                                 if( $data_sku_induk[1]==''||$data_sku_induk[1]==' ' || $data_sku[1]=='' || $data_sku[1]==' '){
                                     $valid="belum";
                                 }else{
                                     $sku_induk = $data_sku_induk[1];
-                                    $valid="valid";
+                                    // check di data barang Apa Sudah Ada
+                                    $bar=Barang::where('kode_barang',$sku_induk)->count();
+                                    if($bar>0){
+                                        $valid="valid";
+                                    }else{
+                                        $valid="belum";
+                                    }
                                 }
                             }
                             $harg=preg_replace('/[Rp.,.]/','',$harga[1]);
                             $total=$jumlah[1]*$harg;
+
                             $data[] = [
                                     'noresi' => $row[0],
                                     'sku'=>$sku,
@@ -70,7 +78,7 @@ class ShopeeImport implements ToCollection
                                     'created_at'=>date('Y-m-d H:i:s'),
                                     'updated_at'=>date('Y-m-d H:i:s'),
                                 ];
-                            
+
                     }
                     echo "<hr>";
                 }

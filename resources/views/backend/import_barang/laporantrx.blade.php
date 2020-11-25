@@ -4,14 +4,14 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('title')
-    shopee import
+    Laporan Transaksi
 @endsection
 @section('content')
     <div class="content-header">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1 class="m-0 text-dark">Import Dari Shopee</h1>
+                    <h1 class="m-0 text-dark">Laporan Transaksi Market Online</h1>
                 </div>
             </div>
         </div>
@@ -30,19 +30,19 @@
                     <div class=" card card-default">
                         <div class="card-header">
                             <div class="card-title">
-                                import data dari shopee : <u>{{$desk}}</u>
+                               Laporan Trx Market
                             </div>
-                            <div class="card-tools">
+                            {{-- <div class="card-tools">
                                <a href="#" data-target="#imprt" data-toggle="modal"><div class="badge badge-primary mr-2">import data</div></a>
-                               {{-- <a href="{{route('sp.data',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Tidak Ada di Stok</div></a> --}}
-                               <a href="{{route('sp.data',['Non-Lengkap'])}}" ><div class="badge badge-danger mr-2">Barang Belum Lengkap</div></a>
-                            </div>
+                               <a href="{{route('datalazada',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Tidak Ada di Stok</div></a>
+                               <a href="{{route('datalazada',['Non-Lengkap'])}}" ><div class="badge badge-danger mr-2">Barang Belum Lengkap</div></a>
+                            </div> --}}
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-12 mb-3">
+                                {{-- <div class="col-12 mb-3">
                                     <button style="display: none" id="btnacc" onclick="acc()" class="btn btn-primary float-right"><i class="fa fa-check"></i> Acc Transaksi</button>
-                                </div>
+                                </div> --}}
                                 <div class="col-12">
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered">
@@ -56,9 +56,9 @@
                                                     <th>Jumlah</th>
                                                     <th>Harga</th>
                                                     <th>Total</th>
-                                                    <th>
+                                                    {{-- <th>
                                                         <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
-                                                    </th>
+                                                    </th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -75,9 +75,9 @@
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
-                                                        <td>
+                                                        {{-- <td>
                                                             <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
-                                                        </td>
+                                                        </td> --}}
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -91,47 +91,13 @@
             </div>
         </div>
     </div>
-    {{-- modal import --}}
-    <div class="modal modal-primary fade" id="imprt">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    Import Data Excel
-                </div>
-                <div class="modal-body">
-                    <form action="{{route('importshopee')}}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label for="">Cari File Excel</label>
-                            <input type="file" name="file" required class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <button data-dismiss="modal" class="btn btn-danger float-right mr-2 ">Tutup</button>
-                            <input type="submit" value="Import Data" class="btn btn-primary float-right mr-2 ">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 @push('customjs')
     <script>
-         function cekall() {
-            if($('#ckb').is(':checked',true))  {
-                $(".subck").prop('checked', true);
-                $('#btnacc').attr('style','display:inline');
-            } else {
-                $(".subck").prop('checked',false);
-                $('#btnacc').attr('style','display:none');
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
             }
-        }
-        function ceksat() {
-            if($('.subck').is(':checked',true)){
-                $('#btnacc').attr('style','display:inline');
-            }else{
-                $('#btnacc').attr('style','display:none');
-            }
-        }
+        });
     </script>
 @endpush

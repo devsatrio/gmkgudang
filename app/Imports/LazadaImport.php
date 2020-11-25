@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\models\Barang;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class LazadaImport implements ToCollection
     */
     public function collection(Collection $rows)
     {
-        
+
         $admin=Auth::user()->name;
         foreach ($rows as $key=>$row) {
             // print_r($row[0]);
@@ -22,12 +23,16 @@ class LazadaImport implements ToCollection
                 $harg=strtok($row[1],'.');
                 $total=$row[5]*$harg;
                 if($row[0]!=""||$row[4]!=""||$row[0]!=" "||$row[4]!=" "){
+                    // $bar=Barang::where('kode_barang',$row[4])->count();
+                    // if ($bar>0) {
+                    //     $valid='valid';
+                    // }else{
+                    //     $valid='belum';
+                    // }
                     $valid='valid';
                 }else{
                     $valid='belum';
                 }
-                print_r($row[0]);
-                echo '<br>';
                 $data[] = [
                     'noresi' => $row[3],
                     'sku'=>$row[0],
@@ -45,7 +50,7 @@ class LazadaImport implements ToCollection
                     'updated_at'=>date('Y-m-d H:i:s'),
                 ];
             }
-            
+
         }
         DB::table('temp_import')->insert($data);
     }

@@ -117,6 +117,11 @@
 @endsection
 @push('customjs')
     <script>
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
          function cekall() {
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
@@ -131,6 +136,32 @@
                 $('#btnacc').attr('style','display:inline');
             }else{
                 $('#btnacc').attr('style','display:none');
+            }
+        }
+        function acc() {
+            var idvall=[];
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin ACC Data ini?");
+                if(conf){
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'acc-lazada',
+                        type:'post',
+                        data:{ids:join_selected},
+                        success:function(response){
+                            if(response.sts="1"){
+                                // refreshCancel();
+                                location.reload();
+                            }
+                        }
+                    })
+                }
             }
         }
     </script>

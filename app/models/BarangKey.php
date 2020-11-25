@@ -8,5 +8,5 @@ class BarangKey extends Model
 {
     public $timestamps = false;
     protected $table = 'barangkey';
-    protected $guarded = ['id'];
+    protected $guarded = [];
 }

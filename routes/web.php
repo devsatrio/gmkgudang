@@ -28,13 +28,20 @@ Route::resource('/barang-keyword','backend\BarangKeyController');
 Route::prefix('import-data')->group(function(){
     Route::get('v-shopee','backend\TrxController@importshopee')->name('im.shopee');
     Route::post('import-shopee','backend\TrxController@actimportshopee')->name('importshopee');
-    Route::get('sp-nonstok','backend\TrxController@spnonstok')->name('sp.nonstok');
+    Route::get('data-shopee/{jns}','backend\TrxController@dataShopee')->name('sp.data');
+    Route::get('export-nonstok-shopee/{jns}','backend\TrxController@exportNonStokSP')->name('exp.nostok.shopee');
     // import lazada
     Route::get('v-lazada','backend\TrxController@importLazada')->name('im.lazada');
     Route::post('import-lazada','backend\TrxController@actimportlazada')->name('importlazada');
     Route::get('data-lazada/{jns}','backend\TrxController@datalazada')->name('datalazada');
+    Route::post('acc-lazada','backend\TrxController@acclazada');
     // export barang non stok
     Route::get('export-nonstok-lazada/{jns}','backend\TrxController@exportNonStok')->name('exp.nostok.lazada');
     // barang Tidak lengkap
     Route::get('barang-nonlengkap','backend\TrxController@NonLengkap')->name('brgnonlengkap');
+    Route::post('import-nonlengkap','backend\TrxController@importNonLengkap')->name('importnonlengkap');
+    Route::get('nonlengkap-nonstok','backend\TrxController@NonLengkapNonStok')->name('nnst');
+    Route::post('acc-nonlengkap','backend\TrxController@accNonlengkap');
+    // laporan TRX
+    Route::get('laporan-trx','backend\TrxController@LaporanTrx')->name('laporan.trx');
 });

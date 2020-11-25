@@ -30,12 +30,12 @@
                     <div class=" card card-default">
                         <div class="card-header">
                             <div class="card-title">
-                                import data Belum Lengkap
+                                import data Belum Lengkap : <b> {{$judul}}</b>
                             </div>
                             <div class="card-tools">
                                 <a href="#" data-target="#imprt" data-toggle="modal"><div class="badge badge-primary mr-2">import data</div></a>
-                               <a href="{{route('datalazada',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Sudah Di Perbaiki</div></a>
-                               <a href="{{route('datalazada',['Non-Lengkap'])}}" ><div class="badge badge-danger mr-2">Barang Sudah Di Perbaiki Non Stok</div></a>
+                               {{-- <a href="{{route('datalazada',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Sudah Di Perbaiki</div></a> --}}
+                               <a href="{{route('nnst')}}" ><div class="badge badge-danger mr-2">Barang Sudah Di Perbaiki Non Stok</div></a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -49,11 +49,10 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Kode Barang</th>
-                                                    <th>Key Barang</th>
+                                                    {{-- <th>Kode Barang</th> --}}
+                                                    <th>Barang</th>
                                                     <th>SKU induk</th>
                                                     <th>SKU</th>
-                                                    <th>Barang</th>
                                                     <th>Jumlah</th>
                                                     <th>Harga</th>
                                                     <th>Total</th>
@@ -69,11 +68,10 @@
                                                 @foreach ($data as $item)
                                                     <tr>
                                                         <td>{{$no++}}</td>
-                                                        <td>{{$item->kode_barang}}</td>
-                                                        <td>{{$item->key_barang}}</td>
+                                                        {{-- <td>{{$item->kode_barang}}</td> --}}
+                                                        <td>{{$item->barang}}</td>
                                                         <td>{{$item->skuindex}}</td>
                                                         <td>{{$item->sku}}</td>
-                                                        <td>{{$item->barang}}</td>
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
@@ -101,7 +99,7 @@
                     Import Data Excel
                 </div>
                 <div class="modal-body">
-                    <form action="{{route('importlazada')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('importnonlengkap')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="">Cari File Excel</label>
@@ -119,6 +117,11 @@
 @endsection
 @push('customjs')
     <script>
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
          function cekall() {
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
@@ -133,6 +136,32 @@
                 $('#btnacc').attr('style','display:inline');
             }else{
                 $('#btnacc').attr('style','display:none');
+            }
+        }
+        function acc() {
+            var idvall=[];
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin ACC Data ini?");
+                if(conf){
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'acc-nonlengkap',
+                        type:'post',
+                        data:{ids:join_selected},
+                        success:function(response){
+                            if(response.sts="1"){
+                                // refreshCancel();
+                                location.reload();
+                            }
+                        }
+                    })
+                }
             }
         }
     </script>
