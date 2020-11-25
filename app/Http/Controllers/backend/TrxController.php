@@ -110,7 +110,7 @@ class TrxController extends Controller
                 'admin'=>$dtr->admin,
             ];
             // kurangi stok
-            $upstk=DB::update("Update Barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '".$dtr->skuindex."'");
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '".$dtr->skuindex."'");
         }
         $in=DB::table('barang_trx')->insert($data);
         if($in){
@@ -281,7 +281,7 @@ class TrxController extends Controller
                 'admin'=>$dtr->admin,
             ];
             // kurangi stok
-            $upstk=DB::update("Update Barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
         }
         $in=DB::table('barang_trx')->insert($data);
         if($in){
