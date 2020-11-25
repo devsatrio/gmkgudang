@@ -14,6 +14,7 @@ Route::get('/edit-profile', 'backend\HomeController@editprofile')->name('editpro
 Route::post('/edit-profile/{id}', 'backend\HomeController@aksieditprofile');
 
 Route::get('/data-admin','backend\AdminController@listdata');
+
 Route::resource('/admin','backend\AdminController');
 
 Route::get('/data-barang','backend\BarangController@listdata');
@@ -24,7 +25,7 @@ Route::resource('/barang','backend\BarangController');
 Route::get('/data-barang-keyword','backend\BarangKeyController@listdata');
 Route::post('/import-barang-keyword','backend\BarangKeyController@importbarangkey');
 Route::resource('/barang-keyword','backend\BarangKeyController');
-
+Route::get('/data-laporantrx','backend\TrxController@listdatalaporanTrx');
 Route::prefix('import-data')->group(function(){
     Route::get('v-shopee','backend\TrxController@importshopee')->name('im.shopee');
     Route::post('import-shopee','backend\TrxController@actimportshopee')->name('importshopee');
@@ -44,4 +45,5 @@ Route::prefix('import-data')->group(function(){
     Route::post('acc-nonlengkap','backend\TrxController@accNonlengkap');
     // laporan TRX
     Route::get('laporan-trx','backend\TrxController@LaporanTrx')->name('laporan.trx');
+    
 });

@@ -46,7 +46,7 @@
 
                             <div id="dynamicInput"></div>
                             <button type="button" onClick="addInput('dynamicInput');" class="btn btn-warning"><i
-                                    class="fa fa-plus"> Tambah Produk</i></button>
+                                    class="fa fa-plus"> Tambah Keyword</i></button>
                         </div>
 
                         <div class="card-footer">

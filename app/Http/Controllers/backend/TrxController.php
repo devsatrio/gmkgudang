@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
+use DataTables;
 
 class TrxController extends Controller
 {
@@ -250,6 +251,7 @@ class TrxController extends Controller
             'data'=>$data,
             'judul'=>'Barang Telah Diperbaiki NON STOK'
         ];
+        // dd($data);
         return view('backend.import_barang.import_nonlengkap',$print);
     }
     public function accNonlengkap(Request $request)
@@ -312,6 +314,11 @@ class TrxController extends Controller
             'data'=>$data
         ];
         return view('backend.import_barang.laporantrx',$data);
+    }
+
+    //=================================================================
+    public function listdatalaporanTrx(){
+        return Datatables::of(DB::table('barang_trx')->get())->make(true);
     }
 
 }
