@@ -4,14 +4,14 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('title')
-    Shopee Data
+    Data Transaksi
 @endsection
 @section('content')
     <div class="content-header">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1 class="m-0 text-dark">Data Shopee {{Request::segment(3)}}</h1>
+                    <h1 class="m-0 text-dark">Data Transaksi Market Place</h1>
                 </div>
             </div>
         </div>
@@ -27,33 +27,30 @@
             @endif
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class=" card card-default">
                         <div class="card-header">
                             <div class="card-tools">
-                                <a href="{{route('exp.nostok.shopee',[Request::segment(3)])}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
-                                <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
+
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-12 mb-3">
+                                    <button style="display: none" id="btnacc" onclick="acc()" class="btn btn-primary float-right"><i class="fa fa-check"></i> Acc Transaksi</button>
+                                </div>
                                 <div class="col-12">
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>No Resi</th>
-                                                        <th>SKU induk</th>
-                                                        <th>SKU</th>
-                                                        <th>Barang</th>
-                                                        <th>Jumlah</th>
-                                                        <th>Harga</th>
-                                                        <th>Total</th>
-                                                        {{-- <th>
-                                                            <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
-                                                        </th> --}}
-                                                    </tr>
+                                                    <th>No</th>
+                                                    <th>No Resi</th>
+                                                    <th>SKU induk</th>
+                                                    <th>SKU</th>
+                                                    <th>Barang</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Harga</th>
+                                                    <th>Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -70,9 +67,6 @@
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
-                                                        {{-- <td>
-                                                            <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
-                                                        </td> --}}
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -86,4 +80,14 @@
             </div>
         </div>
     </div>
+
 @endsection
+@push('customjs')
+    <script>
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+@endpush

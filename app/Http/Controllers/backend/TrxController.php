@@ -108,6 +108,7 @@ class TrxController extends Controller
                 'jumlah'=>$dtr->jumlah,
                 'harga'=>$dtr->harga,
                 'total'=>$dtr->total,
+                'jenis'=>$dtr->jenis,
                 'admin'=>$dtr->admin,
             ];
             // kurangi stok
@@ -274,13 +275,14 @@ class TrxController extends Controller
             $data[]=[
                 'noresi'=>$dtr->noresi,
                 'sku'=>$dtr->sku,
-                'skuindex'=>$dtr->skuindex,
+                'skuindex'=>$bkey->kode_barang,
                 'barang'=>$dtr->barang,
                 'tgl'=>$dtr->tgl,
                 'jumlah'=>$dtr->jumlah,
                 'harga'=>$dtr->harga,
                 'total'=>$dtr->total,
                 'admin'=>$dtr->admin,
+                'jenis'=>$dtr->jenis,
             ];
             // kurangi stok
             $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
