@@ -38,6 +38,7 @@
             class="nav-link dropdown-toggle">Laporan</a>
         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
             <li><a href="{{route('laporan.trx')}}" class="dropdown-item">Laporan Trx </a></li>
+            <li><a href="{{route('data.trx')}}" class="dropdown-item">Data Transaksi </a></li>
         </ul>
     </li>
 </ul>

@@ -45,7 +45,8 @@ Route::prefix('import-data')->group(function(){
     Route::post('acc-nonlengkap','backend\TrxController@accNonlengkap');
     // laporan TRX
     Route::get('laporan-trx','backend\TrxController@LaporanTrx')->name('laporan.trx');
-    
+    Route::get('data-trx','backend\TrxController@LaporanTrx')->name('data.trx');
+
 });
 Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
 Route::get('/barang-masuk/laporan','backend\BarangMasukController@laporan');
