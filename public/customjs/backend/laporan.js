@@ -9,7 +9,7 @@ $(function () {
                 columns: [0,1,2,3,4]
             }},
             {extend: 'excel', title: 'Data Barang',exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5,6,7,8,9]
             }},
             {extend:'print',title: 'Data Barang',exportOptions: {
                 columns: [0,1,2,3,4]
@@ -30,9 +30,11 @@ $(function () {
             { data: 'jumlah', name: 'jumlah' },
             { data: 'harga', name: 'harga' },
             { data: 'total', name: 'total' },
+            { data: 'admin', name: 'admin' },
+            { data: 'tgl', name: 'tgl' },
             
         ],
-        pageLength: 10,
+        pageLength: 50,
         lengthMenu: [[5, 10, 20], [5, 10, 20]]
     });
 

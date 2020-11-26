@@ -16,6 +16,13 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
+            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Penyesuaian Stok</a>
+            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+              <li><a href="{{url('/barang-masuk')}}" class="dropdown-item">Barang Masuk</a></li>
+              <li><a href="{{url('/barang-keyword')}}" class="dropdown-item">Barang Keluar</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
             <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Transaksi</a>
             <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
               <li><a href="{{route('im.lazada')}}" class="dropdown-item">Trx Lazada </a></li>
