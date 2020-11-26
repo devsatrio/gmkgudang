@@ -54,7 +54,6 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Level</label>
                                 <select name="level" class="form-control">
-                                    <option value="Suplier">Suplier</option>
                                     <option value="Admin">Admin</option>
                                     <option value="Super Admin">Super Admin</option>
                                 </select>

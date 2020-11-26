@@ -47,3 +47,7 @@ Route::prefix('import-data')->group(function(){
     Route::get('laporan-trx','backend\TrxController@LaporanTrx')->name('laporan.trx');
     
 });
+Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
+Route::get('/barang-masuk/laporan','backend\BarangMasukController@laporan');
+Route::post('/import-barang-masuk','backend\BarangMasukController@importbarangmasuk');
+Route::resource('/barang-masuk','backend\BarangMasukController');

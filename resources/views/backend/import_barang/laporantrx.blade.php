@@ -61,30 +61,15 @@
                                                     <th>Jumlah</th>
                                                     <th>Harga</th>
                                                     <th>Total</th>
+                                                    <th>User/Toko</th>
+                                                    <th>Tanggal</th>
                                                     {{-- <th>
                                                         <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
                                                     </th> --}}
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $no=1;
-                                                @endphp
-                                                @foreach ($data as $item)
-                                                    <tr>
-                                                        <td>{{$no++}}</td>
-                                                        <td>{{$item->noresi}}</td>
-                                                        <td>{{$item->skuindex}}</td>
-                                                        <td>{{$item->sku}}</td>
-                                                        <td>{{$item->barang}}</td>
-                                                        <td>{{$item->jumlah}}</td>
-                                                        <td>{{number_format($item->harga)}}</td>
-                                                        <td>{{number_format($item->total)}}</td>
-                                                        {{-- <td>
-                                                            <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
-                                                        </td> --}}
-                                                    </tr>
-                                                @endforeach
+                                                
                                             </tbody>
                                         </table>
                                     </div>

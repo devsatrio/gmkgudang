@@ -59,8 +59,7 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Level</label>
                                 <select name="level" class="form-control">
-                                    <option value="Suplier" @if($data->level=="Suplier") selected @endif>Suplier
-                                    </option>
+                                    
                                     <option value="Admin" @if($data->level=="Admin") selected @endif>Admin</option>
                                     <option value="Super Admin" @if($data->level=="Super Admin") selected @endif>Super
                                         Admin</option>
