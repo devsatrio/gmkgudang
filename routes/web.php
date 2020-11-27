@@ -55,3 +55,8 @@ Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
 Route::get('/barang-masuk/laporan','backend\BarangMasukController@laporan');
 Route::post('/import-barang-masuk','backend\BarangMasukController@importbarangmasuk');
 Route::resource('/barang-masuk','backend\BarangMasukController');
+
+Route::get('/data-barang-keluar','backend\BarangKeluarController@listdata');
+Route::get('/barang-keluar/laporan','backend\BarangKeluarController@laporan');
+Route::post('/import-barang-keluar','backend\BarangKeluarController@importbarangmasuk');
+Route::resource('/barang-keluar','backend\BarangKeluarController');

@@ -57,6 +57,7 @@
                                         <th>Nama</th>
                                         <th>Stok</th>
                                         <th>HPP</th>
+                                        <th>Total</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -70,6 +71,7 @@
                                         <th>Nama</th>
                                         <th>Stok</th>
                                         <th>HPP</th>
+                                        <th>Total</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </tfoot>

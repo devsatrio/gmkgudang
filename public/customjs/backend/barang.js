@@ -8,13 +8,13 @@ $(function () {
         pageLength: 20,
         buttons : [
             {extend: 'pdf', title:'Data Barang',exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }},
             {extend: 'excel', title: 'Data Barang',exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }},
             {extend:'print',title: 'Data Barang',exportOptions: {
-                columns: [0,1,2,3,4]
+                columns: [0,1,2,3,4,5]
             }},
         ],
         ajax: '/data-barang',
@@ -35,6 +35,12 @@ $(function () {
             {
                 render: function (data, type, row) {
                     return "Rp. " + rupiah(row['harga']);
+                },
+                "className": 'text-right',
+            },
+            {
+                render: function (data, type, row) {
+                    return "Rp. " + rupiah(row['harga']*row['stok']);
                 },
                 "className": 'text-right',
             },

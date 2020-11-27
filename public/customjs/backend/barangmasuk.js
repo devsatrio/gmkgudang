@@ -7,13 +7,13 @@ $(function () {
         dom: 'Blfrtip',
         pageLength: 20,
         buttons : [
-            {extend: 'pdf', title:'Data Barang',exportOptions: {
+            {extend: 'pdf', title:'Data Barang Masuk',exportOptions: {
                 columns: [0,1,2,3,4,5,6,7]
             }},
-            {extend: 'excel', title: 'Data Barang',exportOptions: {
+            {extend: 'excel', title: 'Data Barang Masuk',exportOptions: {
                 columns: [0,1,2,3,4,5,6,7]
             }},
-            {extend:'print',title: 'Data Barang',exportOptions: {
+            {extend:'print',title: 'Data Barang Masuk',exportOptions: {
                 columns: [0,1,2,3,4,5,6,7]
             }},
         ],

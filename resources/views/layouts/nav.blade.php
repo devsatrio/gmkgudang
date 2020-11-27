@@ -3,7 +3,7 @@
     <li class="nav-item">
         <a href="{{url('/home')}}" class="nav-link">Home</a>
     </li>
-    @if(Auth::user()->level=='admin'||Auth::user()->level=='Super Admin')
+    @if(Auth::user()->level!='Admin')
     <li class="nav-item">
         <a href="{{url('/admin')}}" class="nav-link">Admin</a>
     </li>
@@ -33,6 +33,7 @@
             <li><a href="{{route('brgnonlengkap')}}" class="dropdown-item">Import Barang Tidak Lengkap</a></li>
         </ul>
     </li>
+    @if(Auth::user()->level!='Admin')
     <li class="nav-item dropdown">
         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
             class="nav-link dropdown-toggle">Laporan</a>
@@ -41,4 +42,5 @@
             <li><a href="{{route('data.trx')}}" class="dropdown-item">Laporan Transaksi </a></li>
         </ul>
     </li>
+    @endif
 </ul>

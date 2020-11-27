@@ -10,10 +10,24 @@ class BarangExport implements FromCollection, ShouldAutoSize, WithHeadings
 {
     public function collection()
     {
-        return DB::table('barang')
-        ->select(DB::raw('kode_barang,nama,deskripsi,stok,harga'))
+        $export =DB::table('barang')
+        ->select(DB::raw('kode_barang,nama,deskripsi,stok,harga,harga*stok'))
         ->orderby('id','desc')
         ->get();
+        $total = 0;
+        foreach($export as $row){
+            $total += $row->harga*$row->stok;
+        }
+        $jumlah = count($export);
+        $export[$jumlah] =array(
+            'kode_barang'=>'Total',
+            'nama'=>'',
+            'deskripsi'=>'',
+            'stok'=>'',
+            'harga'=>'',
+            'harga*stok'=>$total
+        );
+        return $export;
     }
     public function headings(): array
     {
@@ -23,6 +37,7 @@ class BarangExport implements FromCollection, ShouldAutoSize, WithHeadings
             'deskripsi',
             'stok',
             'hpp',
+            'Total',
         ];
     }
 }
