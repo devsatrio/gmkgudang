@@ -116,6 +116,7 @@
     </div>
 @endsection
 @push('customjs')
+<script src="{{asset('loading/jquery.loading.js')}}"></script>
     <script>
         $.ajaxSetup({
             headers:{
@@ -139,6 +140,7 @@
             }
         }
         function acc() {
+
             var idvall=[];
             $('.subck:checked').each(function() {
                 idvall.push($(this).attr('data-id'))
@@ -148,6 +150,12 @@
             }else{
                 var conf=confirm("Apakah anda ingin ACC Data ini?");
                 if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
                     var join_selected=idvall.join(",");
                     console.log(join_selected);
                     $.ajax({
@@ -156,6 +164,7 @@
                         data:{ids:join_selected},
                         success:function(response){
                             if(response.sts="1"){
+                                $("body").loading('stop');
                                 // refreshCancel();
                                 location.reload();
                             }

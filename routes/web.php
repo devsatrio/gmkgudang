@@ -31,6 +31,7 @@ Route::prefix('import-data')->group(function(){
     Route::post('import-shopee','backend\TrxController@actimportshopee')->name('importshopee');
     Route::get('data-shopee/{jns}','backend\TrxController@dataShopee')->name('sp.data');
     Route::get('export-nonstok-shopee/{jns}','backend\TrxController@exportNonStokSP')->name('exp.nostok.shopee');
+    Route::post('acc-shopee','backend\TrxController@accShopee');
     // import lazada
     Route::get('v-lazada','backend\TrxController@importLazada')->name('im.lazada');
     Route::post('import-lazada','backend\TrxController@actimportlazada')->name('importlazada');
@@ -44,7 +45,8 @@ Route::prefix('import-data')->group(function(){
     Route::get('nonlengkap-nonstok','backend\TrxController@NonLengkapNonStok')->name('nnst');
     Route::post('acc-nonlengkap','backend\TrxController@accNonlengkap');
     // laporan TRX
-    Route::get('laporan-trx','backend\TrxController@LaporanTrx')->name('laporan.trx');
+    Route::get('list-trx','backend\TrxController@ListTrx')->name('list.trx');
+    Route::get('cari-list-trx/{tgl1}/{tgl2}','backend\TrxController@cariListTrx');
     Route::get('data-trx','backend\TrxController@DataTrx')->name('data.trx');
     Route::get('cari-trx','backend\TrxController@CariTrx')->name('cari.data.trx');
 

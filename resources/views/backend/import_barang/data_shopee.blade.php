@@ -30,7 +30,10 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-tools">
+                                @if ($jn=="Non-Lengkap")
                                 <a href="{{route('exp.nostok.shopee',[Request::segment(3)])}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
+                                @endif
+
                                 <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
                             </div>
                         </div>
@@ -50,9 +53,11 @@
                                                         <th>Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total</th>
-                                                        {{-- <th>
+                                                        @if ($jn=="Sudah-Lengkap")
+                                                        <th>
                                                             <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
-                                                        </th> --}}
+                                                        </th>
+                                                        @endif
                                                     </tr>
                                                 </tr>
                                             </thead>
@@ -70,9 +75,11 @@
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
-                                                        {{-- <td>
+                                                        @if ($jn=="Sudah-Lengkap")
+                                                        <td>
                                                             <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
-                                                        </td> --}}
+                                                        </td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -87,3 +94,62 @@
         </div>
     </div>
 @endsection
+@push('customjs')
+    <script>
+         $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+         function cekall() {
+            if($('#ckb').is(':checked',true))  {
+                $(".subck").prop('checked', true);
+                $('#btnacc').attr('style','display:inline');
+            } else {
+                $(".subck").prop('checked',false);
+                $('#btnacc').attr('style','display:none');
+            }
+        }
+        function ceksat() {
+            if($('.subck').is(':checked',true)){
+                $('#btnacc').attr('style','display:inline');
+            }else{
+                $('#btnacc').attr('style','display:none');
+            }
+        }
+        function acc() {
+            var idvall=[];
+            var jns="keyword";
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin ACC Data ini?");
+                if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'acc-shopee',
+                        type:'post',
+                        data:{ids:join_selected,jns:jns},
+                        success:function(response){
+                            if(response.sts="1"){
+                                $("body").loading('stop');
+                                // refreshCancel();
+                                location.reload();
+                            }
+                        }
+                    })
+                }
+            }
+            }
+    </script>
+@endpush

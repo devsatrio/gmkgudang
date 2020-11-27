@@ -4,7 +4,6 @@
 @endsection
 @section('customcss')
     <link rel="stylesheet" href="{{asset('flatpicker/flatpicker.min.css')}}">
-    {{-- <link rel="stylesheet" href="{{asset('loading/jquery.loading.min.css')}}"> --}}
 @endsection
 @section('title')
     Data Transaksi
@@ -51,7 +50,7 @@
                                         <Button type="submit" class="btn btn-primary mr-2"><i class="fa fa-search"></i></Button>
                                     </div>
                                     <div class="form-group">
-                                        <Button id="btnexcel" type="button" class="btn btn-info"><i class="fa fa-file-excel"></i></Button>
+                                        <Button id="btnexcel" onclick="printd()" type="button" class="btn btn-info"><i class="fa fa-file-excel"></i></Button>
                                     </div>
                                 </form>
                             </div>
@@ -61,19 +60,10 @@
                                 <div class="col-12">
                                     <div class="table-responsive">
                                         <table class="table  table-bordered" id="tablereport">
-                                            {{-- <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No Resi</th>
-                                                    <th>SKU induk</th>
-                                                    <th>SKU</th>
-                                                    <th>Barang</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Harga</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>  --}}
                                             <tbody>
+                                                {{-- <tr>
+                                                    <td colspan="6" align="center"> <b>Laporan GMK Market Place  Tanggal &nbsp; {{$tgl1}} sampai {{$tgl2}} </b></td>
+                                                </tr> --}}
                                                 @foreach ($data as $item)
                                                     <tr class="bg-primary">
                                                         <td>Toko</td>
@@ -90,35 +80,37 @@
                                                             <td>Harga</td>
                                                             <td>Jumlah</td>
                                                         </tr>
+                                                        @php
+                                                            $total=0;
+                                                            $qty=0;
+                                                        @endphp
                                                         @foreach ($detail as $colect)
+                                                        @php
+                                                            $total=$total+$colect->total;
+                                                            $qty=$qty+$colect->jumlah;
+                                                        @endphp
                                                             <tr>
                                                                 <td>{{$colect->skuindex}}</td>
                                                                 <td>{{$colect->jenis}}</td>
                                                                 <td>{{$colect->barang}}</td>
                                                                 <td>{{$colect->jumlah}}</td>
-                                                                <td>{{number_format($colect->harga)}}</td>
-                                                                <td>{{number_format($colect->total)}}</td>
+                                                                <td>{{number_format($colect->harga,0,',','.')}}</td>
+                                                                <td>{{number_format($colect->total,0,',','.')}}</td>
                                                             </tr>
                                                         @endforeach
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="center"> <b>Total Penjualan</b></td>
+                                                            <td>{{$qty}}</td>
+                                                            <td></td>
+                                                            <td>{{number_format($total,0,',','.')}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="6"></td>
+                                                        </tr>
                                                     </tr>
                                                 @endforeach
-                                                {{-- @php
-                                                    $no=1;
-                                                @endphp
-                                                @foreach ($data as $key=>$item)
-
-                                                    <tr>
-                                                        <td>{{$no++}}</td>
-                                                        <td>{{$item->noresi}}</td>
-                                                        <td>{{$item->skuindex}}</td>
-                                                        <td>{{$item->sku}}</td>
-                                                        <td>{{$item->barang}}</td>
-                                                        <td>{{$item->jumlah}}</td>
-                                                        <td>{{number_format($item->harga)}}</td>
-                                                        <td>{{number_format
-                                                        ($item->total)}}</td>
-                                                    </tr>
-                                                @endforeach --}}
                                             </tbody>
                                         </table>
                                     </div>
@@ -134,7 +126,7 @@
 @endsection
 @push('customjs')
     <script src="{{asset('flatpicker/flatpicker.min.js')}}"></script>
-    {{-- <script src="{{asset('loading/jquery.loading.js')}}"></script> --}}
+    <script src="{{asset('loading/tableExport.js')}}"></script>
     <script>
         flatpickr(".picker",{
             dateFormat: "Y-m-d",
@@ -146,22 +138,15 @@
             }
         });
     //    create excel
-    $(document).ready(function() {
-        $('#btnexcel').click(function(e) {
-        e.prevenDefault();
-        var tgl1=$('#tgl1').val();
+        function printd() {
+            var tgl1=$('#tgl1').val();
             var tgl2=$('#tgl2').val();
             // get data table
-            var data_type='data:application/vnd.ms-excel';
-            var tablediv=document.getElementById('#tablereport');
-            var tblehtml=tablediv.outerHTML.replace(/ /g,'%20');
-
-            var a=document.createElement('a');
-            a.href=data_type + ', ' + tblehtml;
-            a.download="Laporan Penjualan-" + tgl1 + "-sampai-" + tgl2+'.xls';
-            a.click();
-        });
-    })
+            $('#tablereport').tableExport({
+               format:'xls',
+               filename:'report-'+tgl1+'-'+tgl2,
+            });
+        }
 
 
     </script>

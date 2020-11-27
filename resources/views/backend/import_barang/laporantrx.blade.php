@@ -4,19 +4,17 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('customcss')
-<link rel="stylesheet" href="{{asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
-<link rel="stylesheet" href="{{asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="{{asset('flatpicker/flatpicker.min.css')}}">
 @endsection
 @section('title')
-    Laporan Transaksi
+    List Data Transaksi
 @endsection
 @section('content')
     <div class="content-header">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h1 class="m-0 text-dark">Laporan Transaksi Market Online</h1>
+                    <h1 class="m-0 text-dark">List Transaksi Market Online</h1>
                 </div>
             </div>
         </div>
@@ -35,46 +33,34 @@
                     <div class=" card card-default">
                         <div class="card-header">
                             <div class="card-title">
-                               Laporan Trx Market
+                               List Trx Market
                             </div>
-                            {{-- <div class="card-tools">
-                               <a href="#" data-target="#imprt" data-toggle="modal"><div class="badge badge-primary mr-2">import data</div></a>
-                               <a href="{{route('datalazada',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Tidak Ada di Stok</div></a>
-                               <a href="{{route('datalazada',['Non-Lengkap'])}}" ><div class="badge badge-danger mr-2">Barang Belum Lengkap</div></a>
-                            </div> --}}
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                {{-- <div class="col-12 mb-3">
-                                    <button style="display: none" id="btnacc" onclick="acc()" class="btn btn-primary float-right"><i class="fa fa-check"></i> Acc Transaksi</button>
-                                </div> --}}
-                                <div class="col-12">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered" id="list-data">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No Resi</th>
-                                                    <th>SKU induk</th>
-                                                    <th>SKU</th>
-                                                    <th>Barang</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Harga</th>
-                                                    <th>Total</th>
-                                                    <th>User/Toko</th>
-                                                    <th>Tanggal</th>
-                                                    {{-- <th>
-                                                        <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
-                                                    </th> --}}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                
-                                            </tbody>
-                                        </table>
+                            <div class="card-tools">
+                                <form class="form-inline">
+                                    @csrf
+                                    <div class="form-group mr-2">
+                                        <input type="text" name="tgl1" id="tgl1" value="{{date('Y-m-d')}}" readonly class="form-control picker" >
                                     </div>
-                                </div>
+                                    <div class="form-group mr-2 ">
+                                        s/d
+                                    </div>
+                                    <div class="form-group mr-2">
+                                        <input type="text" name="tgl2" id="tgl2" value="{{date('Y-m-d')}}" readonly class="form-control picker" >
+                                    </div>
+                                    <div class="form-group">
+                                        <Button type="button" onclick="getData()" class="btn btn-primary mr-2"><i class="fa fa-search"></i></Button>
+                                    </div>
+                                    <div class="form-group mr-2">
+                                        <input type="text" id="cari" class="form-control" placeholder="Cari Noresi , Barang">
+                                    </div>
+                                    <div class="form-group">
+                                        <Button type="button" onclick="cariBarang()" class="btn btn-primary mr-2"><i class="fa fa-search"></i></Button>
+                                    </div>
+                                </form>
                             </div>
+                        </div>
+                        <div class="card-body"  id="tag_container">
+                            @include('backend.import_barang.data_laporantrx')
                         </div>
                     </div>
                 </div>
@@ -84,28 +70,82 @@
 @endsection
 
 @push('customjs')
-<script src="{{asset('assets/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/jquery.dataTables.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js')}}"></script>
-
-<script src="{{asset('assets/plugins/datatables/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/buttons.flash.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/jszip.min.js')}}"></script>
-
-<script src="{{asset('assets/plugins/datatables/pdfmake.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/vfs_fonts.js')}}"></script>
-
-<script src="{{asset('assets/plugins/datatables/buttons.html5.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/buttons.print.min.js')}}"></script>
+<script src="{{asset('flatpicker/flatpicker.min.js')}}"></script>
+<script src="{{asset('loading/jquery.loading.js')}}"></script>
+<script src="{{asset('loading/tableExport.js')}}"></script>
 @endpush
 
 @push('customscripts')
 <script>
+        $(document).ready(function(){
+            getData();
+        });
+        flatpickr(".picker",{
+            dateFormat: "Y-m-d",
+            "locale": "id",
+        });
         $.ajaxSetup({
             headers:{
                 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
             }
         });
+        function cekall() {
+            if($('#ckb').is(':checked',true))  {
+                $(".subck").prop('checked', true);
+                $('#btarik').attr('style','display:inline');
+            } else {
+                $(".subck").prop('checked',false);
+                $('#btarik').attr('style','display:none');
+            }
+        }
+        function ceksat() {
+            if($('.subck').is(':checked',true)){
+                $('#btarik').attr('style','display:inline');
+            }else{
+                $('#btarik').attr('style','display:none');
+            }
+        }
+        function getData() {
+            var tgl1=$('#tgl1').val();
+            var tgl2=$('#tgl2').val();
+            // loading
+            $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+            $.ajax({
+                url:'cari-list-trx/'+tgl1+'/'+tgl2,
+                dataType:'html',
+                type:'get',
+            }).done(function(data){
+                $('#tag_container').empty().html(data);
+                $("body").loading('stop');
+            }).fail(function(jqXHR, ajaxOptions, thrownError){
+            alert('Load Data Gagal');
+                $("body").loading('stop');
+            });
+        }
+        function cariBarang() {
+            var tgl1=$('#tgl1').val();
+            var tgl2=$('#tgl2').val();
+            // loading
+            $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+            $.ajax({
+                url:'cari-list-trx/'+tgl1+'/'+tgl2,
+                dataType:'html',
+                type:'get',
+            }).done(function(data){
+                $('#tag_container').empty().html(data);
+                $("body").loading('stop');
+            }).fail(function(jqXHR, ajaxOptions, thrownError){
+            alert('Load Data Gagal');
+                $("body").loading('stop');
+            });
+        }
     </script>
-<script src="{{asset('customjs/backend/laporan.js')}}"></script>
 @endpush

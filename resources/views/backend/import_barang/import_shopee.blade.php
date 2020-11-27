@@ -34,7 +34,7 @@
                             </div>
                             <div class="card-tools">
                                <a href="#" data-target="#imprt" data-toggle="modal"><div class="badge badge-primary mr-2">import data</div></a>
-                               {{-- <a href="{{route('sp.data',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Tidak Ada di Stok</div></a> --}}
+                               <a href="{{route('sp.data',['Sudah-Lengkap'])}}" ><div class="badge badge-info mr-2">Barang Sudah Dilengkapi</div></a>
                                <a href="{{route('sp.data',['Non-Lengkap'])}}" ><div class="badge badge-danger mr-2">Barang Belum Lengkap</div></a>
                             </div>
                         </div>
@@ -117,6 +117,11 @@
 @endsection
 @push('customjs')
     <script>
+         $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
          function cekall() {
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
@@ -131,6 +136,40 @@
                 $('#btnacc').attr('style','display:inline');
             }else{
                 $('#btnacc').attr('style','display:none');
+            }
+        }
+        function acc() {
+            var idvall=[];
+            var jns="keyword";
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin ACC Data ini?");
+                if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'acc-shopee',
+                        type:'post',
+                        data:{ids:join_selected,jns:jns},
+                        success:function(response){
+                            if(response.sts="1"){
+                                $("body").loading('stop');
+                                // refreshCancel();
+                                location.reload();
+                            }
+                        }
+                    })
+                }
             }
         }
     </script>
