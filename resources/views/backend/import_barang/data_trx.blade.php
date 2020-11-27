@@ -67,35 +67,54 @@
                                                 @foreach ($data as $item)
                                                     <tr class="bg-primary">
                                                         <td>Toko</td>
-                                                        <td colspan="4">{{$item->admin}}</td>
+                                                        <td colspan="7">{{$item->admin}}</td>
                                                         <td class="bg-danger"></td>
                                                         @php
-                                                            $detail=DB::table('barang_trx')->where('admin',$item->admin)->whereBetween('tgl',[$tgl1,$tgl2])->get();
+                                                            $detail=DB::table('barang_trx')->leftjoin('barang','barang.kode_barang','=','barang_trx.skuindex')
+                                                                    ->select(DB::raw('barang.*,barang.harga as hpp,barang_trx.*'))
+                                                                    ->where('admin',$item->admin)->whereBetween('tgl',[$tgl1,$tgl2])
+                                                                    ->get();
                                                         @endphp
                                                         <tr class="bg-info">
                                                             <td>Kode</td>
                                                             <td>Market</td>
                                                             <td>Nama Barang</td>
                                                             <td>Qty</td>
+                                                            <td>HPP</td>
                                                             <td>Harga</td>
-                                                            <td>Jumlah</td>
+                                                            <td>Total HPP</td>
+                                                            <td>Total Jual</td>
+                                                            <td>Keuntungan</td>
                                                         </tr>
                                                         @php
                                                             $total=0;
                                                             $qty=0;
+                                                            $tothp=0;
+                                                            $tojual=0;
+                                                            $tount=0;
                                                         @endphp
                                                         @foreach ($detail as $colect)
                                                         @php
                                                             $total=$total+$colect->total;
                                                             $qty=$qty+$colect->jumlah;
+                                                            $thp=$colect->hpp*$colect->jumlah;
+                                                            $tjual=$colect->harga*$colect->jumlah;
+                                                            $tunt=($colect->harga*$colect->jumlah)-($colect->hpp*$colect->jumlah);
+                                                            $tothp=$tothp+$thp;
+                                                            $tojual=$tojual+$tjual;
+                                                            $tount=$tount+$tunt;
                                                         @endphp
                                                             <tr>
                                                                 <td>{{$colect->skuindex}}</td>
                                                                 <td>{{$colect->jenis}}</td>
                                                                 <td>{{$colect->barang}}</td>
                                                                 <td>{{$colect->jumlah}}</td>
-                                                                <td>{{number_format($colect->harga,0,',','.')}}</td>
-                                                                <td>{{number_format($colect->total,0,',','.')}}</td>
+                                                                <td>{{$colect->hpp}}</td>
+                                                                <td>{{$colect->harga}}</td>
+                                                                <td>{{$thp}}</td>
+                                                                <td>{{$tjual}}</td>
+                                                                <td>{{$tunt}}</td>
+                                                                {{-- <td>{{number_format($colect->harga,0,',','.')}}</td> --}}
                                                             </tr>
                                                         @endforeach
                                                         <tr>
@@ -104,10 +123,13 @@
                                                             <td align="center"> <b>Total Penjualan</b></td>
                                                             <td>{{$qty}}</td>
                                                             <td></td>
-                                                            <td>{{number_format($total,0,',','.')}}</td>
+                                                            <td></td>
+                                                            <td>{{$tothp}}</td>
+                                                            <td>{{$tojual}}</td>
+                                                            <td>{{$tount}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="6"></td>
+                                                            <td colspan="9"></td>
                                                         </tr>
                                                     </tr>
                                                 @endforeach
