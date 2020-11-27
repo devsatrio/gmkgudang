@@ -11,6 +11,7 @@ use App\Imports\BarangNonLengkap;
 use App\Imports\ShopeeImport;
 use App\Imports\LazadaImport;
 use App\models\Barang;
+use App\models\barang_trx;
 use App\models\BarangKey;
 use App\models\temp_import;
 use Illuminate\Http\Request;
@@ -89,11 +90,7 @@ class TrxController extends Controller
     {
         $ids=$request->ids;
         $arr=explode(',',$ids);
-        // for($i=0;$i<count($arr);$i++){
-        // $select=temp_import::whereIn('id',$arr)->select(array('noresi','sku','skuindex','barang','tgl','jumlah','harga','total','admin'));
-        // // }
-        // // insert to trx
-        // $in=DB::table('barang_trx')->insertUsing(['noresi','sku','skuindex','barang','tgl','jumlah','harga','total','admin'],$select);
+        $tglk=date('Y-m-d');
         // // update stts kirim
 
         for($i=0;$i<count($arr);$i++){
@@ -104,7 +101,7 @@ class TrxController extends Controller
                 'sku'=>$dtr->sku,
                 'skuindex'=>$dtr->skuindex,
                 'barang'=>$dtr->barang,
-                'tgl'=>$dtr->tgl,
+                'tgl'=>$tglk,
                 'jumlah'=>$dtr->jumlah,
                 'harga'=>$dtr->harga,
                 'total'=>$dtr->total,
@@ -259,7 +256,7 @@ class TrxController extends Controller
     {
         $ids=$request->ids;
         $arr=explode(',',$ids);
-
+        $tglk=date('Y-m-d');
         for($i=0;$i<count($arr);$i++){
 
             // get data barang_temp
@@ -277,7 +274,7 @@ class TrxController extends Controller
                 'sku'=>$dtr->sku,
                 'skuindex'=>$bkey->kode_barang,
                 'barang'=>$dtr->barang,
-                'tgl'=>$dtr->tgl,
+                'tgl'=>$tglk,
                 'jumlah'=>$dtr->jumlah,
                 'harga'=>$dtr->harga,
                 'total'=>$dtr->total,
@@ -317,10 +314,35 @@ class TrxController extends Controller
         ];
         return view('backend.import_barang.laporantrx',$data);
     }
+    public function DataTrx()
+    {
+        $tgl=date('Y-m-d');
+        // $data=barang_trx::where('tgl',$tgl)->get();a
+        $data=barang_trx::select(DB::raw('admin'))->groupBy('admin')->get();
+        $print=[
+            'data'=>$data,
+            'tgl1'=>$tgl,
+            'tgl2'=>$tgl,
+        ];
+        return view('backend.import_barang.data_trx',$print);
+    }
+    public function CariTrx(Request $request)
+    {
+        $tgl1=$request->tgl1;
+        $tgl2=$request->tgl2;
+        $data=barang_trx::select(DB::raw('admin'))->groupBy('admin')->get();
+        $print=[
+            'data'=>$data,
+            'tgl1'=>$tgl1,
+            'tgl2'=>$tgl2,
+        ];
+        return view('backend.import_barang.data_trx',$print);
+    }
 
     //=================================================================
     public function listdatalaporanTrx(){
         return Datatables::of(DB::table('barang_trx')->get())->make(true);
     }
+
 
 }
