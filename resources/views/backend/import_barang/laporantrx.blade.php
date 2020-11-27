@@ -127,8 +127,7 @@
             });
         }
         function cariBarang() {
-            var tgl1=$('#tgl1').val();
-            var tgl2=$('#tgl2').val();
+            var noresi=$('#cari').val();
             // loading
             $("body").loading({
                     stoppable: true,
@@ -136,7 +135,7 @@
                     theme: "dark"
                     });
             $.ajax({
-                url:'cari-list-trx/'+tgl1+'/'+tgl2,
+                url:'cari-noresi/'+noresi,
                 dataType:'html',
                 type:'get',
             }).done(function(data){
@@ -146,6 +145,38 @@
             alert('Load Data Gagal');
                 $("body").loading('stop');
             });
+        }
+        function dcancel() {
+            var idvall=[];
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin Batal Data ini?");
+                if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'batal-trx',
+                        type:'post',
+                        data:{ids:join_selected},
+                        success:function(response){
+                            if(response.sts="1"){
+                                $("body").loading('stop');
+                                cariBarang();
+                            }
+                        }
+                    })
+                }
+            }
         }
     </script>
 @endpush

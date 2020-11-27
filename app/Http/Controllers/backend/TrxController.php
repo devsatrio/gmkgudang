@@ -460,11 +460,49 @@ class TrxController extends Controller
     }
     public function cariListTrx($tgl1,$tgl2)
     {
-        $data=barang_trx::whereBetween('tgl',[$tgl1,$tgl2])->get();
+        $data=barang_trx::whereBetween('tgl',[$tgl1,$tgl2])->where('stts','!=','batal')->get();
         $print=[
             'data'=>$data,
         ];
         return view('backend.import_barang.data_laporantrx',$print);
+    }
+    public function cariNoresi($norm)
+    {
+        $data=barang_trx::where('noresi','like','%'. $norm  .'%')->where('stts','!=','batal')->get();
+        $print=[
+            'data'=>$data,
+        ];
+        return view('backend.import_barang.data_laporantrx',$print);
+    }
+    public function batalTrx(Request $request)
+    {
+        $ids=$request->ids;
+        $arr=explode(',',$ids);
+        for($i=0;$i<count($arr);$i++){
+            // get data barang_temp
+            $dtr=barang_trx::where('id',$arr[$i])->first();
+               $kd=$dtr->skuindex;
+               $jum=$dtr->jumlah;
+            // update
+            barang_trx::where('id',$arr[$i])->update([
+                'stts'=>'batal'
+            ]);
+            // tambah stok
+            $upstk=DB::update("Update barang set stok=stok + ". $jum ." where kode_barang = '". $kd ."'");
+            if($upstk){
+
+                $print=[
+                    'sts'=>'1',
+                    'msg'=>'Data Berhasil Disimpan'
+                ];
+            }else{
+                $print=[
+                    'sts'=>'0',
+                    'msg'=>'Data Gagal Disimpan'
+                ];
+            }
+            return response()->json($print);
+        }
     }
 
 

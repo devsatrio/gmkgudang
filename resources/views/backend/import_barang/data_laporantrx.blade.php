@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-12 mb-3">
-        <a href="#" style="display: none" class="float-right" id="btarik"><div class="badge badge-warning"><i class="fa fa-history"></i> Batal Barang</div></a>
+        <a href="#" style="display: none" onclick="dcancel()" class="float-right" id="btarik"><div class="badge badge-warning"><i class="fa fa-history"></i> Batal Barang</div></a>
     </div>
     <div class="col-12">
         <div class="table-responsive">
@@ -41,7 +41,7 @@
                             <td>{{$item->tgl}}</td>
                             <td>{{$item->stts}}</td>
                             <td>
-                                <input type="checkbox" onclick="ceksat()" class="subck">
+                                <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="subck">
                             </td>
                         </tr>
                     @endforeach

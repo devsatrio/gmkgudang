@@ -49,6 +49,8 @@ Route::prefix('import-data')->group(function(){
     Route::get('cari-list-trx/{tgl1}/{tgl2}','backend\TrxController@cariListTrx');
     Route::get('data-trx','backend\TrxController@DataTrx')->name('data.trx');
     Route::get('cari-trx','backend\TrxController@CariTrx')->name('cari.data.trx');
+    Route::post('batal-trx','backend\TrxController@batalTrx');
+    Route::get('cari-noresi/{norm}','backend\TrxController@cariNoresi');
 
 });
 Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
