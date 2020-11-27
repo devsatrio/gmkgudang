@@ -95,6 +95,7 @@
     </div>
 @endsection
 @push('customjs')
+<script src="{{asset('loading/jquery.loading.js')}}"></script>
     <script>
          $.ajaxSetup({
             headers:{

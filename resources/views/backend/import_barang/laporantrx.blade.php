@@ -171,7 +171,8 @@
                         success:function(response){
                             if(response.sts="1"){
                                 $("body").loading('stop');
-                                cariBarang();
+                                // cariBarang();
+                                getData();
                             }
                         }
                     })

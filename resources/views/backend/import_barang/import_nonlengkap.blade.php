@@ -116,6 +116,7 @@
     </div>
 @endsection
 @push('customjs')
+<script src="{{asset('loading/jquery.loading.js')}}"></script>
     <script>
         $.ajaxSetup({
             headers:{
@@ -148,6 +149,12 @@
             }else{
                 var conf=confirm("Apakah anda ingin ACC Data ini?");
                 if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
                     var join_selected=idvall.join(",");
                     console.log(join_selected);
                     $.ajax({
@@ -157,6 +164,7 @@
                         success:function(response){
                             if(response.sts="1"){
                                 // refreshCancel();
+                                $("body").loading('stop');
                                 location.reload();
                             }
                         }
