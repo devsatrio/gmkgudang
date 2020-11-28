@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\backend;
 
+use App\Exports\exportNonStokLengkap;
 use App\Exports\TempEExport;
 use App\Exports\TempExport_NonLengkap;
 use App\Exports\TempExportSp;
@@ -327,7 +328,8 @@ class TrxController extends Controller
             ->get();
         $print=[
             'data'=>$data,
-            'judul'=>'Barang Telah Diperbaiki'
+            'judul'=>'Barang Telah Diperbaiki',
+            'jns'=>'fix',
         ];
         return view('backend.import_barang.import_nonlengkap',$print);
     }
@@ -348,12 +350,15 @@ class TrxController extends Controller
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
          }
+        //  dd($kode);
         $data=BarangKey::
             whereNotIn('kode_barang',$kode)
             ->get();
+            // dd($data);
         $print=[
             'data'=>$data,
-            'judul'=>'Barang Telah Diperbaiki NON STOK'
+            'judul'=>'Barang Telah Diperbaiki NON STOK',
+            'jns'=>'nostok',
         ];
         // dd($data);
         return view('backend.import_barang.import_nonlengkap',$print);
@@ -409,6 +414,11 @@ class TrxController extends Controller
             ];
         }
         return response()->json($print);
+    }
+    public function expnsnl()
+    {
+        $namafile = "Data_Barang_non-stok.xls";
+        return Excel::download(new exportNonStokLengkap(), $namafile);
     }
 
     // Laporan TRX
@@ -504,6 +514,8 @@ class TrxController extends Controller
             return response()->json($print);
         }
     }
-
-
+    public function scView()
+    {
+        return view('backend.import_barang.scan');
+    }
 }

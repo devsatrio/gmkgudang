@@ -4,13 +4,12 @@ namespace App\Exports;
 
 use App\models\Barang;
 use App\models\BarangKey;
-use App\models\temp_import;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class TempExportSp_Non_Lengkap implements FromCollection , WithHeadings , ShouldAutoSize
+class exportNonStokLengkap implements FromCollection,WithHeadings,ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -24,16 +23,18 @@ class TempExportSp_Non_Lengkap implements FromCollection , WithHeadings , Should
        //  dd($kode);
        $data=BarangKey::
            whereNotIn('kode_barang',$kode)
+           ->select(DB::raw('kode_barang,skuinduk,sku,key_barang'))
            ->get();
-       return $data;
+        return $data;
     }
     public function headings(): array
     {
         return [
+            'Kode Barang',
             'SKUINDUK',
             'SKU',
             'BARANG',
-            'KEY Kode Barang Gudang',
+            'Jumlah',
         ];
     }
 }

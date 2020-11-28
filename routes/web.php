@@ -44,6 +44,7 @@ Route::prefix('import-data')->group(function(){
     Route::post('import-nonlengkap','backend\TrxController@importNonLengkap')->name('importnonlengkap');
     Route::get('nonlengkap-nonstok','backend\TrxController@NonLengkapNonStok')->name('nnst');
     Route::post('acc-nonlengkap','backend\TrxController@accNonlengkap');
+    Route::get('export-nostoknolengkap','backend\TrxController@expnsnl')->name('exp.nsnl');
     // laporan TRX
     Route::get('list-trx','backend\TrxController@ListTrx')->name('list.trx');
     Route::get('cari-list-trx/{tgl1}/{tgl2}','backend\TrxController@cariListTrx');
@@ -51,6 +52,8 @@ Route::prefix('import-data')->group(function(){
     Route::get('cari-trx','backend\TrxController@CariTrx')->name('cari.data.trx');
     Route::post('batal-trx','backend\TrxController@batalTrx');
     Route::get('cari-noresi/{norm}','backend\TrxController@cariNoresi');
+    // Scaner paket
+    Route::get('sc-view','backend\TrxController@scView')->name('sc.view');
 
 });
 Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');

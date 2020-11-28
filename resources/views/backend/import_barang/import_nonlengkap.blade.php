@@ -33,9 +33,14 @@
                                 import data Belum Lengkap : <b> {{$judul}}</b>
                             </div>
                             <div class="card-tools">
+                            @if ($jns=="fix")
                                 <a href="#" data-target="#imprt" data-toggle="modal"><div class="badge badge-primary mr-2">import data</div></a>
-                               {{-- <a href="{{route('datalazada',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Sudah Di Perbaiki</div></a> --}}
-                               <a href="{{route('nnst')}}" ><div class="badge badge-danger mr-2">Barang Sudah Di Perbaiki Non Stok</div></a>
+                            {{-- <a href="{{route('datalazada',['Non-Stok'])}}" ><div class="badge badge-info mr-2">Barang Sudah Di Perbaiki</div></a> --}}
+                                <a href="{{route('nnst')}}" ><div class="badge badge-danger mr-2">Barang Sudah Di Perbaiki Non Stok</div></a>
+                            @else
+                                <a href="{{route('exp.nsnl')}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
+                                <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
+                            @endif
                             </div>
                         </div>
                         <div class="card-body">
@@ -50,15 +55,23 @@
                                                 <tr>
                                                     <th>No</th>
                                                     {{-- <th>Kode Barang</th> --}}
-                                                    <th>Barang</th>
-                                                    <th>SKU induk</th>
-                                                    <th>SKU</th>
-                                                    <th>Jumlah</th>
-                                                    <th>Harga</th>
-                                                    <th>Total</th>
-                                                    <th>
-                                                        <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
-                                                    </th>
+                                                    @if ($jns=='fix')
+                                                        <th>Barang</th>
+                                                        <th>SKU induk</th>
+                                                        <th>SKU</th>
+                                                        <th>Jumlah</th>
+                                                        <th>Harga</th>
+                                                        <th>Total</th>
+                                                        <th>
+                                                            <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
+                                                        </th>
+                                                    @else
+                                                        <th>Kode Barang</th>
+                                                        <th>SKU induk</th>
+                                                        <th>sku</td>
+                                                        <th>Barang</th>
+                                                    @endif
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -69,15 +82,22 @@
                                                     <tr>
                                                         <td>{{$no++}}</td>
                                                         {{-- <td>{{$item->kode_barang}}</td> --}}
-                                                        <td>{{$item->barang}}</td>
-                                                        <td>{{$item->skuindex}}</td>
-                                                        <td>{{$item->sku}}</td>
-                                                        <td>{{$item->jumlah}}</td>
-                                                        <td>{{number_format($item->harga)}}</td>
-                                                        <td>{{number_format($item->total)}}</td>
-                                                        <td>
-                                                            <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
-                                                        </td>
+                                                        @if ($jns=="fix")
+                                                            <td>{{$item->barang}}</td>
+                                                            <td>{{$item->skuindex}}</td>
+                                                            <td>{{$item->sku}}</td>
+                                                            <td>{{$item->jumlah}}</td>
+                                                            <td>{{number_format($item->harga)}}</td>
+                                                            <td>{{number_format($item->total)}}</td>
+                                                            <td>
+                                                                <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
+                                                            </td>
+                                                        @else
+                                                            <td>{{$item->kode_barang}}</td>
+                                                            <td>{{$item->skuinduk}}</td>
+                                                            <td>{{$item->sku}}</td>
+                                                            <td>{{$item->key_barang}}</td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                             </tbody>

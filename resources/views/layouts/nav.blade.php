@@ -28,6 +28,7 @@
         <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
             class="nav-link dropdown-toggle">Transaksi</a>
         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+            <li><a href="{{route('sc.view')}}" class="dropdown-item">Trx Scan Paket</a></li>
             <li><a href="{{route('im.lazada')}}" class="dropdown-item">Trx Lazada </a></li>
             <li><a href="{{route('im.shopee')}}" class="dropdown-item">Trx Shopee </a></li>
             <li><a href="{{route('brgnonlengkap')}}" class="dropdown-item">Import Barang Tidak Lengkap</a></li>
