@@ -41,6 +41,7 @@
         <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
             <li><a href="{{route('list.trx')}}" class="dropdown-item">Data Trx </a></li>
             <li><a href="{{route('data.trx')}}" class="dropdown-item">Laporan Transaksi </a></li>
+            <li><a href="{{route('lap.sc')}}" class="dropdown-item">Laporan Paket Scan </a></li>
         </ul>
     </li>
     @endif

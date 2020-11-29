@@ -14,6 +14,7 @@ use App\Imports\LazadaImport;
 use App\models\Barang;
 use App\models\barang_trx;
 use App\models\BarangKey;
+use App\models\model_barang_scan;
 use App\models\temp_import;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -514,8 +515,96 @@ class TrxController extends Controller
             return response()->json($print);
         }
     }
+    // Scan Barang=====================================================================================================
     public function scView()
     {
-        return view('backend.import_barang.scan');
+        $data=[];
+        $print=[
+            'data'=>$data,
+        ];
+        return view('backend.import_barang.scan',$print);
+    }
+    public function scData($jn)
+    {
+        $tgl=date('Y-m-d');
+        if($jn=="scan"){
+            $data=model_barang_scan::where('stts','!=','batal')->take(20)->orderBy('id','DESC')->get();
+        }elseif($jn=="terkirim"){
+            $data=model_barang_scan::where(['stts'=>'terkirim'])->take(20)->orderBy('id','DESC')->get();
+        }elseif($jn=="batal"){
+            $data=model_barang_scan::where(['stts'=>'batal'])->take(20)->orderBy('id','DESC')->get();
+        }
+        $print=[
+            'data'=>$data,
+        ];
+        return view('backend.import_barang.data_scan',$print);
+    }
+    public function scSimpan(Request $request)
+    {
+        $nresi=$request->noresi;
+        $dt=[];
+        // cek barng ada
+        $cb=temp_import::where('noresi',$nresi)->count();
+        if($cb>0){
+        //    cek discan barang apa sudah ada
+        $cscan=model_barang_scan::where('noresi',$nresi)->count();
+            if($cscan>0){
+                $print=[
+                    'sts'=>'2',
+                    'msg'=>'Data Barang Sudah Di scan',
+                ];
+            }else{
+                $data=temp_import::where('noresi',$nresi)->get();
+                foreach($data as $item){
+                    $dt[]=[
+                        'noresi'=>$item->noresi,
+                        'tgl'=>date('Y-m-d'),
+                        'skuinduk'=>$item->skuindex,
+                        'sku'=>$item->sku,
+                        'barang'=>$item->barang,
+                        'jumlah'=>$item->jumlah,
+                        'harga'=>$item->harga,
+                        'total'=>$item->total,
+                    ];
+                }
+                $sim=DB::table('barang_scan')->insert($dt);
+                if($sim){
+                    $print=[
+                        'sts'=>'1',
+                        'msg'=>'Data Barang Berhasil Disimpan',
+                    ];
+                }
+            }
+        }else{
+            $print=[
+                'sts'=>'0',
+                'msg'=>'Data Tidak Ditemukan',
+            ];
+        }
+        return response()->json($print);
+    }
+    // batal barang
+    public function batalscData($noresi)
+    {
+        $btl=model_barang_scan::where('noresi',$noresi)->update([
+            'stts'=>'batal',
+        ]);
+        if($btl){
+            $print=[
+                'sts'=>'1',
+                'msg'=>'Data Berhasil Dibatalkan',
+            ];
+        }else{
+            $print=[
+                'sts'=>'0',
+                'msg'=>'Data Gagal Dibatalkan',
+            ];
+        }
+        return response()->json($print);
+    }
+    // lap scan
+    public function lapscan()
+    {
+
     }
 }

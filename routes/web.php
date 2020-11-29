@@ -54,6 +54,10 @@ Route::prefix('import-data')->group(function(){
     Route::get('cari-noresi/{norm}','backend\TrxController@cariNoresi');
     // Scaner paket
     Route::get('sc-view','backend\TrxController@scView')->name('sc.view');
+    Route::get('get-scan-data/{jns}','backend\TrxController@scData');
+    Route::get('batal-scan/{noresi}','backend\TrxController@batalscData');
+    Route::post('simpan-scan','backend\TrxController@scSimpan');
+    Route::get('lap-scan','backend\TrxController@lapscan')->name('lap.sc');
 
 });
 Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
