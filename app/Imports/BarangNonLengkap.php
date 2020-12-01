@@ -14,6 +14,7 @@ class BarangNonLengkap implements ToCollection
     */
     public function collection(Collection $collection)
     {
+        $data=[];
         foreach ($collection as $key => $row) {
             if($key>0){
                 $tgl=date('Y-m-d');

@@ -48,6 +48,7 @@ class BarangController extends Controller
             'harga'=>$request->harga,
             'deskripsi'=>$request->deskripsi,
             'created_at'=>date('Y-m-d H:i:s'),
+            'updated_at'=>date('Y-m-d H:i:s'),
         ]);
         
         return redirect('/barang')->with('status','Sukses menyimpan data');

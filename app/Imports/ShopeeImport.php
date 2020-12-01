@@ -20,6 +20,8 @@ class ShopeeImport implements ToCollection
             $admin=Auth::user()->name;
             $dataproduk = array();
             $data = array();
+            $sku="";
+            $sku_induk="";
             foreach ($rows as $row){
                 if($numberrow!=0){
                     $teks = $row[8];

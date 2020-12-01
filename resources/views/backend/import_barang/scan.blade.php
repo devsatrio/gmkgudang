@@ -49,14 +49,14 @@
                                     <div class="row">
                                         <div class="col-12 mb-4">
                                             <div class="card-tools float-right">
-                                                <form class="form-inline">
+                                                <div class="form-inline">
                                                     <div class="form-group mr-2">
                                                         <label for="" class="mr-2">Masukan / Scan Kode</label>
                                                     </div>
                                                     <div class="form-group mr-2">
                                                         <input type="text" style="widht:500px" class="form-control" id="scn" placeholder="Input Nomer Resi atau Barcode ">
                                                     </div>
-                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-12" class="divload" id="container_scan">
@@ -117,7 +117,6 @@
             if(key==13){
                 var kd=$('#scn').val();
                 saveData(kd);
-
                 $('#scn').val('');
             }
     });
@@ -135,38 +134,38 @@
                     });
                     getDataScan('scan','container_scan');
                 }else if(response.sts=="2"){
-                Swal.fire({
-                    type:'warning',
-                    title:'Peringatan!',
-                    text:'Barang Ini Sudah Discan Atau Terkirim, Konfirmasi Status Batal Untuk Barang Ini ? ',
-                    showCancelButton:true,
-                    cancelButtonColor:'#3085d6',
-                    confirmButtonColor:'#d33',
-                    confirmButtonText:'Ya, Batalkan'
-                }).then(function(result){
-                    if(result.value){
-                        // batal barang
-                        $.ajax({
-                            url:'batal-scan/'+kd,
-                            type:'get',
-                            dataType:'json',
-                            success:function(response){
-                                if(response.sts=="1"){
-                                    Toast.fire({
-                                        type: 'success',
-                                        title: response.msg
-                                    });
-                                    getDataScan('scan','container_scan')
-                                }else{
-                                    Toast.fire({
-                                        type: 'error',
-                                        title: response.msg
-                                    });
+                    Swal.fire({
+                        type:'warning',
+                        title:'Peringatan!',
+                        text:'Barang Ini Sudah Discan Atau Terkirim, Konfirmasi Status Batal Untuk Barang Ini ? ',
+                        showCancelButton:true,
+                        cancelButtonColor:'#3085d6',
+                        confirmButtonColor:'#d33',
+                        confirmButtonText:'Ya, Batalkan'
+                    }).then(function(result){
+                        if(result.value){
+                            // batal barang
+                            $.ajax({
+                                url:'batal-scan/'+kd,
+                                type:'get',
+                                dataType:'json',
+                                success:function(response){
+                                    if(response.sts=="1"){
+                                        Toast.fire({
+                                            type: 'success',
+                                            title: response.msg
+                                        });
+                                        getDataScan('scan','container_scan');
+                                    }else{
+                                        Toast.fire({
+                                            type: 'error',
+                                            title: response.msg
+                                        });
+                                    }
                                 }
-                            }
-                        })
-                    }
-                });
+                            })
+                        }
+                    });
                 }else{
                     Swal.fire({
                         type:'warning',

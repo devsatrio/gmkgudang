@@ -20,31 +20,25 @@ class LazadaImport implements ToCollection
         foreach ($rows as $key=>$row) {
             // print_r($row[0]);
             if($key>0){
-                $harg=strtok($row[1],'.');
-                $total=$row[5]*$harg;
-                if($row[0]!=""||$row[4]!=""||$row[0]!=" "||$row[4]!=" "){
-                    // $bar=Barang::where('kode_barang',$row[4])->count();
-                    // if ($bar>0) {
-                    //     $valid='valid';
-                    // }else{
-                    //     $valid='belum';
-                    // }
-                    $valid='valid';
-                }else{
-                    $valid='belum';
-                }
+                $harg=strtok($row[37],'.');
+                // $total=$row[5]*$harg;
+                // if($row[0]!=""||$row[4]!=""||$row[0]!=" "||$row[4]!=" "){
+                //     $valid='valid';
+                // }else{
+                //     $valid='belum';
+                // }
                 $data[] = [
-                    'noresi' => $row[3],
-                    'sku'=>$row[0],
+                    'noresi' => $row[48],
+                    'sku'=>$row[4],
                     'skuindex'=>$row[4],
                     'tgl'=>date('Y-m-d'),
-                    'barang'=> $row[2],
-                    'varian'=> $row[2],
+                    'barang'=> $row[41],
+                    'varian'=> $row[42],
                     'harga'=> $harg,
-                    'jumlah'=>$row[5],
+                    'jumlah'=>'1',
                     'admin'=>$admin,
-                    'total'=>$total,
-                    'sts_valid'=>$valid,
+                    'total'=>$harg,
+                    'sts_valid'=>'belum',
                     'jenis'=>'lazada',
                     'created_at'=>date('Y-m-d H:i:s'),
                     'updated_at'=>date('Y-m-d H:i:s'),

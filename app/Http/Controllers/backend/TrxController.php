@@ -151,7 +151,9 @@ class TrxController extends Controller
     }
     public function dataShopee($jn)
     {
-
+        $sku=[];
+        $skuindex=[];
+        $bar=[];
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
@@ -307,6 +309,9 @@ class TrxController extends Controller
     {
         // $data=BarangKey::join('temp_import','barangkey.skuinduk','=');
         // $tgl=date('Y-m-d');
+        $sku=[];
+        $skuindex=[];
+        $barkey=[];
         $br=BarangKey::get();
          foreach ($br as  $item) {
              $barkey[]=$item->key_barang;
