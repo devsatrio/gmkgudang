@@ -2,8 +2,6 @@
 
 namespace App\Exports;
 
-use App\models\Barang;
-use App\models\BarangKey;
 use App\models\temp_import;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -17,14 +15,9 @@ class TempExportSp_Non_Lengkap implements FromCollection , WithHeadings , Should
     */
     public function collection()
     {
-        $br=Barang::get();
-        foreach ($br as  $item) {
-            $kode[]=$item->kode_barang;
-        }
-       //  dd($kode);
-       $data=BarangKey::
-           whereNotIn('kode_barang',$kode)
-           ->get();
+        $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'shopee'])
+        ->select(DB::raw('skuindex,sku,barang'))
+        ->get();
        return $data;
     }
     public function headings(): array
