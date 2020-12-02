@@ -33,8 +33,8 @@
                                 @if ($jn=="Non-Lengkap")
                                 <a href="{{route('exp.nostok.shopee',[Request::segment(3)])}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
                                 @endif
-
                                 <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
+                                <a href="#" class="float-right mr-2" style="visibility: hidden" id="btnhapus" onclick="hapus()"  class="float-right"><div class="badge badge-danger"> <i class="fa fa-delete"></i> Hapus Data</div></a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -53,11 +53,11 @@
                                                         <th>Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total</th>
-                                                        @if ($jn=="Sudah-Lengkap")
+                                                        {{-- @if ($jn=="Sudah-Lengkap") --}}
                                                         <th>
                                                             <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
                                                         </th>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     </tr>
                                                 </tr>
                                             </thead>
@@ -75,11 +75,11 @@
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
-                                                        @if ($jn=="Sudah-Lengkap")
+                                                        {{-- @if ($jn=="Sudah-Lengkap") --}}
                                                         <td>
                                                             <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
                                                         </td>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -96,26 +96,34 @@
 @endsection
 @push('customjs')
 <script src="{{asset('loading/jquery.loading.js')}}"></script>
+<script src="{{asset('assets/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
     <script>
          $.ajaxSetup({
             headers:{
                 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
             }
         });
+         // sweetalert
+         const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            showConfirmButton: false,
+            timer: 3000
+        });
          function cekall() {
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
-                $('#btnacc').attr('style','display:inline');
+                $('#btnhapus').attr('style',"visibility:show");
             } else {
                 $(".subck").prop('checked',false);
-                $('#btnacc').attr('style','display:none');
+                $('#btnhapus').attr('style',"visibility:hidden");
             }
         }
         function ceksat() {
             if($('.subck').is(':checked',true)){
-                $('#btnacc').attr('style','display:inline');
+                $('#btnhapus').attr('style',"visibility:show");
             }else{
-                $('#btnacc').attr('style','display:none');
+                $('#btnhapus').attr('style',"visibility:hidden");
             }
         }
         function acc() {
@@ -150,6 +158,51 @@
                         }
                     })
                 }
+            }
+        }
+        function hapus() {
+            var allVals=[];
+            $('.subck:checked').each(function() {
+                allVals.push($(this).attr('data-id'))
+            });
+            if(allVals.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                console.log(allVals);
+                // var conf=confirm("Apakah anda ingin Proses Data ini?");
+                Swal.fire({
+                    type:'warning',
+                    title:'Peringatan!',
+                    text:'Apakah Anda Yakin Menghapus Data Ini ? ',
+                    showCancelButton:true,
+                    cancelButtonColor:'#d33',
+                    confirmButtonColor:'#3085d6',
+                    confirmButtonText:'Proses'
+                }).then(function(result){
+                    if(result.value){
+                        // acc pasien
+                        var join_selected=allVals.join(",");
+                        $.ajax({
+                            url:"{{route('del.temp')}}",
+                            type:'post',
+                            data:{norawat:join_selected},
+                            success:function(response){
+                                if(response.sts="1"){
+                                    Toast.fire({
+                                        type: 'success',
+                                        title: response.msg
+                                    });
+                                    location.reload();
+                                }else{
+                                    Toast.fire({
+                                        type: 'error',
+                                        title: response.msg
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
     </script>

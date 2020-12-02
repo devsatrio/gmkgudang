@@ -44,6 +44,7 @@ class TrxController extends Controller
             'data'=>$data,
             'desk'=>'Barang Sudah Fix',
         ];
+
         return view('backend.import_barang.import_lazada',$sed);
     }
     public function actimportlazada(Request $request)
@@ -57,25 +58,54 @@ class TrxController extends Controller
             }
         }
     }
-    public function datalazada($pram)
+    public function datalazada($jn)
     {
-         // cari kolom data barang
-         $br=Barang::get();
+        //  // cari kolom data barang
+        //  $br=Barang::get();
+        //  foreach ($br as  $item) {
+        //      $kode[]=$item->kode_barang;
+        //  }
+        //  if($pram=="Non-Stok"){
+        //     $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'lazada'])
+        //      ->whereNotIn('skuindex',$kode)
+        //      ->get();
+        //  }else{
+        //     $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
+        //     ->get();
+        //  }
+
+        //  $sed=[
+        //      'data'=>$data,
+        //  ];
+        $sku=[];
+        $skuindex=[];
+        $bar=[];
+        $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
          }
-         if($pram=="Non-Stok"){
+        if($jn=="Sudah-Lengkap"){
+            $keb=BarangKey::get();
+            foreach ($keb as $key => $val) {
+                $sku[]=$val->sku;
+                $skuindex[]=$val->skuindex;
+                $bar[]=$val->barang;
+            }
             $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'lazada'])
-             ->whereNotIn('skuindex',$kode)
-             ->get();
-         }else{
+                ->whereIn('skuindex',$skuindex)
+                ->whereIn('barang',$bar)
+                ->get();
+            // $ktg="Lengkap";
+        }else{
             $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
             ->get();
-         }
-
-         $sed=[
-             'data'=>$data,
-         ];
+            // $$ktg="NonLengkap";
+        }
+        $sed=[
+            'data'=>$data,
+            'desk'=>'Barang Sudah Fix',
+            'jn'=>$jn,
+        ];
          return view('backend.import_barang.data_lazada',$sed);
     }
     public function exportNonStok($pram)
@@ -352,6 +382,7 @@ class TrxController extends Controller
     }
     public function NonLengkapNonStok()
     {
+
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
@@ -611,5 +642,25 @@ class TrxController extends Controller
     public function lapscan()
     {
 
+    }
+    // hapus Temp -barang
+    public function hapusTemp(Request $request)
+    {
+        $ids=$request->norawat;
+        // return explode(',',$norawat);
+        $listid=explode(',',$ids);
+        $del=temp_import::whereIn('id',$listid)->delete();
+        if($del){
+            $print=[
+                'sts'=>'1',
+                'msg'=>'Data Behasil Dihapus',
+            ];
+        }else{
+            $print=[
+                'sts'=>'0',
+                'msg'=>'Data Gagal Dihapus',
+            ];
+        }
+        return response()->json($print);
     }
 }

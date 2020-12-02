@@ -42,6 +42,7 @@
                             <div class="row">
                                 <div class="col-12 mb-3">
                                     <button style="display: none" id="btnacc" onclick="acc()" class="btn btn-primary float-right"><i class="fa fa-check"></i> Acc Transaksi</button>
+                                    <a href="#" class="float-right mr-2" style="display: none" id="btnhapus" onclick="hapus()"  class="float-right"><div class="badge badge-danger"> <i class="fa fa-delete"></i> Hapus Data</div></a>
                                 </div>
                                 <div class="col-12">
                                     <div class="table-responsive">
@@ -123,20 +124,24 @@
                 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
             }
         });
-         function cekall() {
+        function cekall() {
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
                 $('#btnacc').attr('style','display:inline');
+                $('#btnhapus').attr('style','display:inline');
             } else {
                 $(".subck").prop('checked',false);
                 $('#btnacc').attr('style','display:none');
+                $('#btnhapus').attr('style','display:none');
             }
         }
         function ceksat() {
             if($('.subck').is(':checked',true)){
                 $('#btnacc').attr('style','display:inline');
+                $('#btnhapus').attr('style','display:inline');
             }else{
                 $('#btnacc').attr('style','display:none');
+                $('#btnhapus').attr('style','display:none');
             }
         }
         function acc() {
@@ -171,6 +176,51 @@
                         }
                     })
                 }
+            }
+        }
+        function hapus() {
+            var allVals=[];
+            $('.subck:checked').each(function() {
+                allVals.push($(this).attr('data-id'))
+            });
+            if(allVals.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                console.log(allVals);
+                // var conf=confirm("Apakah anda ingin Proses Data ini?");
+                Swal.fire({
+                    type:'warning',
+                    title:'Peringatan!',
+                    text:'Apakah Anda Yakin Menghapus Data Ini ? ',
+                    showCancelButton:true,
+                    cancelButtonColor:'#d33',
+                    confirmButtonColor:'#3085d6',
+                    confirmButtonText:'Proses'
+                }).then(function(result){
+                    if(result.value){
+                        // acc pasien
+                        var join_selected=allVals.join(",");
+                        $.ajax({
+                            url:"{{route('del.temp')}}",
+                            type:'post',
+                            data:{norawat:join_selected},
+                            success:function(response){
+                                if(response.sts="1"){
+                                    Toast.fire({
+                                        type: 'success',
+                                        title: response.msg
+                                    });
+                                    location.reload();
+                                }else{
+                                    Toast.fire({
+                                        type: 'error',
+                                        title: response.msg
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
             }
         }
     </script>

@@ -58,7 +58,8 @@ Route::prefix('import-data')->group(function(){
     Route::get('batal-scan/{noresi}','backend\TrxController@batalscData');
     Route::post('simpan-scan','backend\TrxController@scSimpan');
     Route::get('lap-scan','backend\TrxController@lapscan')->name('lap.sc');
-
+    // hapus temp_barang
+    Route::post('hapus-temp','backend\TrxController@hapusTemp')->name('del.temp');
 });
 Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
 Route::get('/barang-masuk/laporan','backend\BarangMasukController@laporan');
