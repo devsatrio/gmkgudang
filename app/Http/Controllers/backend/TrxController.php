@@ -579,22 +579,41 @@ class TrxController extends Controller
     }
     public function scData($jn)
     {
+
+        $admin=Auth::user()->name;
         $tgl=date('Y-m-d');
-        if($jn=="scan"){
-            $data=model_barang_scan::where('stts','!=','batal')->take(20)->orderBy('id','DESC')->get();
-        }elseif($jn=="terkirim"){
-            $data=model_barang_scan::where(['stts'=>'terkirim'])->take(20)->orderBy('id','DESC')->get();
-        }elseif($jn=="batal"){
-            $data=model_barang_scan::where(['stts'=>'batal'])->take(20)->orderBy('id','DESC')->get();
+        if($admin=="Super Admin"){
+            if($jn=="scan"){
+                $data=model_barang_scan::where('stts','!=','batal')->orderBy('id','DESC')->get();
+            }elseif($jn=="terkirim"){
+                $data=model_barang_scan::where(['stts'=>'terkirim'])->orderBy('id','DESC')->get();
+            }elseif($jn=="batal"){
+                $data=model_barang_scan::where(['stts'=>'batal'])->orderBy('id','DESC')->get();
+            }
+
+            $print=[
+                'data'=>$data,
+            ];
+            return view('backend.import_barang.data_scan',$print);
+        }else{
+            if($jn=="scan"){
+                $data=model_barang_scan::where('stts','!=','batal')->where('admin',$admin)->orderBy('id','DESC')->get();
+            }elseif($jn=="terkirim"){
+                $data=model_barang_scan::where(['stts'=>'terkirim'])->where('admin',$admin)->orderBy('id','DESC')->get();
+            }elseif($jn=="batal"){
+                $data=model_barang_scan::where(['stts'=>'batal'])->where('admin',$admin)->orderBy('id','DESC')->get();
+            }
+
+            $print=[
+                'data'=>$data,
+            ];
+            return view('backend.import_barang.data_scan',$print);
         }
-        $print=[
-            'data'=>$data,
-        ];
-        return view('backend.import_barang.data_scan',$print);
     }
     public function scSimpan(Request $request)
     {
         $nresi=$request->noresi;
+        $admin=Auth::user()->name;
         $dt=[];
         // cek barng ada
         $cb=temp_import::where('noresi',$nresi)->count();
@@ -619,6 +638,7 @@ class TrxController extends Controller
                         'jumlah'=>$item->jumlah,
                         'harga'=>$item->harga,
                         'total'=>$item->total,
+                        'admin'=>$admin,
                     ];
                 }
                 $sim=DB::table('barang_scan')->insert($dt);
@@ -670,7 +690,16 @@ class TrxController extends Controller
     public function cariLscan($tgl1,$tgl2,$pil)
     {
         // $admin=Auth::user()->name;
-        $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->get();
+        if($pil=="pending"){
+            $temp=temp_import::get();
+            $resi=[];
+            foreach($temp as $gl){
+                $resi[]=$gl->noresi;
+            }
+            $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->whereIn('noresi',$resi)->get();
+        }else{
+            $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->get();
+        }
         $print=[
             'data'=>$data,
             'tgl1'=>date('Y-m-d'),

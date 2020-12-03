@@ -50,6 +50,7 @@
                                         <select name="pil" id="pil" class="form-control">
                                             <option value="terkirim">Terkirim</option>
                                             <option value="batal">Batal</option>
+                                            <option value="pending">Pending</option>
                                         </select>
                                     </div>
                                     <div class="form-group">

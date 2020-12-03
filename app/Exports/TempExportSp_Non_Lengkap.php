@@ -16,13 +16,14 @@ class TempExportSp_Non_Lengkap implements FromCollection , WithHeadings , Should
     public function collection()
     {
         $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'shopee'])
-        ->select(DB::raw('skuindex,sku,barang,varian'))
+        ->select(DB::raw('noresi,skuindex,sku,barang,varian'))
         ->get();
        return $data;
     }
     public function headings(): array
     {
         return [
+            'NO RESI',
             'SKUINDUK',
             'SKU',
             'BARANG',

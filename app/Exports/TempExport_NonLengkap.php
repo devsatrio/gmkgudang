@@ -17,13 +17,14 @@ class TempExport_NonLengkap implements FromCollection, ShouldAutoSize,WithHeadin
     public function collection()
     {
         $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
-        ->select(DB::raw('skuindex,sku,barang,varian'))
+        ->select(DB::raw('noresi,skuindex,sku,barang,varian'))
         ->get();
        return $data;
     }
     public function headings(): array
     {
         return [
+            'NO RESI',
             'SKUINDUK',
             'SKU',
             'BARANG',
