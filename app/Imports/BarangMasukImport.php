@@ -19,11 +19,11 @@ class BarangMasukImport implements ToCollection, WithHeadingRow
                     $idbarang = $brg->id;
                     $harga = $brg->harga;
                     $stokbaru = $brg->stok+$row['jumlah'];
+                    Barang::find($idbarang)
+                    ->update([
+                        'stok'=>$stokbaru,
+                    ]);
                 }
-                Barang::find($idbarang)
-                ->update([
-                    'stok'=>$stokbaru,
-                ]);
                 if($row['harga']!=0){
                     $hargafix = $row['harga'];
                     $total = $row['jumlah']*$hargafix;

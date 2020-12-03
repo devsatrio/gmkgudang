@@ -12,6 +12,7 @@ class BarangImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $collection)
     {
+        $data=[];
         foreach ($collection as $row){
                 $data[] = [
                     'kode_barang'=>$row['kode'],
