@@ -177,7 +177,6 @@
         })
     }
     function getDataScan(jns,idcontainer) {
-
             // loading
             $('#'+idcontainer).loading({
                     stoppable: true,

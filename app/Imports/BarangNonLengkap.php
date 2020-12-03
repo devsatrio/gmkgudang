@@ -21,7 +21,8 @@ class BarangNonLengkap implements ToCollection
                 $sku=$row[0];
                 $skuinduk=$row[1];
                 $bar=$row[2];
-                $kbar=$row[3];
+                $varian=$row[3];
+                $kbar=$row[4];
             // // update temp
             // temp_import::where('barang',$bar)->update(['stts_valid'=>'valid']);
             $data[]=[
@@ -29,6 +30,7 @@ class BarangNonLengkap implements ToCollection
                 'skuinduk'=>$skuinduk,
                 'key_barang'=>$bar,
                 'kode_barang'=>$kbar,
+                'varian'=>$varian,
                 'tgl_upload'=>$tgl
                 ];
             }

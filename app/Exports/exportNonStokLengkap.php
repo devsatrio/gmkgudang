@@ -23,7 +23,7 @@ class exportNonStokLengkap implements FromCollection,WithHeadings,ShouldAutoSize
        //  dd($kode);
        $data=BarangKey::
            whereNotIn('kode_barang',$kode)
-           ->select(DB::raw('kode_barang,skuinduk,sku,key_barang'))
+           ->select(DB::raw('kode_barang,skuinduk,sku,key_barang,varian'))
            ->get();
         return $data;
     }
@@ -34,6 +34,7 @@ class exportNonStokLengkap implements FromCollection,WithHeadings,ShouldAutoSize
             'SKUINDUK',
             'SKU',
             'BARANG',
+            'VARIAN',
             'Jumlah',
         ];
     }

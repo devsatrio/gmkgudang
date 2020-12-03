@@ -69,9 +69,11 @@
                                                         <td>Toko</td>
                                                         <td colspan="7">{{$item->admin}}</td>
                                                         <td class="bg-danger"></td>
+                                                        <td class="bg-success"></td>
                                                         @php
                                                             $detail=DB::table('barang_trx')->leftjoin('barang','barang.kode_barang','=','barang_trx.skuindex')
                                                                     ->select(DB::raw('barang.*,barang.harga as hpp,barang_trx.*'))
+                                                                    ->where('stts','!=','batal')
                                                                     ->where('admin',$item->admin)->whereBetween('tgl',[$tgl1,$tgl2])
                                                                     ->get();
                                                         @endphp
@@ -79,6 +81,7 @@
                                                             <td>Kode</td>
                                                             <td>Market</td>
                                                             <td>Nama Barang</td>
+                                                            <td>Varian</td>
                                                             <td>Qty</td>
                                                             <td>HPP</td>
                                                             <td>Harga</td>
@@ -108,6 +111,7 @@
                                                                 <td>{{$colect->skuindex}}</td>
                                                                 <td>{{$colect->jenis}}</td>
                                                                 <td>{{$colect->barang}}</td>
+                                                                <td>{{$colect->varian}}</td>
                                                                 <td>{{$colect->jumlah}}</td>
                                                                 <td>{{$colect->hpp}}</td>
                                                                 <td>{{$colect->harga}}</td>
@@ -124,12 +128,13 @@
                                                             <td>{{$qty}}</td>
                                                             <td></td>
                                                             <td></td>
+                                                            <td></td>
                                                             <td>{{$tothp}}</td>
                                                             <td>{{$tojual}}</td>
                                                             <td>{{$tount}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="9"></td>
+                                                            <td colspan="10"></td>
                                                         </tr>
                                                     </tr>
                                                 @endforeach

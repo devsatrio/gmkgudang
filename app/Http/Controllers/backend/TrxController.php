@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
 use DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class TrxController extends Controller
 {
@@ -339,6 +340,7 @@ class TrxController extends Controller
     {
         // $data=BarangKey::join('temp_import','barangkey.skuinduk','=');
         // $tgl=date('Y-m-d');
+        $admin=Auth::user()->name;
         $sku=[];
         $skuindex=[];
         $barkey=[];
@@ -353,7 +355,8 @@ class TrxController extends Controller
         foreach ($cst as $key => $value) {
             $kbar[]=$value->kode_barang;
         }
-        $data=temp_import::
+        if($admin=="Super Admin"){
+            $data=temp_import::
             // leftjoin('barangkey','barangkey.key_barang','=','temp_import.barang')
             // ->select(DB::raw('barangkey.kode_barang,temp_import.*'))
             whereIn('barang',$barkey)
@@ -361,7 +364,21 @@ class TrxController extends Controller
             // ->whereIn('temp_import.skuindex',$skuinduk)
             // ->whereIn('temp_import.sku',$sku)
             ->where('sts_valid','belum')
+            // ->where('admin',$admin)
             ->get();
+        }else{
+            $data=temp_import::
+            // leftjoin('barangkey','barangkey.key_barang','=','temp_import.barang')
+            // ->select(DB::raw('barangkey.kode_barang,temp_import.*'))
+            whereIn('barang',$barkey)
+            // ->whereIn('barangkey.kode_barang',$kbar)
+            // ->whereIn('temp_import.skuindex',$skuinduk)
+            // ->whereIn('temp_import.sku',$sku)
+            ->where('sts_valid','belum')
+            ->where('admin',$admin)
+            ->get();
+        }
+
         $print=[
             'data'=>$data,
             'judul'=>'Barang Telah Diperbaiki',
@@ -598,6 +615,7 @@ class TrxController extends Controller
                         'skuinduk'=>$item->skuindex,
                         'sku'=>$item->sku,
                         'barang'=>$item->barang,
+                        'varian'=>$item->varian,
                         'jumlah'=>$item->jumlah,
                         'harga'=>$item->harga,
                         'total'=>$item->total,
@@ -641,7 +659,24 @@ class TrxController extends Controller
     // lap scan
     public function lapscan()
     {
-
+        $data=[];
+        $print=[
+            'data'=>$data,
+            'tgl1'=>date('Y-m-d'),
+            'tgl2'=>date('Y-m-d'),
+        ];
+        return view('backend.import_barang.laporan_scan',$print);
+    }
+    public function cariLscan($tgl1,$tgl2,$pil)
+    {
+        // $admin=Auth::user()->name;
+        $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->get();
+        $print=[
+            'data'=>$data,
+            'tgl1'=>date('Y-m-d'),
+            'tgl2'=>date('Y-m-d'),
+        ];
+        return view('backend.import_barang.data_scan',$print);
     }
     // hapus Temp -barang
     public function hapusTemp(Request $request)

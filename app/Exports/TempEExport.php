@@ -19,7 +19,7 @@ class TempEExport implements FromCollection, ShouldAutoSize, WithHeadings
          }
          $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'lazada'])
          ->whereNotIn('skuindex',$kode)
-         ->select(DB::raw('skuindex,sku,barang'))
+         ->select(DB::raw('skuindex,sku,barang,varian'))
          ->get();
         return $data;
     }
@@ -29,6 +29,7 @@ class TempEExport implements FromCollection, ShouldAutoSize, WithHeadings
             'SKUINDUK',
             'SKU',
             'BARANG',
+            'VARIAN',
             'JUMLAH',
         ];
     }

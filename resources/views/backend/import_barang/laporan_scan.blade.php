@@ -35,7 +35,7 @@
                                 Data Pada Tanggal :   {{$tgl1}} sampai {{$tgl2}}
                             </div>
                             <div class="card-tools">
-                                <form action="{{route('cari.data.trx')}}" method="get" class="form-inline">
+                                <div class="form-inline">
                                     @csrf
                                     <div class="form-group mr-2">
                                         <input type="text" name="tgl1" id="tgl1" value="{{$tgl1}}" readonly class="form-control picker" >
@@ -46,16 +46,22 @@
                                     <div class="form-group mr-2">
                                         <input type="text" name="tgl2" id="tgl2" value="{{$tgl2}}" readonly class="form-control picker" >
                                     </div>
+                                    <div class="form-group mr-2">
+                                        <select name="pil" id="pil" class="form-control">
+                                            <option value="terkirim">Terkirim</option>
+                                            <option value="batal">Batal</option>
+                                        </select>
+                                    </div>
                                     <div class="form-group">
-                                        <Button type="submit" class="btn btn-primary mr-2"><i class="fa fa-search"></i></Button>
+                                        <Button type="button" onclick="getData()" class="btn btn-primary mr-2"><i class="fa fa-search"></i></Button>
                                     </div>
                                     <div class="form-group">
                                         <Button id="btnexcel" onclick="printd()" type="button" class="btn btn-info"><i class="fa fa-file-excel"></i></Button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" id="tag_container">
                             @include('backend.import_barang.data_scan')
                         </div>
                     </div>
@@ -68,10 +74,10 @@
 @push('customjs')
     <script src="{{asset('flatpicker/flatpicker.min.js')}}"></script>
     <script src="{{asset('loading/tableExport.js')}}"></script>
+    <script src="{{asset('loading/jquery.loading.js')}}"></script>
     <script>
         flatpickr(".picker",{
             dateFormat: "Y-m-d",
-            "locale": "id",
         });
         $.ajaxSetup({
             headers:{
@@ -83,9 +89,32 @@
             var tgl1=$('#tgl1').val();
             var tgl2=$('#tgl2').val();
             // get data table
-            $('#tablereport').tableExport({
+            $('#tbl').tableExport({
                format:'xls',
                filename:'report-'+tgl1+'-'+tgl2,
+            });
+        }
+        getData();
+        function getData() {
+            var tgl1=$('#tgl1').val();
+            var tgl2=$('#tgl2').val();
+            var pil=$('#pil').val();
+            // loading
+            $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+            $.ajax({
+                url:'cari-list-scan/'+tgl1+'/'+tgl2+'/'+pil,
+                dataType:'html',
+                type:'get',
+            }).done(function(data){
+                $('#tag_container').empty().html(data);
+                $("body").loading('stop');
+            }).fail(function(jqXHR, ajaxOptions, thrownError){
+            alert('Load Data Gagal');
+                $("body").loading('stop');
             });
         }
 

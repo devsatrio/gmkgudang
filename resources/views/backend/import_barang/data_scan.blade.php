@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered" id="tbl">
         <thead>
             <tr>
                 <tr>
@@ -9,6 +9,7 @@
                     <th>SKU induk</th>
                     <th>SKU</th>
                     <th>Barang</th>
+                    <th>Varian</th>
                     <th>Jumlah</th>
                     <th>Harga</th>
                     <th>Total</th>
@@ -27,9 +28,10 @@
                     <td>{{$no++}}</td>
                     <td>{{$item->stts}}</td>
                     <td>{{$item->noresi}}</td>
-                    <td>{{$item->skuindex}}</td>
+                    <td>{{$item->skuinduk}}</td>
                     <td>{{$item->sku}}</td>
                     <td>{{$item->barang}}</td>
+                    <td>{{$item->varian}}</td>
                     <td>{{$item->jumlah}}</td>
                     <td>{{$item->harga}}</td>
                     <td>{{$item->total}}</td>

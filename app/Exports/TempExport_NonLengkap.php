@@ -17,7 +17,7 @@ class TempExport_NonLengkap implements FromCollection, ShouldAutoSize,WithHeadin
     public function collection()
     {
         $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
-        ->select(DB::raw('skuindex,sku,barang'))
+        ->select(DB::raw('skuindex,sku,barang,varian'))
         ->get();
        return $data;
     }
@@ -27,6 +27,7 @@ class TempExport_NonLengkap implements FromCollection, ShouldAutoSize,WithHeadin
             'SKUINDUK',
             'SKU',
             'BARANG',
+            'VARIAN',
             'KEY Kode Barang Gudang',
         ];
     }

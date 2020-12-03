@@ -3,6 +3,9 @@
 @section('token')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
+@section('customcss')
+    <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert2/sweetalert2.min.css')}}">
+@endsection
 @section('title')
     Shopee Data
 @endsection
@@ -50,6 +53,7 @@
                                                         <th>SKU induk</th>
                                                         <th>SKU</th>
                                                         <th>Barang</th>
+                                                        <th>Varian</th>
                                                         <th>Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total</th>
@@ -72,6 +76,7 @@
                                                         <td>{{$item->skuindex}}</td>
                                                         <td>{{$item->sku}}</td>
                                                         <td>{{$item->barang}}</td>
+                                                        <td>{{$item->varian}}</td>
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>

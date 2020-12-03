@@ -12,6 +12,7 @@ class BarangMasukImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $collection)
     {
+        $data=[];
         foreach ($collection as $row){
                 $barang = DB::table('barang')->where('kode_barang',$row['kode_barang'])->get();
                 foreach($barang as $brg){

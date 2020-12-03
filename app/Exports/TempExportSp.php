@@ -16,7 +16,7 @@ class TempExportSp implements FromCollection, WithHeadings, ShouldAutoSize
     public function collection()
     {
         $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'sudah','jenis'=>'shopee'])
-        ->select(DB::raw('skuindex,sku,barang'))
+        ->select(DB::raw('skuindex,sku,barang,varian'))
         ->get();
        return $data;
     }
@@ -26,6 +26,7 @@ class TempExportSp implements FromCollection, WithHeadings, ShouldAutoSize
             'SKUINDUK',
             'SKU',
             'BARANG',
+            'VARIAN',
             'JUMLAH',
         ];
     }
