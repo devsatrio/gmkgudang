@@ -6,6 +6,8 @@
                     <th>No</th>
                     <th>Status</th>
                     <th>No Resi</th>
+                    <th>No Pesan</th>
+                    <th>Kurir</th>
                     <th>SKU induk</th>
                     <th>SKU</th>
                     <th>Barang</th>
@@ -28,6 +30,8 @@
                     <td>{{$no++}}</td>
                     <td>{{$item->stts}}</td>
                     <td>{{$item->noresi}}</td>
+                    <td>{{$item->nopesan}}</td>
+                    <td>{{$item->kurir}}</td>
                     <td>{{$item->skuinduk}}</td>
                     <td>{{$item->sku}}</td>
                     <td>{{$item->barang}}</td>

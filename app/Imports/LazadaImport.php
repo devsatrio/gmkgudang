@@ -27,8 +27,12 @@ class LazadaImport implements ToCollection
                 // }else{
                 //     $valid='belum';
                 // }
+                $nopesan=(int) $row[8];
+                // dd($nopesan);
                 $data[] = [
                     'noresi' => $row[48],
+                    'nopesan' => $nopesan,
+                    'kurir' => $row[50],
                     'sku'=>$row[4],
                     'skuindex'=>$row[4],
                     'tgl'=>date('Y-m-d'),

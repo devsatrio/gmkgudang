@@ -13,6 +13,8 @@ class BarangMasukImport implements ToCollection, WithHeadingRow
     public function collection(Collection $collection)
     {
         $data=[];
+        $hargafix="";
+        $total="";
         foreach ($collection as $row){
                 $barang = DB::table('barang')->where('kode_barang',$row['kode_barang'])->get();
                 foreach($barang as $brg){
@@ -23,13 +25,13 @@ class BarangMasukImport implements ToCollection, WithHeadingRow
                     ->update([
                         'stok'=>$stokbaru,
                     ]);
-                }
-                if($row['harga']!=0){
-                    $hargafix = $row['harga'];
-                    $total = $row['jumlah']*$hargafix;
-                }else{
-                    $hargafix = $harga;
-                    $total = $row['jumlah']*$hargafix;
+                    if($row['harga']!=0){
+                        $hargafix = $row['harga'];
+                        $total = $row['jumlah']*$hargafix;
+                    }else{
+                        $hargafix = $harga;
+                        $total = $row['jumlah']*$hargafix;
+                    }
                 }
                 $data[] = [
                     'kode'=>$row['kode_barang'],

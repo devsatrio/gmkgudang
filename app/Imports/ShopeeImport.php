@@ -66,6 +66,8 @@ class ShopeeImport implements ToCollection
 
                             $data[] = [
                                     'noresi' => $row[0],
+                                    'nopesan' => $row[1],
+                                    'kurir' => $row[9],
                                     'sku'=>$sku,
                                     'skuindex'=>$sku_induk,
                                     'tgl'=>date('Y-m-d'),

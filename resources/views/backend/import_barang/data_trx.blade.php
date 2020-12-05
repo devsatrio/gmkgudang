@@ -67,7 +67,7 @@
                                                 @foreach ($data as $item)
                                                     <tr class="bg-primary">
                                                         <td>Toko</td>
-                                                        <td colspan="7">{{$item->admin}}</td>
+                                                        <td colspan="10">{{$item->admin}}</td>
                                                         <td class="bg-danger"></td>
                                                         <td class="bg-success"></td>
                                                         @php
@@ -80,6 +80,9 @@
                                                         <tr class="bg-info">
                                                             <td>Kode</td>
                                                             <td>Market</td>
+                                                            <td>Noresi</td>
+                                                            <td>Nopesan</td>
+                                                            <td>Kurir</td>
                                                             <td>Nama Barang</td>
                                                             <td>Varian</td>
                                                             <td>Qty</td>
@@ -110,6 +113,9 @@
                                                             <tr>
                                                                 <td>{{$colect->skuindex}}</td>
                                                                 <td>{{$colect->jenis}}</td>
+                                                                <td>{{$colect->noresi}}</td>
+                                                                <td>{{$colect->nopesan}}</td>
+                                                                <td>{{$colect->kurir}}</td>
                                                                 <td>{{$colect->barang}}</td>
                                                                 <td>{{$colect->varian}}</td>
                                                                 <td>{{$colect->jumlah}}</td>
@@ -124,9 +130,12 @@
                                                         <tr>
                                                             <td></td>
                                                             <td></td>
-                                                            <td align="center"> <b>Total Penjualan</b></td>
-                                                            <td>{{$qty}}</td>
                                                             <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="center"> <b>Total Penjualan</b></td>
+                                                            <td></td>
+                                                            <td>{{$qty}}</td>
                                                             <td></td>
                                                             <td></td>
                                                             <td>{{$tothp}}</td>
@@ -134,7 +143,7 @@
                                                             <td>{{$tount}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="10"></td>
+                                                            <td colspan="13"></td>
                                                         </tr>
                                                     </tr>
                                                 @endforeach
