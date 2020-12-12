@@ -26,6 +26,24 @@ Route::get('/data-barang-keyword','backend\BarangKeyController@listdata');
 Route::post('/import-barang-keyword','backend\BarangKeyController@importbarangkey');
 Route::resource('/barang-keyword','backend\BarangKeyController');
 Route::get('/data-laporantrx','backend\TrxController@listdatalaporanTrx');
+
+Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
+Route::get('/barang-masuk/laporan','backend\BarangMasukController@laporan');
+Route::post('/import-barang-masuk','backend\BarangMasukController@importbarangmasuk');
+Route::resource('/barang-masuk','backend\BarangMasukController');
+
+Route::get('/data-barang-keluar','backend\BarangKeluarController@listdata');
+Route::get('/barang-keluar/laporan','backend\BarangKeluarController@laporan');
+Route::post('/import-barang-keluar','backend\BarangKeluarController@importbarangmasuk');
+Route::resource('/barang-keluar','backend\BarangKeluarController');
+
+Route::get('/transaksi-manual','backend\TransaksiManualController@index');
+Route::post('/transaksi-manual','backend\TransaksiManualController@store');
+Route::get('/transaksi-manual/cari-detail','backend\TransaksiManualController@caridetail');
+Route::get('/transaksi-manual/cari-detail-barang/{kode}','backend\TransaksiManualController@caribarang');
+Route::get('/transaksi-manual/hapus-detail/{kode}','backend\TransaksiManualController@hapusdetail');
+Route::post('/transaksi-manual/tambah-detail','backend\TransaksiManualController@storedetail');
+
 Route::prefix('import-data')->group(function(){
     Route::get('v-shopee','backend\TrxController@importshopee')->name('im.shopee');
     Route::post('import-shopee','backend\TrxController@actimportshopee')->name('importshopee');
@@ -62,12 +80,4 @@ Route::prefix('import-data')->group(function(){
     // hapus temp_barang
     Route::post('hapus-temp','backend\TrxController@hapusTemp')->name('del.temp');
 });
-Route::get('/data-barang-masuk','backend\BarangMasukController@listdata');
-Route::get('/barang-masuk/laporan','backend\BarangMasukController@laporan');
-Route::post('/import-barang-masuk','backend\BarangMasukController@importbarangmasuk');
-Route::resource('/barang-masuk','backend\BarangMasukController');
 
-Route::get('/data-barang-keluar','backend\BarangKeluarController@listdata');
-Route::get('/barang-keluar/laporan','backend\BarangKeluarController@laporan');
-Route::post('/import-barang-keluar','backend\BarangKeluarController@importbarangmasuk');
-Route::resource('/barang-keluar','backend\BarangKeluarController');
