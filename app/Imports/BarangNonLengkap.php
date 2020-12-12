@@ -18,16 +18,16 @@ class BarangNonLengkap implements ToCollection
         foreach ($collection as $key => $row) {
             if($key>0){
                 $tgl=date('Y-m-d');
-                $sku=$row[0];
                 $skuinduk=$row[1];
-                $bar=$row[2];
-                $varian=$row[3];
-                $kbar=$row[4];
+                $sku=$row[2];
+                $bar=$row[3];
+                $varian=$row[4];
+                $kbar=$row[5];
             // // update temp
             // temp_import::where('barang',$bar)->update(['stts_valid'=>'valid']);
             $data[]=[
-                'sku'=>$sku,
                 'skuinduk'=>$skuinduk,
+                'sku'=>$sku,
                 'key_barang'=>$bar,
                 'kode_barang'=>$kbar,
                 'varian'=>$varian,

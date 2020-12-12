@@ -81,6 +81,8 @@ class TrxController extends Controller
         $sku=[];
         $skuindex=[];
         $bar=[];
+        $varian=[];
+
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
@@ -91,9 +93,10 @@ class TrxController extends Controller
                 $sku[]=$val->sku;
                 $skuindex[]=$val->skuindex;
                 $bar[]=$val->barang;
+                $varian[]=$val->varian;
             }
             $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'lazada'])
-                ->whereIn('skuindex',$skuindex)
+                ->whereIn('varian',$varian)
                 ->whereIn('barang',$bar)
                 ->get();
             // $ktg="Lengkap";
@@ -131,6 +134,9 @@ class TrxController extends Controller
             $dtr=temp_import::where('id',$arr[$i])->first();
             $data[]=[
                 'noresi'=>$dtr->noresi,
+                'nopesan'=>$dtr->nopesan,
+                'kurir'=>$dtr->kurir,
+                'varian'=>$dtr->varian,
                 'sku'=>$dtr->sku,
                 'skuindex'=>$dtr->skuindex,
                 'barang'=>$dtr->barang,
@@ -185,6 +191,7 @@ class TrxController extends Controller
         $sku=[];
         $skuindex=[];
         $bar=[];
+        $varian=[];
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
@@ -195,9 +202,10 @@ class TrxController extends Controller
                 $sku[]=$val->sku;
                 $skuindex[]=$val->skuindex;
                 $bar[]=$val->barang;
+                $varian[]=$val->varian;
             }
             $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'shopee'])
-                ->whereIn('skuindex',$skuindex)
+                ->whereIn('varian',$varian)
                 ->whereIn('barang',$bar)
                 ->get();
             // $ktg="Lengkap";
@@ -242,6 +250,9 @@ class TrxController extends Controller
                 $dtr=temp_import::where('id',$arr[$i])->first();
                 $data[]=[
                     'noresi'=>$dtr->noresi,
+                    'nopesan'=>$dtr->nopesan,
+                    'kurir'=>$dtr->kurir,
+                    'varian'=>$dtr->varian,
                     'sku'=>$dtr->sku,
                     'skuindex'=>$dtr->skuindex,
                     'barang'=>$dtr->barang,
@@ -344,11 +355,13 @@ class TrxController extends Controller
         $sku=[];
         $skuindex=[];
         $barkey=[];
+        $varian=[];
         $br=BarangKey::get();
          foreach ($br as  $item) {
              $barkey[]=$item->key_barang;
              $sku[]=$item->sku;
              $skuinduk[]=$item->skuinduk;
+             $varian[]=$item->varian;
          }
         //  cek apa ada di stok
         $cst=Barang::get();
@@ -360,6 +373,7 @@ class TrxController extends Controller
             // leftjoin('barangkey','barangkey.key_barang','=','temp_import.barang')
             // ->select(DB::raw('barangkey.kode_barang,temp_import.*'))
             whereIn('barang',$barkey)
+            ->whereIn('varian',$varian)
             // ->whereIn('barangkey.kode_barang',$kbar)
             // ->whereIn('temp_import.skuindex',$skuinduk)
             // ->whereIn('temp_import.sku',$sku)
@@ -436,6 +450,9 @@ class TrxController extends Controller
             // dd($bkey->kode_barang);
             $data[]=[
                 'noresi'=>$dtr->noresi,
+                'nopesan'=>$dtr->nopesan,
+                'kurir'=>$dtr->kurir,
+                'varian'=>$dtr->varian,
                 'sku'=>$dtr->sku,
                 'skuindex'=>$bkey->kode_barang,
                 'barang'=>$dtr->barang,
