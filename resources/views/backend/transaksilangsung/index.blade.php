@@ -31,7 +31,7 @@
                 @endif
             </div>
         </div>
-        <form method="POST" class="row pl-4 pr-4" enctype="multipart/form-data" action="{{url('transaksi-manual')}}">
+        <form method="POST" class="row pl-4 pr-4" enctype="multipart/form-data" onsubmit="return validform()" action="{{url('transaksi-manual')}}">
             <div class="col-md-5">
                 <div class="card card-outline card-primary" id="panelnya">
                     @csrf
@@ -115,7 +115,13 @@
                             </div>
                         </div>
                         <div class="row mt-5">
+                        <div class="col-md-6">
+                                <label>SKU Induk</label>
+                                <div class="nk-int-st">
+                                    <input type="text" readonly class="form-control" name="sku_induk" id="sku_induk">
+                                </div>
 
+                            </div>
                             <div class="col-md-6">
                                 <label>SKU</label>
                                 <div class="nk-int-st">
@@ -123,13 +129,7 @@
                                 </div>
 
                             </div>
-                            <div class="col-md-6">
-                                <label>SKU Induk</label>
-                                <div class="nk-int-st">
-                                    <input type="text" class="form-control" name="sku_induk" id="sku_induk">
-                                </div>
-
-                            </div>
+                            
                         </div>
                     </div>
 
