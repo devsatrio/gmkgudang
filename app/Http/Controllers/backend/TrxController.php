@@ -444,6 +444,7 @@ class TrxController extends Controller
             $bkey=BarangKey::where([
                 // 'sku'=>$dtr->sku,
                 // 'skuinduk'=>$dtr->skuindex,
+                'varian'=>$dtr->varian,
                 'key_barang'=>$dtr->barang,
                 ])
                 ->first();
