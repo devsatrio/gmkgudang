@@ -24,6 +24,7 @@
 						$("#stok").val(item.stok);
                         $("#harga").val(item.harga);
                         $('#nama_barang').val(item.nama);
+                        $('#sku_induk').val(item.kode_barang);
                         $('#harga').focus();
 					})
 				}
@@ -95,8 +96,10 @@
         });
     
         $("#simpanbtn").click(function(e){
-            $('#panelnya').loading('toggle');
-            $('#paneldua').loading('toggle');
+            if($("#total").html()!=''){
+                $('#panelnya').loading('toggle');
+                $('#paneldua').loading('toggle');
+            }
         });
     //==================================================
 	function getdata(){
@@ -185,5 +188,20 @@
             })
         }
         window.deletedetail = deletedetail;
+        function validform(){
+            if($("#total").html()==''){
+                swalWithBootstrapButtons.fire(
+                    'Oops',
+                    'Tambahkan detail transaksi terlebih dahulu!',
+                    'error'
+                );
+            return false;
+            }else{
+                
+                return true;
+                
+            }
+        }
+        window.validform = validform;
   });
   
