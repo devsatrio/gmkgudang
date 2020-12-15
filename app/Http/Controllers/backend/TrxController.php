@@ -95,13 +95,25 @@ class TrxController extends Controller
                 $bar[]=$val->barang;
                 $varian[]=$val->varian;
             }
-            $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'lazada'])
-                ->whereIn('varian',$varian)
-                ->whereIn('barang',$bar)
+            $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
+                // ->whereIn('varian',$varian)
+                // ->orWhereIn('barang',$bar)
+                ->whereExists(function($query){
+                    $query->select(DB::raw(1))
+                    ->from('barangkey')
+                    ->whereColumn('barangkey.varian','temp_import.varian')
+                    ->whereColumn('barangkey.key_barang','temp_import.barang');
+                })
                 ->get();
             // $ktg="Lengkap";
         }else{
             $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
+            ->whereNotExists(function($query){
+                $query->select(DB::raw(1))
+                ->from('barangkey')
+                ->whereColumn('barangkey.varian','temp_import.varian')
+                ->whereColumn('barangkey.key_barang','temp_import.barang');
+            })
             ->get();
             // $$ktg="NonLengkap";
         }
@@ -204,13 +216,25 @@ class TrxController extends Controller
                 $bar[]=$val->barang;
                 $varian[]=$val->varian;
             }
-            $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'shopee'])
-                ->whereIn('varian',$varian)
-                ->whereIn('barang',$bar)
+            $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'shopee'])
+                // ->whereIn('varian',$varian)
+                // ->orWhereIn('barang',$bar)
+                ->whereExists(function($query){
+                    $query->select(DB::raw(1))
+                    ->from('barangkey')
+                    ->whereColumn('barangkey.varian','temp_import.varian')
+                    ->whereColumn('barangkey.key_barang','temp_import.barang');
+                })
                 ->get();
             // $ktg="Lengkap";
         }else{
             $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'shopee'])
+            ->whereNotExists(function($query){
+                $query->select(DB::raw(1))
+                ->from('barangkey')
+                ->whereColumn('barangkey.varian','temp_import.varian')
+                ->whereColumn('barangkey.key_barang','temp_import.barang');
+            })
             ->get();
             // $$ktg="NonLengkap";
         }
@@ -300,6 +324,9 @@ class TrxController extends Controller
                 // dd($bkey->kode_barang);
                 $data[]=[
                     'noresi'=>$dtr->noresi,
+                    'nopesan'=>$dtr->nopesan,
+                    'kurir'=>$dtr->kurir,
+                    'varian'=>$dtr->varian,
                     'sku'=>$dtr->sku,
                     'skuindex'=>$bkey->kode_barang,
                     'barang'=>$dtr->barang,
@@ -372,9 +399,15 @@ class TrxController extends Controller
             $data=temp_import::
             // leftjoin('barangkey','barangkey.key_barang','=','temp_import.barang')
             // ->select(DB::raw('barangkey.kode_barang,temp_import.*'))
-            whereIn('barang',$barkey)
-            ->whereIn('varian',$varian)
+            // whereIn('barang',$barkey)
+            // ->orWhereIn('varian',$varian)
             // ->whereIn('barangkey.kode_barang',$kbar)
+            whereExists(function($query){
+                $query->select(DB::raw('temp_import.*'))
+                ->from('barangkey')
+                ->whereColumn('barangkey.varian','temp_import.varian')
+                ->whereColumn('barangkey.key_barang','temp_import.barang');
+            })
             // ->whereIn('temp_import.skuindex',$skuinduk)
             // ->whereIn('temp_import.sku',$sku)
             ->where('sts_valid','belum')
@@ -384,7 +417,14 @@ class TrxController extends Controller
             $data=temp_import::
             // leftjoin('barangkey','barangkey.key_barang','=','temp_import.barang')
             // ->select(DB::raw('barangkey.kode_barang,temp_import.*'))
-            whereIn('barang',$barkey)
+            // whereIn('barang',$barkey)
+            // ->orWhereIn('varian',$varian)
+            whereExists(function($query){
+                $query->select(DB::raw(1))
+                ->from('barangkey')
+                ->whereColumn('barangkey.varian','temp_import.varian')
+                ->whereColumn('barangkey.key_barang','temp_import.barang');
+            })
             // ->whereIn('barangkey.kode_barang',$kbar)
             // ->whereIn('temp_import.skuindex',$skuinduk)
             // ->whereIn('temp_import.sku',$sku)
@@ -435,9 +475,9 @@ class TrxController extends Controller
     {
         $ids=$request->ids;
         $arr=explode(',',$ids);
+
         $tglk=date('Y-m-d');
         for($i=0;$i<count($arr);$i++){
-
             // get data barang_temp
             $dtr=temp_import::where('id',$arr[$i])->first();
             // get barang key
@@ -448,7 +488,7 @@ class TrxController extends Controller
                 'key_barang'=>$dtr->barang,
                 ])
                 ->first();
-            // dd($bkey->kode_barang);
+
             $data[]=[
                 'noresi'=>$dtr->noresi,
                 'nopesan'=>$dtr->nopesan,

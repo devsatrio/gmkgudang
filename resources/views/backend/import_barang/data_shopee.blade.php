@@ -37,6 +37,7 @@
                                 <a href="{{route('exp.nostok.shopee',[Request::segment(3)])}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
                                 @endif
                                 <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
+                                <a href="#" style="display: none" id="btnacc" onclick="acc()" class="float-right mr-2 "><div class="badge badge-success"><i class="fa fa-check"></i> Acc Transaksi</div></a>
                                 <a href="#" class="float-right mr-2" style="visibility: hidden" id="btnhapus" onclick="hapus()"  class="float-right"><div class="badge badge-danger"> <i class="fa fa-delete"></i> Hapus Data</div></a>
                             </div>
                         </div>
@@ -118,16 +119,20 @@
          function cekall() {
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
+                $('#btnacc').attr('style','display:inline');
                 $('#btnhapus').attr('style',"visibility:show");
             } else {
                 $(".subck").prop('checked',false);
+                $('#btnacc').attr('style','display:none');
                 $('#btnhapus').attr('style',"visibility:hidden");
             }
         }
         function ceksat() {
             if($('.subck').is(':checked',true)){
                 $('#btnhapus').attr('style',"visibility:show");
+                $('#btnacc').attr('style','display:inline');
             }else{
+                $('#btnacc').attr('style','display:none');
                 $('#btnhapus').attr('style',"visibility:hidden");
             }
         }
@@ -151,7 +156,7 @@
                     var join_selected=idvall.join(",");
                     console.log(join_selected);
                     $.ajax({
-                        url:'acc-shopee',
+                        url:'/import-data/acc-shopee',
                         type:'post',
                         data:{ids:join_selected,jns:jns},
                         success:function(response){
