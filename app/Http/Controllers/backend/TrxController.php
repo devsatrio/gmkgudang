@@ -688,6 +688,8 @@ class TrxController extends Controller
                 foreach($data as $item){
                     $dt[]=[
                         'noresi'=>$item->noresi,
+                        'nopesan'=>$item->nopesan,
+                        'kurir'=>$item->kurir,
                         'tgl'=>date('Y-m-d'),
                         'skuinduk'=>$item->skuindex,
                         'sku'=>$item->sku,
@@ -742,26 +744,29 @@ class TrxController extends Controller
             'data'=>$data,
             'tgl1'=>date('Y-m-d'),
             'tgl2'=>date('Y-m-d'),
+            'pil'=>'Terkirim',
         ];
         return view('backend.import_barang.laporan_scan',$print);
     }
     public function cariLscan($tgl1,$tgl2,$pil)
     {
         // $admin=Auth::user()->name;
-        if($pil=="pending"){
-            $temp=temp_import::get();
-            $resi=[];
-            foreach($temp as $gl){
-                $resi[]=$gl->noresi;
-            }
-            $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->whereIn('noresi',$resi)->get();
-        }else{
-            $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->get();
-        }
+        // if($pil=="pending"){
+        //     $temp=temp_import::get();
+        //     $resi=[];
+        //     foreach($temp as $gl){
+        //         $resi[]=$gl->noresi;
+        //     }
+        //     // $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->whereIn('noresi',$resi)->get();
+        // }else{
+        //     // $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->get();
+        // }
+        $data=model_barang_scan::select(DB::raw('admin'))->groupBy('admin')->get();
         $print=[
             'data'=>$data,
-            'tgl1'=>date('Y-m-d'),
-            'tgl2'=>date('Y-m-d'),
+            'tgl1'=>$tgl1,
+            'tgl2'=>$tgl2,
+            'pil'=>$pil,
         ];
         return view('backend.import_barang.data_scan',$print);
     }

@@ -107,7 +107,7 @@
                                     <input type="number" min="0" class="form-control" id="jumlah" name="jumlah">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div style="display: none" class="col-md-4">
                                 <label>Harga</label>
                                 <div class="nk-int-st">
                                     <input type="number" class="form-control" name="harga" id="harga">
@@ -129,7 +129,7 @@
                                 </div>
 
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -150,16 +150,16 @@
                                         <th>SKU</th>
                                         <th>SKU Induk</th>
                                         <th>Produk</th>
-                                        <th>Harga</th>
+                                        <th style="display: none">Harga</th>
                                         <th>Qty</th>
-                                        <th>Subtotal</th>
+                                        <th style="display: none">Subtotal</th>
                                         <th class="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tubuh">
 
                                 </tbody>
-                                <tfoot>
+                                <tfoot style="display: none">
                                     <tr>
                                         <td colspan="5"><b>Total</b></td>
                                         <td class="text-right"><span id="total"></span></td>

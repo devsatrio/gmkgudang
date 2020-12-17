@@ -37,7 +37,10 @@
                                 <a href="{{route('exp.nostok.shopee',[Request::segment(3)])}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
                                 @endif
                                 <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
-                                <a href="#" style="display: none" id="btnacc" onclick="acc()" class="float-right mr-2 "><div class="badge badge-success"><i class="fa fa-check"></i> Acc Transaksi</div></a>
+                                @if (Request::segment(3)=="Non-Lengkap")
+                                @else
+                                    <a href="#" style="display: none" id="btnacc" onclick="acc()" class="float-right mr-2 "><div class="badge badge-success"><i class="fa fa-check"></i> Acc Transaksi</div></a>
+                                @endif
                                 <a href="#" class="float-right mr-2" style="visibility: hidden" id="btnhapus" onclick="hapus()"  class="float-right"><div class="badge badge-danger"> <i class="fa fa-delete"></i> Hapus Data</div></a>
                             </div>
                         </div>

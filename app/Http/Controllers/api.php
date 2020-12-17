@@ -59,6 +59,8 @@ function upstat(Request $request){
             foreach($data as $item){
                 $dt[]=[
                     'noresi'=>$item->noresi,
+                    'nopesan'=>$item->nopesan,
+                    'kurir'=>$item->kurir,
                     'tgl'=>date('Y-m-d'),
                     'skuinduk'=>$item->skuindex,
                     'sku'=>$item->sku,

@@ -35,6 +35,10 @@
                             <div class="card-tools">
                                 <a href="{{route('exp.nostok.lazada',[Request::segment(3)])}}"  class="float-right"><div class="badge badge-info"> Download Data</div></a>
                                 <a href="#" onclick="history.back()" class="float-right mr-2"><div class="badge badge-primary"> Kembali</div></a>
+                                @if (Request::segment(3)=="Non-Lengkap")
+                                @else
+                                    <a href="#" style="display: none" id="btnacc" onclick="acc()" class="float-right mr-2 "><div class="badge badge-success"><i class="fa fa-check"></i> Acc Transaksi</div></a>
+                                @endif
                                 <a href="#" class="float-right mr-2" style="visibility: hidden" id="btnhapus" onclick="hapus()"  class="float-right"><div class="badge badge-danger"> <i class="fa fa-delete"></i> Hapus Data</div></a>
 
                             </div>
@@ -115,16 +119,20 @@
             if($('#ckb').is(':checked',true))  {
                 $(".subck").prop('checked', true);
                 $('#btnhapus').attr('style',"visibility:show");
+                $('#btnacc').attr('style','display:inline');
             } else {
                 $(".subck").prop('checked',false);
                 $('#btnhapus').attr('style',"visibility:hidden");
+                $('#btnacc').attr('style','display:none');
             }
         }
         function ceksat() {
             if($('.subck').is(':checked',true)){
                 $('#btnhapus').attr('style',"visibility:show");
+                $('#btnacc').attr('style','display:inline');
             }else{
                 $('#btnhapus').attr('style',"visibility:hidden");
+                $('#btnacc').attr('style','display:none');
             }
         }
         function hapus() {
@@ -170,6 +178,73 @@
                         });
                     }
                 });
+            }
+        }
+        function acc() {
+
+            var idvall=[];
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin ACC Data ini?");
+                if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'/import-data/acc-lazada',
+                        type:'post',
+                        data:{ids:join_selected},
+                        success:function(response){
+                            if(response.sts="1"){
+                                $("body").loading('stop');
+                                // refreshCancel();
+                                location.reload();
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        function acc() {
+            var idvall=[];
+            $('.subck:checked').each(function() {
+                idvall.push($(this).attr('data-id'))
+            });
+            if(idvall.length<=0){
+                alert('Pilih Salah Satu Data');
+            }else{
+                var conf=confirm("Apakah anda ingin ACC Data ini?");
+                if(conf){
+                    // loading
+                    $("body").loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+                    var join_selected=idvall.join(",");
+                    console.log(join_selected);
+                    $.ajax({
+                        url:'acc-lazada',
+                        type:'post',
+                        data:{ids:join_selected},
+                        success:function(response){
+                            if(response.sts="1"){
+                                $("body").loading('stop');
+                                // refreshCancel();
+                                location.reload();
+                            }
+                        }
+                    })
+                }
             }
         }
     </script>
