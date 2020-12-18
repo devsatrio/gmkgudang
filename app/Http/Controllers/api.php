@@ -41,7 +41,7 @@ class api extends Controller
     return response()->json($print);
 }
 function upstat(Request $request){
-    $nresi=$request->noresi;
+    $nresi=$request->kode;
     $admin=$request->nama;
     $dt=[];
     // cek barng ada

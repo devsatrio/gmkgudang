@@ -82,7 +82,7 @@ class TrxController extends Controller
         $skuindex=[];
         $bar=[];
         $varian=[];
-
+        $admin=Auth::user()->name;
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
@@ -104,6 +104,7 @@ class TrxController extends Controller
                     ->whereColumn('barangkey.varian','temp_import.varian')
                     ->whereColumn('barangkey.key_barang','temp_import.barang');
                 })
+                ->where('admin',$admin)
                 ->get();
             // $ktg="Lengkap";
         }else{
@@ -114,6 +115,7 @@ class TrxController extends Controller
                 ->whereColumn('barangkey.varian','temp_import.varian')
                 ->whereColumn('barangkey.key_barang','temp_import.barang');
             })
+            ->where('admin',$admin)
             ->get();
             // $$ktg="NonLengkap";
         }
@@ -204,6 +206,7 @@ class TrxController extends Controller
         $skuindex=[];
         $bar=[];
         $varian=[];
+        $admin=Auth::user()->name;
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
@@ -225,6 +228,7 @@ class TrxController extends Controller
                     ->whereColumn('barangkey.varian','temp_import.varian')
                     ->whereColumn('barangkey.key_barang','temp_import.barang');
                 })
+                ->where('admin',$admin)
                 ->get();
             // $ktg="Lengkap";
         }else{
@@ -235,6 +239,7 @@ class TrxController extends Controller
                 ->whereColumn('barangkey.varian','temp_import.varian')
                 ->whereColumn('barangkey.key_barang','temp_import.barang');
             })
+            ->where('admin',$admin)
             ->get();
             // $$ktg="NonLengkap";
         }
@@ -411,7 +416,7 @@ class TrxController extends Controller
             // ->whereIn('temp_import.skuindex',$skuinduk)
             // ->whereIn('temp_import.sku',$sku)
             ->where('sts_valid','belum')
-            // ->where('admin',$admin)
+            ->where('admin',$admin)
             ->get();
         }else{
             $data=temp_import::
@@ -652,7 +657,7 @@ class TrxController extends Controller
             $print=[
                 'data'=>$data,
             ];
-            return view('backend.import_barang.data_scan',$print);
+            return view('backend.import_barang.data_scaner',$print);
         }else{
             if($jn=="scan"){
                 $data=model_barang_scan::where('stts','!=','batal')->where('admin',$admin)->orderBy('id','DESC')->get();
@@ -665,7 +670,7 @@ class TrxController extends Controller
             $print=[
                 'data'=>$data,
             ];
-            return view('backend.import_barang.data_scan',$print);
+            return view('backend.import_barang.data_scaner',$print);
         }
     }
     public function scSimpan(Request $request)
