@@ -61,6 +61,8 @@
                                                     <th>No</th>
                                                     {{-- <th>Kode Barang</th> --}}
                                                     @if ($jns=='fix')
+                                                        <th>No resi</th>
+                                                        <th>No Pesan</th>
                                                         <th>Barang</th>
                                                         <th>Varian</th>
                                                         <th>SKU induk</th>
@@ -93,6 +95,8 @@
                                                         <td>{{$no++}}</td>
                                                         {{-- <td>{{$item->kode_barang}}</td> --}}
                                                         @if ($jns=="fix")
+                                                            <td>{{$item->noresi}}</td>
+                                                            <td>{{$item->nopesan}}</td>
                                                             <td>{{$item->barang}}</td>
                                                             <td>{{$item->varian}}</td>
                                                             <td>{{$item->skuindex}}</td>
