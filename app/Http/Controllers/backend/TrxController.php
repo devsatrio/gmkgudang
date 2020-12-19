@@ -416,7 +416,7 @@ class TrxController extends Controller
             // ->whereIn('temp_import.skuindex',$skuinduk)
             // ->whereIn('temp_import.sku',$sku)
             ->where('sts_valid','belum')
-            ->where('admin',$admin)
+            // ->where('admin',$admin)
             ->get();
         }else{
             $data=temp_import::
@@ -640,18 +640,18 @@ class TrxController extends Controller
         ];
         return view('backend.import_barang.scan',$print);
     }
-    public function scData($jn)
+    public function scData($jn,$tg1,$tg2)
     {
 
         $admin=Auth::user()->name;
         $tgl=date('Y-m-d');
         if($admin=="Super Admin"){
             if($jn=="scan"){
-                $data=model_barang_scan::where('stts','!=','batal')->orderBy('id','DESC')->get();
+                $data=model_barang_scan::where('stts','!=','batal')->whereBetween('tgl',[$tg1,$tg2])->orderBy('id','DESC')->get();
             }elseif($jn=="terkirim"){
-                $data=model_barang_scan::where(['stts'=>'terkirim'])->orderBy('id','DESC')->get();
+                $data=model_barang_scan::where(['stts'=>'terkirim'])->whereBetween('tgl',[$tg1,$tg2])->orderBy('id','DESC')->get();
             }elseif($jn=="batal"){
-                $data=model_barang_scan::where(['stts'=>'batal'])->orderBy('id','DESC')->get();
+                $data=model_barang_scan::where(['stts'=>'batal'])->whereBetween('tgl',[$tg1,$tg2])->orderBy('id','DESC')->get();
             }
 
             $print=[
@@ -660,11 +660,11 @@ class TrxController extends Controller
             return view('backend.import_barang.data_scaner',$print);
         }else{
             if($jn=="scan"){
-                $data=model_barang_scan::where('stts','!=','batal')->where('admin',$admin)->orderBy('id','DESC')->get();
+                $data=model_barang_scan::where('stts','!=','batal')->whereBetween('tgl',[$tg1,$tg2])->where('admin',$admin)->orderBy('id','DESC')->get();
             }elseif($jn=="terkirim"){
-                $data=model_barang_scan::where(['stts'=>'terkirim'])->where('admin',$admin)->orderBy('id','DESC')->get();
+                $data=model_barang_scan::where(['stts'=>'terkirim'])->whereBetween('tgl',[$tg1,$tg2])->where('admin',$admin)->orderBy('id','DESC')->get();
             }elseif($jn=="batal"){
-                $data=model_barang_scan::where(['stts'=>'batal'])->where('admin',$admin)->orderBy('id','DESC')->get();
+                $data=model_barang_scan::where(['stts'=>'batal'])->whereBetween('tgl',[$tg1,$tg2])->where('admin',$admin)->orderBy('id','DESC')->get();
             }
 
             $print=[
@@ -791,6 +791,77 @@ class TrxController extends Controller
             $print=[
                 'sts'=>'0',
                 'msg'=>'Data Gagal Dihapus',
+            ];
+        }
+        return response()->json($print);
+    }
+    public function dataAccScan()
+    {
+        $admin=Auth::user()->name;
+        $nores=[];
+        // cari data scan
+        $dcs=model_barang_scan::where(['stts'=>'terkirim','admin'=>$admin])->get();
+        foreach ($dcs as $k) {
+            $nores[]=$k->noresi;
+        }
+        $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum'])
+        ->whereExists(function($query){
+            $query->select(DB::raw(1))
+            ->from('barangkey')
+            ->whereColumn('barangkey.varian','temp_import.varian')
+            ->whereColumn('barangkey.key_barang','temp_import.barang');
+        })
+        ->whereIn('temp_import.noresi',$nores)
+        ->where('admin',$admin)
+        ->get();
+        $print=[
+            'data'=>$data
+        ];
+        return view('backend.import_barang.acc_scan',$print);
+    }
+    public function accScan(Request $request)
+    {
+        $ids=$request->ids;
+        $arr=explode(',',$ids);
+        $tglk=date('Y-m-d');
+        // // update stts kirim
+
+        for($i=0;$i<count($arr);$i++){
+            // get data barang_temp
+            $dtr=temp_import::where('id',$arr[$i])->first();
+            $data[]=[
+                'noresi'=>$dtr->noresi,
+                'nopesan'=>$dtr->nopesan,
+                'kurir'=>$dtr->kurir,
+                'varian'=>$dtr->varian,
+                'sku'=>$dtr->sku,
+                'skuindex'=>$dtr->skuindex,
+                'barang'=>$dtr->barang,
+                'tgl'=>$tglk,
+                'jumlah'=>$dtr->jumlah,
+                'harga'=>$dtr->harga,
+                'total'=>$dtr->total,
+                'jenis'=>$dtr->jenis,
+                'admin'=>$dtr->admin,
+            ];
+            // kurangi stok
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '".$dtr->skuindex."'");
+        }
+        $in=DB::table('barang_trx')->insert($data);
+        if($in){
+            $kr=temp_import::whereIn('id',$arr)->update([
+                'sts_kirim'=>'sudah'
+            ]);
+            // update Stok
+
+            $print=[
+                'sts'=>'1',
+                'msg'=>'Berhasil Disimpan'
+            ];
+        }else{
+            $print=[
+                'sts'=>'0',
+                'msg'=>'Gagal Disimpan'
             ];
         }
         return response()->json($print);
