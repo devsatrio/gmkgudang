@@ -146,23 +146,32 @@ class TrxController extends Controller
         for($i=0;$i<count($arr);$i++){
             // get data barang_temp
             $dtr=temp_import::where('id',$arr[$i])->first();
+            // get barang key
+            $bkey=BarangKey::where([
+                // 'sku'=>$dtr->sku,
+                // 'skuinduk'=>$dtr->skuindex,
+                'varian'=>$dtr->varian,
+                'key_barang'=>$dtr->barang,
+                ])
+                ->first();
+
             $data[]=[
                 'noresi'=>$dtr->noresi,
                 'nopesan'=>$dtr->nopesan,
                 'kurir'=>$dtr->kurir,
                 'varian'=>$dtr->varian,
                 'sku'=>$dtr->sku,
-                'skuindex'=>$dtr->skuindex,
+                'skuindex'=>$bkey->kode_barang,
                 'barang'=>$dtr->barang,
                 'tgl'=>$tglk,
                 'jumlah'=>$dtr->jumlah,
                 'harga'=>$dtr->harga,
                 'total'=>$dtr->total,
-                'jenis'=>$dtr->jenis,
                 'admin'=>$dtr->admin,
+                'jenis'=>$dtr->jenis,
             ];
             // kurangi stok
-            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '".$dtr->skuindex."'");
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
         }
         $in=DB::table('barang_trx')->insert($data);
         if($in){
@@ -277,23 +286,32 @@ class TrxController extends Controller
             for($i=0;$i<count($arr);$i++){
                 // get data barang_temp
                 $dtr=temp_import::where('id',$arr[$i])->first();
-                $data[]=[
-                    'noresi'=>$dtr->noresi,
-                    'nopesan'=>$dtr->nopesan,
-                    'kurir'=>$dtr->kurir,
-                    'varian'=>$dtr->varian,
-                    'sku'=>$dtr->sku,
-                    'skuindex'=>$dtr->skuindex,
-                    'barang'=>$dtr->barang,
-                    'tgl'=>$tglk,
-                    'jumlah'=>$dtr->jumlah,
-                    'harga'=>$dtr->harga,
-                    'total'=>$dtr->total,
-                    'jenis'=>$dtr->jenis,
-                    'admin'=>$dtr->admin,
-                ];
-                // kurangi stok
-                $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '".$dtr->skuindex."'");
+               // get barang key
+            $bkey=BarangKey::where([
+                // 'sku'=>$dtr->sku,
+                // 'skuinduk'=>$dtr->skuindex,
+                'varian'=>$dtr->varian,
+                'key_barang'=>$dtr->barang,
+                ])
+                ->first();
+
+            $data[]=[
+                'noresi'=>$dtr->noresi,
+                'nopesan'=>$dtr->nopesan,
+                'kurir'=>$dtr->kurir,
+                'varian'=>$dtr->varian,
+                'sku'=>$dtr->sku,
+                'skuindex'=>$bkey->kode_barang,
+                'barang'=>$dtr->barang,
+                'tgl'=>$tglk,
+                'jumlah'=>$dtr->jumlah,
+                'harga'=>$dtr->harga,
+                'total'=>$dtr->total,
+                'admin'=>$dtr->admin,
+                'jenis'=>$dtr->jenis,
+            ];
+            // kurangi stok
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
             }
             $in=DB::table('barang_trx')->insert($data);
             if($in){
@@ -829,23 +847,32 @@ class TrxController extends Controller
         for($i=0;$i<count($arr);$i++){
             // get data barang_temp
             $dtr=temp_import::where('id',$arr[$i])->first();
+            // get barang key
+            $bkey=BarangKey::where([
+                // 'sku'=>$dtr->sku,
+                // 'skuinduk'=>$dtr->skuindex,
+                'varian'=>$dtr->varian,
+                'key_barang'=>$dtr->barang,
+                ])
+                ->first();
+
             $data[]=[
                 'noresi'=>$dtr->noresi,
                 'nopesan'=>$dtr->nopesan,
                 'kurir'=>$dtr->kurir,
                 'varian'=>$dtr->varian,
                 'sku'=>$dtr->sku,
-                'skuindex'=>$dtr->skuindex,
+                'skuindex'=>$bkey->kode_barang,
                 'barang'=>$dtr->barang,
                 'tgl'=>$tglk,
                 'jumlah'=>$dtr->jumlah,
                 'harga'=>$dtr->harga,
                 'total'=>$dtr->total,
-                'jenis'=>$dtr->jenis,
                 'admin'=>$dtr->admin,
+                'jenis'=>$dtr->jenis,
             ];
             // kurangi stok
-            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '".$dtr->skuindex."'");
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
         }
         $in=DB::table('barang_trx')->insert($data);
         if($in){
