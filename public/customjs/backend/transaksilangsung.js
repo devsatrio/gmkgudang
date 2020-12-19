@@ -22,10 +22,12 @@
 				return {
 					results : $.map(data, function (item){
 						$("#stok").val(item.stok);
-                        $("#harga").val(item.harga);
                         $('#nama_barang').val(item.nama);
+                        if($('#statusadmin').val()!='Admin'){
+                            $("#harga").val(item.harga);
+                        }
                         $('#sku_induk').val(item.kode_barang);
-                        $('#harga').focus();
+                        $('#jumlah').focus();
 					})
 				}
 			},complete:function(){
@@ -47,7 +49,7 @@
 			var sku	= $("#sku").val();
 			var kode	= $(".select2").val();
 			var sku_induk	= $("#sku_induk").val();
-			if(resi=='' || admin=='' || nama_barang=='' || harga==''|| jumlah == ''){
+			if(resi=='' || admin=='' || nama_barang=='' || harga==''|| harga==0|| jumlah == ''){
                 swalWithBootstrapButtons.fire(
                     'Oops',
                     'Semua Data Harus Diisi!',
@@ -119,22 +121,24 @@
     //=================================================
 	function managerow(data){
 		var rows ='';
-		var total=0;
+        var total=0;
+        var totalpcs=0;
 			$.each(data,function(key, value){
                 rows = rows + '<tr>';
                 rows = rows + '<td>' +value.sku+'</td>';
                 rows = rows + '<td>' +value.sku_induk+'</td>';
                 rows = rows + '<td>' +value.barang+'</td>';
                 rows = rows + '<td class="text-right">' +value.harga+'</td>';
-                rows = rows + '<td> Rp. ' +rupiah(value.jumlah)+' Pcs</td>';
+                rows = rows + '<td class="text-center">' +value.jumlah+' Pcs</td>';
                 rows = rows + '<td class="text-right"> Rp. ' +rupiah(value.subtotal)+'</td>';
                 rows = rows + '<td class="text-center"><button type="button" class="btn btn-warning btn-sm" onclick="deletedetail('+value.id+')"><i class="fa fa-trash"></i></button></td>';
                 rows = rows + '</tr>';
                 total += value.subtotal;
-
+                totalpcs += value.jumlah;
             });
             $("#tubuh").html(rows);
             $("#total").html('Rp. '+rupiah(total));
+            $("#totalpcs").html(totalpcs+' Pcs');
     }
 
     //==================================================

@@ -42,16 +42,21 @@
                                     <label for="exampleInputEmail1">No. Resi</label>
                                     <input type="text" class="form-control" name="resi" id="resi" required autofocus>
                                     <input type="hidden" name="admin" value="{{Auth::user()->id}}" id="admin">
+                                    <input type="hidden" name="statusadmin" value="{{Auth::user()->level}}" id="statusadmin">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Admin</label>
+                                    @if(Auth::user()->level!='Admin')
                                     <select name="admin" class="form-control">
                                         @foreach($admin as $adm)
                                         <option value="{{$adm->username}}">{{$adm->username}}</option>
                                         @endforeach
                                     </select>
+                                    @else
+                                    <input type="text" class="form-control" name="admin" value="{{Auth::user()->username}}" readonly>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -107,7 +112,7 @@
                                     <input type="number" min="0" class="form-control" id="jumlah" name="jumlah">
                                 </div>
                             </div>
-                            <div style="display: none" class="col-md-4">
+                            <div class="col-md-4">
                                 <label>Harga</label>
                                 <div class="nk-int-st">
                                     <input type="number" class="form-control" name="harga" id="harga">
@@ -150,18 +155,19 @@
                                         <th>SKU</th>
                                         <th>SKU Induk</th>
                                         <th>Produk</th>
-                                        <th style="display: none">Harga</th>
-                                        <th>Qty</th>
-                                        <th style="display: none">Subtotal</th>
+                                        <th>Harga</th>
+                                        <th class="text-center">Qty</th>
+                                        <th>Subtotal</th>
                                         <th class="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tubuh">
 
                                 </tbody>
-                                <tfoot style="display: none">
+                                <tfoot>
                                     <tr>
-                                        <td colspan="5"><b>Total</b></td>
+                                        <td colspan="4"><b>Total</b></td>
+                                        <td class="text-center"><span id="totalpcs"></span></td>
                                         <td class="text-right"><span id="total"></span></td>
                                         <td></td>
                                     </tr>
