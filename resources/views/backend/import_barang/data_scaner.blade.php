@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-bordered" id="tbl">
+    <table class="table table-bordered tbel" id="tscan">
         <tr class="bg-info">
             <td>No</td>
             <td>Status</td>

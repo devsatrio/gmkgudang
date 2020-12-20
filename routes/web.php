@@ -77,6 +77,7 @@ Route::prefix('import-data')->group(function(){
     Route::post('simpan-scan','backend\TrxController@scSimpan');
     Route::get('lap-scan','backend\TrxController@lapscan')->name('lap.sc');
     Route::get('cari-list-scan/{tgl1}/{tgl2}/{pil}','backend\TrxController@cariLscan')->name('clistscan');
+    // Route::get('dn-list-scan/{tgl1}/{tgl2}','backend\TrxController@DnSckirim')->name('dn.sckirim');
     // acc scan
     Route::get('data-acc-scan','backend\TrxController@dataAccScan')->name('data.acc.sc');
     Route::post('acc-scanan','backend\TrxController@accScan');

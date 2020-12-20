@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Exports\exportNonStokLengkap;
+use App\Exports\exportScan;
 use App\Exports\TempEExport;
 use App\Exports\TempExport_NonLengkap;
 use App\Exports\TempExportSp;
@@ -176,7 +177,8 @@ class TrxController extends Controller
         $in=DB::table('barang_trx')->insert($data);
         if($in){
             $kr=temp_import::whereIn('id',$arr)->update([
-                'sts_kirim'=>'sudah'
+                'sts_kirim'=>'sudah',
+                'sts_valid'=>'valid'
             ]);
             // update Stok
 
@@ -316,7 +318,8 @@ class TrxController extends Controller
             $in=DB::table('barang_trx')->insert($data);
             if($in){
                 $kr=temp_import::whereIn('id',$arr)->update([
-                    'sts_kirim'=>'sudah'
+                    'sts_kirim'=>'sudah',
+                    'sts_valid'=>'valid'
                 ]);
                 // update Stok
 
@@ -691,6 +694,11 @@ class TrxController extends Controller
             return view('backend.import_barang.data_scaner',$print);
         }
     }
+    // public function DnSckirim($tgl1,$tgl2)
+    // {
+    //     $namafile = "Data_Barang_Shopee_non-stok.xls";
+    //     return Excel::download(new exportScan(), $namafile);
+    // }
     public function scSimpan(Request $request)
     {
         $nresi=$request->noresi;
@@ -877,7 +885,8 @@ class TrxController extends Controller
         $in=DB::table('barang_trx')->insert($data);
         if($in){
             $kr=temp_import::whereIn('id',$arr)->update([
-                'sts_kirim'=>'sudah'
+                'sts_kirim'=>'sudah',
+                'sts_valid'=>'valid'
             ]);
             // update Stok
 

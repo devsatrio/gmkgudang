@@ -59,6 +59,7 @@
                                         <div class="form-group">
                                             <Button type="button" onclick="getData()" class="btn btn-primary mr-2"><i class="fa fa-search"></i></Button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -75,6 +76,9 @@
                                                     </div>
                                                     <div class="form-group mr-2">
                                                         <input type="text" style="widht:500px" class="form-control" id="scn" placeholder="Input Nomer Resi atau Barcode ">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <a href="#" onclick="dnKiriman()" class="btn btn-success mr-2"><i class="fa fa-file-excel"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -135,6 +139,19 @@
                 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
             }
         });
+        // download KIriman
+        function dnKiriman() {
+            var tgl1=$('#tgl1').val();
+            var tgl2=$('#tgl2').val();
+            var jenis=$('#tjnis').val();
+            // var etg=document.getElementById('tbl');
+            $('#tscan').tableExport({
+                format:'xls',
+                filename:'Scan Barang - ' + jenis + ' - ' +tgl1+'-'+tgl2,
+            });
+
+
+        }
     //    create excel
     $('#scn').keypress(function(event) {
         var key=event.which;
@@ -169,6 +186,7 @@
             }).done(function(data){
                 $('#'+idcontainer).empty().html(data);
                 $('#'+idcontainer).loading('stop');
+
             }).fail(function(jqXHR, ajaxOptions, thrownError){
             // alert('Load Data Gagal');
             Toast.fire({
@@ -238,6 +256,7 @@
             $('#tjnis').val(jns);
             var tgl1=$('#tgl1').val();
             var tgl2=$('#tgl2').val();
+            // document.getElementsByClassName('tbel')[0].id="t"+jns;
             // loading
             $('#'+idcontainer).loading({
                     stoppable: true,
