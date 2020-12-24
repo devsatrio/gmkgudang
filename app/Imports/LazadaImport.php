@@ -44,6 +44,7 @@ class LazadaImport implements ToCollection
                     'total'=>$harg,
                     'sts_valid'=>'belum',
                     'jenis'=>'lazada',
+                    'penerima'=>$row[13],
                     'created_at'=>date('Y-m-d H:i:s'),
                     'updated_at'=>date('Y-m-d H:i:s'),
                 ];

@@ -25,6 +25,7 @@ class TempExport_NonLengkap implements FromCollection, ShouldAutoSize,WithHeadin
             ->whereColumn('barangkey.varian','temp_import.varian')
             ->whereColumn('barangkey.key_barang','temp_import.barang');
         })
+        ->select(DB::raw('noresi,skuindex,sku,barang,varian'))
         ->where('admin',$admin)
         ->get();
        return $data;

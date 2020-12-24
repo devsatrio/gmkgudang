@@ -24,6 +24,7 @@ class TempExportSp_Non_Lengkap implements FromCollection , WithHeadings , Should
             ->whereColumn('barangkey.varian','temp_import.varian')
             ->whereColumn('barangkey.key_barang','temp_import.barang');
         })
+        ->select(DB::raw('noresi,skuindex,sku,barang,varian'))
         ->where('admin',$admin)
         ->get();
        return $data;

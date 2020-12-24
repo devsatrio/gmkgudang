@@ -703,9 +703,11 @@ class TrxController extends Controller
     {
         $nresi=$request->noresi;
         $admin=Auth::user()->name;
+        $print=[];
         $dt=[];
         // cek barng ada
         $cb=temp_import::where('noresi',$nresi)->count();
+        $mda=temp_import::where('noresi',$nresi)->first();
         if($cb>0){
         //    cek discan barang apa sudah ada
         $cscan=model_barang_scan::where('noresi',$nresi)->count();
@@ -715,28 +717,37 @@ class TrxController extends Controller
                     'msg'=>'Data Barang Sudah Di scan',
                 ];
             }else{
-                $data=temp_import::where('noresi',$nresi)->get();
-                foreach($data as $item){
-                    $dt[]=[
-                        'noresi'=>$item->noresi,
-                        'nopesan'=>$item->nopesan,
-                        'kurir'=>$item->kurir,
-                        'tgl'=>date('Y-m-d'),
-                        'skuinduk'=>$item->skuindex,
-                        'sku'=>$item->sku,
-                        'barang'=>$item->barang,
-                        'varian'=>$item->varian,
-                        'jumlah'=>$item->jumlah,
-                        'harga'=>$item->harga,
-                        'total'=>$item->total,
-                        'admin'=>$admin,
-                    ];
-                }
-                $sim=DB::table('barang_scan')->insert($dt);
-                if($sim){
+                // cek scan per admin
+                if($mda->admin==$admin){
+                    $data=temp_import::where('noresi',$nresi)->get();
+                    foreach($data as $item){
+                        $dt[]=[
+                            'noresi'=>$item->noresi,
+                            'nopesan'=>$item->nopesan,
+                            'kurir'=>$item->kurir,
+                            'tgl'=>date('Y-m-d'),
+                            'skuinduk'=>$item->skuindex,
+                            'sku'=>$item->sku,
+                            'barang'=>$item->barang,
+                            'varian'=>$item->varian,
+                            'jumlah'=>$item->jumlah,
+                            'harga'=>$item->harga,
+                            'total'=>$item->total,
+                            'admin'=>$admin,
+                            'penerima'=>$item->penerima,
+                        ];
+                    }
+                    $sim=DB::table('barang_scan')->insert($dt);
+                    if($sim){
+                        $print=[
+                            'sts'=>'1',
+                            'msg'=>'Data Barang Berhasil Disimpan',
+                        ];
+                    }
+                }else{
                     $print=[
-                        'sts'=>'1',
-                        'msg'=>'Data Barang Berhasil Disimpan',
+                        'sts'=>'3',
+                        'msg'=>'Anda Bukan Admin Paket Ini !',
                     ];
                 }
             }

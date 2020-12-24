@@ -60,6 +60,7 @@
                                                         <th>Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total</th>
+                                                        <th>admin</th>
                                                         <th>
                                                             <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
                                                         </th>
@@ -81,6 +82,7 @@
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
+                                                        <td>{{$item->admin}}</td>
                                                         <td>
                                                             <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">
                                                         </td>
