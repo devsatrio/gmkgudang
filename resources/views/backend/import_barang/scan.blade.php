@@ -77,6 +77,10 @@
                                                     <div class="form-group mr-2">
                                                         <input type="text" style="widht:500px" class="form-control" id="scn" placeholder="Input Nomer Resi atau Barcode ">
                                                     </div>
+                                                    <div class="form-group mr-2">
+                                                        <input type="text" style="widht:500px" class="form-control mr-2" id="cresi" placeholder="Input Nomer Resi atau Barcode ">
+                                                        <button onclick="cariResi('terkirim','container_terkirim')" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                                    </div>
                                                     <div class="form-group">
                                                         <a href="#" onclick="dnKiriman()" class="btn btn-success mr-2"><i class="fa fa-file-excel"></i></a>
                                                     </div>
@@ -90,6 +94,13 @@
                                 </div>
                                 <div class="tab-pane" id="navscaned">
                                     <div class="row">
+                                        <div class="col-12 mb-4">
+                                           <div class="card-tools float-right">
+                                            <div class="form-inline">
+
+                                            </div>
+                                           </div>
+                                        </div>
                                         <div class="col-12" class="divload" id="container_terkirim">
                                             @include('backend.import_barang.data_scaner')
                                         </div>
@@ -161,6 +172,29 @@
                 $('#scn').val('');
             }
     });
+    function cariResi(jns,idcontainer) {
+        var cresi=$('#cresi').val();
+        $('#'+idcontainer).loading({
+                    stoppable: true,
+                    message: "Please wait .....",
+                    theme: "dark"
+                    });
+            $.ajax({
+                url:'cari-scan-data/'+cresi ,
+                dataType:'html',
+                type:'get',
+            }).done(function(data){
+                $('#'+idcontainer).empty().html(data);
+                $('#'+idcontainer).loading('stop');
+            }).fail(function(jqXHR, ajaxOptions, thrownError){
+            // alert('Load Data Gagal');
+            Toast.fire({
+                type: 'error',
+                title: 'Load Data Gagal!'
+            });
+                $('#'+idcontainer).loading('stop');
+            });
+    }
     function getData() {
         var jns=$('#tjnis').val();
         var idcontainer="";
@@ -277,6 +311,28 @@
                 title: 'Load Data Gagal!'
             });
                 $('#'+idcontainer).loading('stop');
+            });
+        }
+        function upAdmin(id) {
+            var adm=$('#scladmin').val();
+            $.ajax({
+                url:'up-scan-admin/'+id+'/'+adm,
+                dataType:'json',
+                type:'get',
+                success:function(response){
+                   if(response.sts=="1"){
+                    Toast.fire({
+                        type: 'success',
+                        title: response.msg
+                    });
+                    window.location.reload();
+                   }else{
+                    Toast.fire({
+                        type: 'error',
+                        title: response.msg
+                    });
+                   }
+                }
             });
         }
     </script>

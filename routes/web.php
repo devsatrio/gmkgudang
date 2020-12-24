@@ -73,6 +73,8 @@ Route::prefix('import-data')->group(function(){
     // Scaner paket
     Route::get('sc-view','backend\TrxController@scView')->name('sc.view');
     Route::get('get-scan-data/{jns}/{tgl1}/{tgl2}','backend\TrxController@scData');
+    Route::get('cari-scan-data/{cari}','backend\TrxController@CariscData');
+    Route::get('up-scan-admin/{ids}/{adm}','backend\TrxController@upScAdmin');
     Route::get('batal-scan/{noresi}','backend\TrxController@batalscData');
     Route::post('simpan-scan','backend\TrxController@scSimpan');
     Route::get('lap-scan','backend\TrxController@lapscan')->name('lap.sc');

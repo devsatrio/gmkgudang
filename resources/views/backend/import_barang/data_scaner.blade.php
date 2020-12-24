@@ -11,6 +11,7 @@
             <td>Jumlah</td>
             <td>Harga</td>
             <td>Total</td>
+            <td>Ops</td>
         </tr>
         @php
             $no=1;
@@ -27,7 +28,38 @@
                     <td>{{$item->jumlah}}</td>
                     <td>{{$item->harga}}</td>
                     <td>{{$item->total}}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-target="#mdl{{$item->id}}" data-toggle="modal">
+                         <i class="fa fa-user"></i>
+                        </button>
+                    </td>
                 </tr>
+                {{-- modal --}}
+                <div class="modal fade" id="mdl{{$item->id}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div class="modal-title">
+                                    Edit Admin
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="">Admin</label>
+                                    <select name="" class="form-control" id="scladmin">
+                                        <option value="{{$item->admin}}">{{$item->admin}}</option>
+                                        @foreach ($adm as $it)
+                                            <option value="{{$it->name}}">{{$it->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <button onclick="upAdmin('{{$item->id}}')" type="button" class="btn btn-primary float-right">Simpan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
     </table>
 </div>

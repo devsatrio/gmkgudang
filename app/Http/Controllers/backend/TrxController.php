@@ -17,6 +17,7 @@ use App\models\barang_trx;
 use App\models\BarangKey;
 use App\models\model_barang_scan;
 use App\models\temp_import;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -665,6 +666,7 @@ class TrxController extends Controller
     {
 
         $admin=Auth::user()->name;
+        $users=User::select(DB::raw('name'))->get();
         $tgl=date('Y-m-d');
         if($admin=="Super Admin"){
             if($jn=="scan"){
@@ -690,6 +692,7 @@ class TrxController extends Controller
 
             $print=[
                 'data'=>$data,
+                'adm'=>$users,
             ];
             return view('backend.import_barang.data_scaner',$print);
         }
@@ -699,6 +702,35 @@ class TrxController extends Controller
     //     $namafile = "Data_Barang_Shopee_non-stok.xls";
     //     return Excel::download(new exportScan(), $namafile);
     // }
+    public function upScAdmin($ids,$adm)
+    {
+        $ups=model_barang_scan::where('id',$ids)->update([
+            'admin'=>$adm
+        ]);
+        if($ups){
+            $print=[
+                'sts'=>'1',
+                'msg'=>'Berhasil Di Ubah',
+            ];
+        }else{
+            $print=[
+                'sts'=>'0',
+                'msg'=>'Gagal Di Ubah',
+            ];
+        }
+        return response()->json($print);
+    }
+    public function CariscData($cari)
+    {
+        $users=User::select(DB::raw('name'))->get();
+        $admin=Auth::user()->name;
+        $data=model_barang_scan::where(['stts'=>'terkirim'])->where('noresi',$cari)->where('admin',$admin)->orderBy('id','DESC')->get();
+        $print=[
+            'data'=>$data,
+            'adm'=>$users,
+        ];
+        return view('backend.import_barang.data_scaner',$print);
+    }
     public function scSimpan(Request $request)
     {
         $nresi=$request->noresi;
@@ -733,7 +765,7 @@ class TrxController extends Controller
                             'jumlah'=>$item->jumlah,
                             'harga'=>$item->harga,
                             'total'=>$item->total,
-                            'admin'=>$admin,
+                            'admin'=>$item->admin,
                             'penerima'=>$item->penerima,
                         ];
                     }
