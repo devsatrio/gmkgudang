@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\models\Barang;
+use App\models\temp_import;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\Auth;
@@ -29,25 +30,30 @@ class LazadaImport implements ToCollection
                 // }
                 $nopesan=(int) $row[8];
                 // dd($nopesan);
-                $data[] = [
-                    'noresi' => $row[48],
-                    'nopesan' => $nopesan,
-                    'kurir' => $row[50],
-                    'sku'=>$row[4],
-                    'skuindex'=>$row[4],
-                    'tgl'=>date('Y-m-d'),
-                    'barang'=> $row[41],
-                    'varian'=> $row[42],
-                    'harga'=> $harg,
-                    'jumlah'=>'1',
-                    'admin'=>$admin,
-                    'total'=>$harg,
-                    'sts_valid'=>'belum',
-                    'jenis'=>'lazada',
-                    'penerima'=>$row[13],
-                    'created_at'=>date('Y-m-d H:i:s'),
-                    'updated_at'=>date('Y-m-d H:i:s'),
-                ];
+                $ckb=temp_import::where(['noresi'=>$row[48],'barang'=> $row[41],'varian'=> $row[42]])->count();
+                if($ckb>0){
+
+                }else{
+                    $data[] = [
+                        'noresi' => $row[48],
+                        'nopesan' => $nopesan,
+                        'kurir' => $row[50],
+                        'sku'=>$row[4],
+                        'skuindex'=>$row[4],
+                        'tgl'=>date('Y-m-d'),
+                        'barang'=> $row[41],
+                        'varian'=> $row[42],
+                        'harga'=> $harg,
+                        'jumlah'=>'1',
+                        'admin'=>$admin,
+                        'total'=>$harg,
+                        'sts_valid'=>'belum',
+                        'jenis'=>'lazada',
+                        'penerima'=>$row[13],
+                        'created_at'=>date('Y-m-d H:i:s'),
+                        'updated_at'=>date('Y-m-d H:i:s'),
+                    ];
+                }
             }
 
         }

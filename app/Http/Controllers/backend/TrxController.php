@@ -480,13 +480,21 @@ class TrxController extends Controller
     }
     public function NonLengkapNonStok()
     {
-
+        $admin=Auth::user()->name;
         $br=Barang::get();
          foreach ($br as  $item) {
              $kode[]=$item->kode_barang;
          }
         //  dd($kode);
         $data=BarangKey::
+            // leftjoin('temp_import','temp_import.barang','=',"barangkey.key_barang")
+            // leftjoin('temp_import',function($join){
+            //     $join->on('temp_import.barang','=',"barangkey.key_barang")
+            //         ->where('temp_import.varian','=','barangkey.varian');
+            // })
+            // // ->leftjoin('temp_import','temp_import.varian','=',"barangkey.varian")
+            // ->select(DB::raw('temp_import.barang,temp_import.varian,temp_import.admin,barangkey.*'))
+            // ->where('temp_import.admin',$admin)
             whereNotIn('kode_barang',$kode)
             ->get();
             // dd($data);
@@ -758,6 +766,7 @@ class TrxController extends Controller
                             'nopesan'=>$item->nopesan,
                             'kurir'=>$item->kurir,
                             'tgl'=>date('Y-m-d'),
+                            'jam'=>date('H:i:s'),
                             'skuinduk'=>$item->skuindex,
                             'sku'=>$item->sku,
                             'barang'=>$item->barang,

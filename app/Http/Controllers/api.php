@@ -15,10 +15,16 @@ class api extends Controller
    function getket($id,$user){
     $print=[];
     $brsc=model_barang_scan::where('noresi',$id)->count();
+    $data=DB::table('temp_import')
+        ->where('noresi',$id)
+        ->take(1)
+        ->get();
+
     if($brsc>0){
         $print=[
             'sts'=>'2',
             'msg'=>'Data Barang Sudah Di scan',
+            'data'=>$data,
         ];
     }else{
         $badmin=temp_import::where('noresi',$id)->first();
@@ -27,10 +33,7 @@ class api extends Controller
             if($badmin->admin==$user){
                 $cb=temp_import::where('noresi',$id)->count();
                 if($cb>0){
-                    $data=DB::table('temp_import')
-                    ->where('noresi',$id)
-                    ->take(1)
-                    ->get();
+
                     $print=[
                         'sts'=>'1',
                         'msg'=>'Data Barang Diproses',
@@ -83,6 +86,7 @@ function upstat(Request $request){
                         'nopesan'=>$item->nopesan,
                         'kurir'=>$item->kurir,
                         'tgl'=>date('Y-m-d'),
+                        'jam'=>date('H:i:s'),
                         'skuinduk'=>$item->skuindex,
                         'sku'=>$item->sku,
                         'barang'=>$item->barang,

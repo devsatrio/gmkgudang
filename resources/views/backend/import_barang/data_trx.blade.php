@@ -67,7 +67,7 @@
                                                 @foreach ($data as $item)
                                                     <tr class="bg-primary">
                                                         <td>Toko</td>
-                                                        <td colspan="10">{{$item->admin}}</td>
+                                                        <td colspan="11">{{$item->admin}}</td>
                                                         <td class="bg-danger"></td>
                                                         <td class="bg-success"></td>
                                                         @php
@@ -78,6 +78,7 @@
                                                                     ->get();
                                                         @endphp
                                                         <tr class="bg-info">
+                                                            <td>No</td>
                                                             <td>Kode</td>
                                                             <td>Market</td>
                                                             <td>Noresi</td>
@@ -98,6 +99,7 @@
                                                             $tothp=0;
                                                             $tojual=0;
                                                             $tount=0;
+                                                            $nt=1;
                                                         @endphp
                                                         @foreach ($detail as $colect)
                                                         @php
@@ -109,8 +111,10 @@
                                                             $tothp=$tothp+$thp;
                                                             $tojual=$tojual+$tjual;
                                                             $tount=$tount+$tunt;
+
                                                         @endphp
                                                             <tr>
+                                                                <td>{{$nt++}}</td>
                                                                 <td>{{$colect->skuindex}}</td>
                                                                 <td>{{$colect->jenis}}</td>
                                                                 <td>{{$colect->noresi}}</td>
@@ -133,6 +137,7 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td></td>
+                                                            <td></td>
                                                             <td align="center"> <b>Total Penjualan</b></td>
                                                             <td></td>
                                                             <td>{{$qty}}</td>
@@ -143,7 +148,7 @@
                                                             <td>{{$tount}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td colspan="13"></td>
+                                                            <td colspan="14"></td>
                                                         </tr>
                                                     </tr>
                                                 @endforeach

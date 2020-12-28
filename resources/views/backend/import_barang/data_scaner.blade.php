@@ -20,7 +20,10 @@
                 <tr>
                     <td>{{$no++}}</td>
                     <td>{{$item->stts}}</td>
-                    <td>{{$item->noresi}}</td>
+                    <td>
+                        {{$item->noresi}}
+                        <div class="badge badge-primary">scan: {{$item->tgl.' '.$item->jam}}</div>
+                    </td>
                     <td>{{$item->nopesan}}</td>
                     <td>{{$item->kurir}}</td>
                     <td>{{$item->barang}}</td>
