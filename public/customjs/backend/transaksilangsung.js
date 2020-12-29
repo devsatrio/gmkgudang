@@ -87,6 +87,13 @@
                             $("#stok").val('');
                             $("#sku").val('');
                             $("#sku_induk").val('');
+                            $("#resi").prop('readonly',true);
+                            $("#admin").prop('readonly',true);
+                            $("#resi").prop('readonly',true);
+                            $("#tgltrx").prop('readonly',true);
+                            $("#tipetrx").hide();
+                            $('#displaytipetrx').val($("#tipetrx").val());
+                            $('#displaytipetrx').show();
                             getdata();
                         },complete:function(){
                             $('#panelnya').loading('stop');
