@@ -21,13 +21,6 @@
 </div>
 <div class="content">
     <div class="container">
-        @if (session('status'))
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4>Info!</h4>
-            {{ session('status') }}
-        </div>
-        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card card-primary">

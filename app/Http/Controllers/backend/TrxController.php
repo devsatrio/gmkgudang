@@ -55,9 +55,9 @@ class TrxController extends Controller
         if($request->hasFile('file')){
             $import=Excel::import(new LazadaImport(), request()->file('file'));
             if($import){
-                return redirect()->route('im.lazada', ['status' => 'Data Berhasil Diimport']);
+                return redirect()->route('im.lazada')->with('status','Data Berhasil DiImport');
             }else{
-                return redirect()->route('im.lazada', ['status' => 'Data Gagal Diimport']);
+                return redirect()->route('im.lazada')->with('status','Data Gagal DiImport');
             }
         }
     }
@@ -269,9 +269,9 @@ class TrxController extends Controller
             // delete file
             // File::delete($pathi,$nama_file);
             if($import){
-                return redirect()->route('im.shopee', ['status' => 'Data Berhasil Diimport']);
+                return redirect()->route('im.shopee')->with('status','Data Berhasil DiImport');
             }else{
-                return redirect()->route('im.shopee', ['status' => 'Data Gagal Diimport']);
+                return redirect()->route('im.shopee')->with('status','Data Gagal DiImport');
             }
         }
 
@@ -472,9 +472,9 @@ class TrxController extends Controller
         if($request->hasFile('file')){
             $import=Excel::import(new BarangNonLengkap(), request()->file('file'));
             if($import){
-                return redirect()->route('brgnonlengkap', ['status' => 'Data Berhasil Diimport']);
+                return redirect()->route('brgnonlengkap')->with('status','Data Berhasil DiImport');;
             }else{
-                return redirect()->route('brgnonlengkap', ['status' => 'Data Gagal Diimport']);
+                return redirect()->route('brgnonlengkap')->with('status','Data Gagal DiImport');;
             }
         }
     }

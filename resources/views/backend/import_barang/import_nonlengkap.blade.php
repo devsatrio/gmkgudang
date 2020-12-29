@@ -23,10 +23,44 @@
         <div class="container">
             @if (session('status'))
             <div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <button type="button" class="close" data-dismiss="alert" onclick="myStopFunction()" aria-hidden="true">×</button>
                 <h4>Info!</h4>
                 {{ session('status') }}
             </div>
+            <audio id="audiotag1" class="output" src="../pristine-609.mp3" preload="auto"  allow="autoplay"></audio>
+            <script>
+            var myVar;
+            window.addEventListener('load', () => {
+				// noinspection JSUnresolvedVariable
+				let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', '../pristine-609.mp3');
+				xhr.responseType = 'arraybuffer';
+				xhr.addEventListener('load', () => {
+					let playsound = (audioBuffer) => {
+						let source = audioCtx.createBufferSource();
+						source.buffer = audioBuffer;
+						source.connect(audioCtx.destination);
+						source.loop = false;
+						source.start();
+
+						myVar = setTimeout(function () {
+							let t = document.createElement('p');
+							t.appendChild(document.createTextNode((new Date()).toLocaleString() + ': Sound played'));
+							document.querySelector('.output').appendChild(t);
+							playsound(audioBuffer);
+						}, 3000);
+					};
+
+					audioCtx.decodeAudioData(xhr.response).then(playsound);
+				});
+				xhr.send();
+            });
+
+            function myStopFunction() {
+            clearTimeout(myVar);
+            }
+            </script>
             @endif
             <div class="row">
                 <div class="col-12">
