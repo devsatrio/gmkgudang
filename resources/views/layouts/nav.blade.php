@@ -33,6 +33,7 @@
             <li><a href="{{route('im.lazada')}}" class="dropdown-item">Trx Lazada </a></li>
             <li><a href="{{route('im.shopee')}}" class="dropdown-item">Trx Shopee </a></li>
             <li><a href="{{route('brgnonlengkap')}}" class="dropdown-item">Import Barang Tidak Lengkap</a></li>
+            <li><a href="{{route('data.acc.sc')}}" class="dropdown-item">Acc Barang Telah Ter-Scan</a></li>
         </ul>
     </li>
     @if(Auth::user()->level!='Admin')

@@ -61,6 +61,7 @@
                                                         <th>Jumlah</th>
                                                         <th>Harga</th>
                                                         <th>Total</th>
+                                                        <th>Admin</th>
                                                         {{-- @if ($jn=="Sudah-Lengkap") --}}
                                                         <th>
                                                             <input type="checkbox" id="ckb" class="checkbox-control" onclick="cekall()">
@@ -84,6 +85,7 @@
                                                         <td>{{$item->jumlah}}</td>
                                                         <td>{{number_format($item->harga)}}</td>
                                                         <td>{{number_format($item->total)}}</td>
+                                                        <td>{{$item->admin}}</td>
                                                         {{-- @if ($jn=="Sudah-Lengkap") --}}
                                                         <td>
                                                             <input type="checkbox" onclick="ceksat()" data-id="{{$item->id}}" class="checkbox-control subck">

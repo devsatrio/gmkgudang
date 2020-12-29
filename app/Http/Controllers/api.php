@@ -12,31 +12,52 @@ use Illuminate\Support\Facades\Hash;
 class api extends Controller
 {
    // +++++++++++++++++++++++++++++++API ANDROID++++++++++++++++++++++++++++++++++++++++++++++
-   function getket($id){
+   function getket($id,$user){
     $print=[];
-
     $brsc=model_barang_scan::where('noresi',$id)->count();
+    $data=DB::table('temp_import')
+        ->where('noresi',$id)
+        ->take(1)
+        ->get();
+
     if($brsc>0){
         $print=[
             'sts'=>'2',
             'msg'=>'Data Barang Sudah Di scan',
+            'data'=>$data,
         ];
     }else{
-        $cb=temp_import::where('noresi',$id)->count();
-        if($cb>0){
-            $data=DB::table('temp_import')
-            ->where('noresi',$id)
-            ->first();
-            $print=[
-                'sts'=>'1',
-                'msg'=>'Data Barang Diproses',
-            ];
+        $badmin=temp_import::where('noresi',$id)->first();
+        $badminc=temp_import::where('noresi',$id)->count();
+        if($badminc>0){
+            if($badmin->admin==$user){
+                $cb=temp_import::where('noresi',$id)->count();
+                if($cb>0){
+
+                    $print=[
+                        'sts'=>'1',
+                        'msg'=>'Data Barang Diproses',
+                        'data'=>$data,
+                    ];
+                }else{
+                    $print=[
+                        'sts'=>'0',
+                        'msg'=>'Data Tidak Ditemukan',
+                    ];
+                }
+           }else{
+                $print=[
+                    'sts'=>'2',
+                    'msg'=>'Anda Bukan Admin Paket Ini',
+                ];
+           }
         }else{
             $print=[
                 'sts'=>'0',
                 'msg'=>'Data Tidak Ditemukan',
             ];
         }
+
     }
     return response()->json($print);
 }
@@ -44,8 +65,10 @@ function upstat(Request $request){
     $nresi=$request->kode;
     $admin=$request->nama;
     $dt=[];
+    $print=[];
     // cek barng ada
     $cb=temp_import::where('noresi',$nresi)->count();
+    $mda=temp_import::where('noresi',$nresi)->first();
     if($cb>0){
         //    cek discan barang apa sudah ada
         $cscan=model_barang_scan::where('noresi',$nresi)->count();
@@ -55,28 +78,37 @@ function upstat(Request $request){
                 'msg'=>'Data Barang Sudah Di scan',
             ];
         }else{
-            $data=temp_import::where('noresi',$nresi)->get();
-            foreach($data as $item){
-                $dt[]=[
-                    'noresi'=>$item->noresi,
-                    'nopesan'=>$item->nopesan,
-                    'kurir'=>$item->kurir,
-                    'tgl'=>date('Y-m-d'),
-                    'skuinduk'=>$item->skuindex,
-                    'sku'=>$item->sku,
-                    'barang'=>$item->barang,
-                    'varian'=>$item->varian,
-                    'jumlah'=>$item->jumlah,
-                    'harga'=>$item->harga,
-                    'total'=>$item->total,
-                    'admin'=>$admin,
-                ];
-            }
-            $sim=DB::table('barang_scan')->insert($dt);
-            if($sim){
+            if($mda->admin==$admin){
+                $data=temp_import::where('noresi',$nresi)->get();
+                foreach($data as $item){
+                    $dt[]=[
+                        'noresi'=>$item->noresi,
+                        'nopesan'=>$item->nopesan,
+                        'kurir'=>$item->kurir,
+                        'tgl'=>date('Y-m-d'),
+                        'jam'=>date('H:i:s'),
+                        'skuinduk'=>$item->skuindex,
+                        'sku'=>$item->sku,
+                        'barang'=>$item->barang,
+                        'varian'=>$item->varian,
+                        'jumlah'=>$item->jumlah,
+                        'harga'=>$item->harga,
+                        'total'=>$item->total,
+                        'admin'=>$admin,
+                        'penerima'=>$item->penerima,
+                    ];
+                }
+                $sim=DB::table('barang_scan')->insert($dt);
+                if($sim){
+                    $print=[
+                        'sts'=>'1',
+                        'msg'=>'Data Barang Berhasil Disimpan',
+                    ];
+                }
+            }else{
                 $print=[
-                    'sts'=>'1',
-                    'msg'=>'Data Barang Berhasil Disimpan',
+                    'sts'=>'3',
+                    'msg'=>'Anda BUkan Admin Paket Ini!',
                 ];
             }
         }
@@ -145,11 +177,23 @@ function upakun(Request $req){
         return response()->json(['status'=>'0','msg'=>'Gagal Diupdate']);
     }
 }
-function kiriman(){
-    $data=DB::table('barang_scan')
-    ->where('stts','terkirim')
-    // ->groupBy('noresi')
-    ->orderBy('tgl','DESC')->paginate(20);
-     return response()->json($data);
-}
+    function kiriman($user){
+        $data=DB::table('barang_scan')
+        ->where('stts','terkirim')
+        ->where('admin',$user)
+        // ->groupBy('noresi')
+        ->orderBy('tgl','DESC')->paginate(20);
+        return response()->json($data);
+    }
+    public function cariKiriman($cari,$user)
+    {
+        $data=DB::table('barang_scan')
+        ->where('stts','terkirim')
+        ->where('admin',$user)
+        ->where('noresi','like','%'.$cari.'%')
+        ->orWhere('barang','like','%'.$cari.'%')
+        // ->groupBy('noresi')
+        ->orderBy('tgl','DESC')->get();
+         return response()->json($data);
+    }
 }

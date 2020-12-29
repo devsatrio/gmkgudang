@@ -63,8 +63,13 @@ class ShopeeImport implements ToCollection
                             }
                             $harg=preg_replace('/[Rp.,.]/','',$harga[1]);
                             $total=$jumlah[1]*$harg;
+                            // $dtgl=date('Y-m-d');
+                            // checking bila di data sudah in
+                            $ckb=temp_import::where(['noresi'=>$row[0],'barang'=>$produk[1],'varian'=>$variasi[1]])->count();
+                            if($ckb>0){
 
-                            $data[] = [
+                            }else{
+                                $data[] = [
                                     'noresi' => $row[0],
                                     'nopesan' => $row[1],
                                     'kurir' => $row[9],
@@ -79,10 +84,11 @@ class ShopeeImport implements ToCollection
                                     'total'=>$total,
                                     'sts_valid'=>$valid,
                                     'jenis'=>'shopee',
+                                    'penerima'=>$row[10],
                                     'created_at'=>date('Y-m-d H:i:s'),
                                     'updated_at'=>date('Y-m-d H:i:s'),
                                 ];
-
+                            }
                     }
                     echo "<hr>";
                 }

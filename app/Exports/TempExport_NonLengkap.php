@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\models\temp_import;
 use Illuminate\Contracts\Auth\Access\Authorizable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -16,8 +17,16 @@ class TempExport_NonLengkap implements FromCollection, ShouldAutoSize,WithHeadin
     */
     public function collection()
     {
+        $admin=Auth::user()->name;
         $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'lazada'])
+        ->whereNotExists(function($query){
+            $query->select(DB::raw(1))
+            ->from('barangkey')
+            ->whereColumn('barangkey.varian','temp_import.varian')
+            ->whereColumn('barangkey.key_barang','temp_import.barang');
+        })
         ->select(DB::raw('noresi,skuindex,sku,barang,varian'))
+        ->where('admin',$admin)
         ->get();
        return $data;
     }

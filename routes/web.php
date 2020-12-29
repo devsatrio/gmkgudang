@@ -72,11 +72,17 @@ Route::prefix('import-data')->group(function(){
     Route::get('cari-noresi/{norm}','backend\TrxController@cariNoresi');
     // Scaner paket
     Route::get('sc-view','backend\TrxController@scView')->name('sc.view');
-    Route::get('get-scan-data/{jns}','backend\TrxController@scData');
+    Route::get('get-scan-data/{jns}/{tgl1}/{tgl2}','backend\TrxController@scData');
+    Route::get('cari-scan-data/{cari}','backend\TrxController@CariscData');
+    Route::get('up-scan-admin/{ids}/{adm}','backend\TrxController@upScAdmin');
     Route::get('batal-scan/{noresi}','backend\TrxController@batalscData');
     Route::post('simpan-scan','backend\TrxController@scSimpan');
     Route::get('lap-scan','backend\TrxController@lapscan')->name('lap.sc');
     Route::get('cari-list-scan/{tgl1}/{tgl2}/{pil}','backend\TrxController@cariLscan')->name('clistscan');
+    // Route::get('dn-list-scan/{tgl1}/{tgl2}','backend\TrxController@DnSckirim')->name('dn.sckirim');
+    // acc scan
+    Route::get('data-acc-scan','backend\TrxController@dataAccScan')->name('data.acc.sc');
+    Route::post('acc-scanan','backend\TrxController@accScan');
     // hapus temp_barang
     Route::post('hapus-temp','backend\TrxController@hapusTemp')->name('del.temp');
 });
