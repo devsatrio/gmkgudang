@@ -53,9 +53,9 @@
                                                 <tr>
                                                     <tr>
                                                         <th>No</th>
+                                                        <td>Tgl</td>
                                                         <th>No Resi</th>
                                                         <th>SKU induk</th>
-                                                        <th>SKU</th>
                                                         <th>Barang</th>
                                                         <th>Varian</th>
                                                         <th>Jumlah</th>
@@ -77,9 +77,9 @@
                                                 @foreach ($data as $item)
                                                     <tr>
                                                         <td>{{$no++}}</td>
+                                                        <td>{{$item->Tgl}}</td>
                                                         <td>{{$item->noresi}}</td>
                                                         <td>{{$item->skuindex}}</td>
-                                                        <td>{{$item->sku}}</td>
                                                         <td>{{$item->barang}}</td>
                                                         <td>{{$item->varian}}</td>
                                                         <td>{{$item->jumlah}}</td>

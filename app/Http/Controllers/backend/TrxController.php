@@ -683,10 +683,18 @@ class TrxController extends Controller
                 $data=model_barang_scan::where(['stts'=>'terkirim'])->whereBetween('tgl',[$tg1,$tg2])->orderBy('id','DESC')->get();
             }elseif($jn=="batal"){
                 $data=model_barang_scan::where(['stts'=>'batal'])->whereBetween('tgl',[$tg1,$tg2])->orderBy('id','DESC')->get();
+            }elseif($jn=="pending"){
+                $temp=DB::table('temp_import')->get();
+                $resi=[];
+                foreach($temp as $gl){
+                    $resi[]=$gl->noresi;
+                }
+                $data=model_barang_scan::whereBetween('tgl',[$tg1,$tg2])->whereIn('noresi',$resi)->get();
             }
 
             $print=[
                 'data'=>$data,
+                'jn'=>$jn,
             ];
             return view('backend.import_barang.data_scaner',$print);
         }else{
@@ -696,11 +704,19 @@ class TrxController extends Controller
                 $data=model_barang_scan::where(['stts'=>'terkirim'])->whereBetween('tgl',[$tg1,$tg2])->where('admin',$admin)->orderBy('id','DESC')->get();
             }elseif($jn=="batal"){
                 $data=model_barang_scan::where(['stts'=>'batal'])->whereBetween('tgl',[$tg1,$tg2])->where('admin',$admin)->orderBy('id','DESC')->get();
+            }elseif($jn=="pending"){
+                $temp=DB::table('barang_scan')->get();
+                $resi=[];
+                foreach($temp as $gl){
+                    $resi[]=$gl->noresi;
+                }
+                $data=temp_import::whereBetween('tgl',[$tg1,$tg2])->where(['admin'=>$admin])->whereNotIn('noresi',$resi)->get();
             }
 
             $print=[
                 'data'=>$data,
                 'adm'=>$users,
+                'jn'=>$jn
             ];
             return view('backend.import_barang.data_scaner',$print);
         }

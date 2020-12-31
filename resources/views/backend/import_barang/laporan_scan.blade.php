@@ -92,7 +92,7 @@
             // get data table
             $('#tbl').tableExport({
                format:'xls',
-               filename:'report-'+tgl1+'-'+tgl2,
+               filename:'report-SCAN-'+tgl1+'-'+tgl2,
             });
         }
         getData();

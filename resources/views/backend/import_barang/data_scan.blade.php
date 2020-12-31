@@ -6,19 +6,20 @@
                 <td class="bg-primary" colspan="11">{{$itm->admin}}</td>
                 @php
                     if($pil=="pending"){
-                        $temp=DB::table('temp_import')->get();
+                        $temp=DB::table('barang_scan')->get();
                         $resi=[];
                         foreach($temp as $gl){
                             $resi[]=$gl->noresi;
                         }
-                        $dtl=DB::table('barang_scan')->whereBetween('tgl',[$tgl1,$tgl2])->where(['stts'=>$pil,'admin'=>$itm->admin])->whereIn('noresi',$resi)->get();
+                        $dtl=DB::table('temp_import')->whereBetween('tgl',[$tgl1,$tgl2])->where(['admin'=>$itm->admin])->whereNotIn('noresi',$resi)->get();
                     }else{
-                        $dtl=DB::table('barang_scan')->whereBetween('tgl',[$tgl1,$tgl2])->where(['stts'=>$pil,'admin'=>$itm->admin])->get();
+                        $dtl=DB::table('barang_scan')->whereBetween('tgl',[$tgl1,$tgl2])->where(['admin'=>$itm->admin])->get();
                     }
                     $no=1;
                 @endphp
                 <tr class="bg-info">
                     <td>No</td>
+                    <td>Tgl</td>
                     <td>Status</td>
                     <td>No Resi</td>
                     <td>No Pesan</td>
@@ -32,6 +33,7 @@
                 @foreach ($dtl as $item)
                     <tr>
                         <td>{{$no++}}</td>
+                        <td>{{$item->tgl}}</td>
                         <td>{{$item->stts}}</td>
                         <td>{{$item->noresi}}</td>
                         <td>{{$item->nopesan}}</td>

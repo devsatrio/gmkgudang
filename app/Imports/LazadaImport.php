@@ -16,7 +16,7 @@ class LazadaImport implements ToCollection
     */
     public function collection(Collection $rows)
     {
-
+        $data = array();
         $admin=Auth::user()->name;
         foreach ($rows as $key=>$row) {
             // print_r($row[0]);

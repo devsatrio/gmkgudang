@@ -40,6 +40,9 @@
                                     <a href="#navscaned" onclick="getDataScan('terkirim','container_terkirim')" data-toggle="pill" class="nav-link" role="tab">Data Paket Terkirim</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="#navpending" onclick="getDataScan('pending','container_pending')" data-toggle="pill" class="nav-link" role="tab">Data Paket Pending</a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="#navbatal" onclick="getDataScan('batal','container_batal')" data-toggle="pill" class="nav-link" role="tab">Data Paket Batal</a>
                                 </li>
                             </ul>
@@ -102,6 +105,13 @@
                                            </div>
                                         </div>
                                         <div class="col-12" class="divload" id="container_terkirim">
+                                            @include('backend.import_barang.data_scaner')
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="navpending">
+                                    <div class="row">
+                                        <div class="col-12" class="divload" id="container_pending">
                                             @include('backend.import_barang.data_scaner')
                                         </div>
                                     </div>
@@ -207,6 +217,8 @@
             idcontainer="container_terkirim";
         }else if(jns=="batal"){
             idcontainer="container_batal";
+        }else if(jns=="pending"){
+            idcontainer="container_pending";
         }
         $('#'+idcontainer).loading({
                     stoppable: true,

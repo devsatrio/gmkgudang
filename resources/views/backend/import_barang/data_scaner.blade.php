@@ -2,6 +2,7 @@
     <table class="table table-bordered tbel" id="tscan">
         <tr class="bg-info">
             <td>No</td>
+            <td>@</td>
             <td>Status</td>
             <td>No Resi</td>
             <td>No Pesan</td>
@@ -19,10 +20,14 @@
             @foreach ($data as $item)
                 <tr>
                     <td>{{$no++}}</td>
+                    <td>{{$item->tgl.' '.$item->jam}}</td>
+                    @if($jn=="pending")
+                    <td>Pending</td>
+                    @else
                     <td>{{$item->stts}}</td>
+                    @endif
                     <td>
                         {{$item->noresi}}
-                        <div class="badge badge-primary">scan: {{$item->tgl.' '.$item->jam}}</div>
                     </td>
                     <td>{{$item->nopesan}}</td>
                     <td>{{$item->kurir}}</td>
