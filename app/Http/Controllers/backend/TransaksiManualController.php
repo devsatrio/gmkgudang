@@ -63,9 +63,9 @@ class TransaksiManualController extends Controller
     public function store(Request $request)
     {
         $data = DB::table('barang_trx_manual')->where('pembuat',Auth::user()->id)->get();
-        $data_input[]=array();
+        $data_input=[];
         foreach($data as $row){
-            $data_input=[
+            $data_input[]=[
                 'noresi'=>$request->resi,
                 'sku'=>$row->sku,
                 'skuindex'=>$row->sku_induk,

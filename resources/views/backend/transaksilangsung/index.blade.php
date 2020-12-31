@@ -48,15 +48,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Admin</label>
-                                    @if(Auth::user()->level!='Admin')
-                                    <select name="admin" class="form-control">
-                                        @foreach($admin as $adm)
-                                        <option value="{{$adm->username}}">{{$adm->username}}</option>
-                                        @endforeach
-                                    </select>
-                                    @else
                                     <input type="text" class="form-control" name="admin" value="{{Auth::user()->username}}" readonly>
-                                    @endif
+                            
                                 </div>
                             </div>
                         </div>
@@ -64,16 +57,17 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tipe</label>
-                                    <select name="tipe" class="form-control">
+                                    <select name="tipe" class="form-control" id="tipetrx">
                                         <option value="shopee">Shoope</option>
                                         <option value="lazada">Lazada</option>
                                     </select>
+                                    <input type="text" id="displaytipetrx" class="form-control" style="display:none;" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tanggal</label>
-                                    <input type="date" class="form-control" name="tgl" value="{{date('Y-m-d')}}"
+                                    <input type="date" class="form-control" name="tgl" id="tgltrx" value="{{date('Y-m-d')}}"
                                         required>
                                 </div>
                             </div>
