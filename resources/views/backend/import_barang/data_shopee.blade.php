@@ -77,7 +77,7 @@
                                                 @foreach ($data as $item)
                                                     <tr>
                                                         <td>{{$no++}}</td>
-                                                        <td>{{$item->Tgl}}</td>
+                                                        <td>{{$item->tgl}}</td>
                                                         <td>{{$item->noresi}}</td>
                                                         <td>{{$item->skuindex}}</td>
                                                         <td>{{$item->barang}}</td>

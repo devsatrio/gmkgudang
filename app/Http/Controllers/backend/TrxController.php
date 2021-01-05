@@ -695,6 +695,7 @@ class TrxController extends Controller
             $print=[
                 'data'=>$data,
                 'jn'=>$jn,
+                'adm'=>$users,
             ];
             return view('backend.import_barang.data_scaner',$print);
         }else{
