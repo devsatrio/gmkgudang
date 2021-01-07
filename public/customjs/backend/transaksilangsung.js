@@ -47,6 +47,10 @@
 			var jumlah	= $("#jumlah").val();
 			var stok	= $("#stok").val();
 			var sku	= $("#sku").val();
+			var varian	= $("#varian").val();
+			var kurir	= $("#kurir").val();
+			var penerima	= $("#penerima").val();
+			var nopesanan	= $("#nopesanan").val();
 			var kode	= $(".select2").val();
 			var sku_induk	= $("#sku_induk").val();
 			if(resi=='' || admin=='' || nama_barang=='' || harga==''|| harga==0|| jumlah == ''){
@@ -76,7 +80,11 @@
                             'harga'		: harga,
                             'jumlah'	: jumlah,
                             'sku'	: sku,
-                            'kode'	: kode,
+                            'penerima':penerima,
+                            'varian': varian,
+                            'kurir':kurir,
+                            'nopesanan':nopesanan,
+                            'kode' : kode,
                             'sku_induk'	: sku_induk,
                         },
                         success:function(){
@@ -86,6 +94,7 @@
                             $("#jumlah").val('');
                             $("#stok").val('');
                             $("#sku").val('');
+                            $("#varian").val('');
                             $("#sku_induk").val('');
                             $("#resi").prop('readonly',true);
                             $("#admin").prop('readonly',true);
@@ -135,6 +144,8 @@
                 rows = rows + '<td>' +value.sku+'</td>';
                 rows = rows + '<td>' +value.sku_induk+'</td>';
                 rows = rows + '<td>' +value.barang+'</td>';
+                rows = rows + '<td class="text-right">' +value.varian+'</td>';
+                rows = rows + '<td class="text-center">' +value.kurir+'</td>';
                 rows = rows + '<td class="text-right">' +value.harga+'</td>';
                 rows = rows + '<td class="text-center">' +value.jumlah+' Pcs</td>';
                 rows = rows + '<td class="text-right"> Rp. ' +rupiah(value.subtotal)+'</td>';
