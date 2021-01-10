@@ -86,7 +86,7 @@ class TransaksiManualController extends Controller
                 'jenis'=>$request->tipe,
                 'admin'=>$request->admin,
                 'sts_kirim'=>'belum',
-                'sts_valid'=>'valid',
+                'sts_valid'=>'belum',
                 'created_at'=>date('Y-m-d H:i:s'),
                 'updated_at'=>date('Y-m-d H:i:s'),
             ];
