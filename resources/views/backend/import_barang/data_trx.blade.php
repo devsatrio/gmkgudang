@@ -38,6 +38,15 @@
                                 <form action="{{route('cari.data.trx')}}" method="get" class="form-inline">
                                     @csrf
                                     <div class="form-group mr-2">
+                                        <select name="admin" id="admin" class="form-control">
+                                            <option  value="all" disabled selected>Pilih Marketplace</option>
+                                            <option value="all">Semua</option>
+                                            @foreach ($user as $sdm)
+                                                <option value="{{$sdm->name}}">{{$sdm->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group mr-2">
                                         <input type="text" name="tgl1" id="tgl1" value="{{$tgl1}}" readonly class="form-control picker" >
                                     </div>
                                     <div class="form-group mr-2 ">
@@ -67,16 +76,21 @@
                                                 @foreach ($data as $item)
                                                     <tr class="bg-primary">
                                                         <td>Toko</td>
-                                                        <td colspan="11">{{$item->admin}}</td>
+                                                        <td colspan="11">{{$item->name}} </td>
                                                         <td class="bg-danger"></td>
                                                         <td class="bg-success"></td>
                                                         @php
-                                                            $detail=DB::table('barang_trx')->leftjoin('barang','barang.kode_barang','=','barang_trx.skuindex')
-                                                                    ->select(DB::raw('barang.*,barang.harga as hpp,barang_trx.*'))
+                                                            $detail=DB::table('barang_trx')
+                                                                    // ->join('barang','barang.kode_barang','=','barang_trx.skuindex')
+                                                                    // ->select(DB::raw('barang.*,barang.harga as hpp,barang_trx.*'))
                                                                     ->where('stts','!=','batal')
-                                                                    ->where('admin',$item->admin)->whereBetween('tgl',[$tgl1,$tgl2])
+                                                                    ->where('admin',$item->name)->whereBetween('tgl',[$tgl1,$tgl2])
                                                                     ->get();
+                                                            // $detail=DB::select("select barang.*,barang.harga as hpp,barang_trx.* from barang_trx , barang where barang.kode_barang=barang_trx.skuindex and stts !='batal' and admin='" . $item->name . "' and tgl between '".$tgl1."' and '".$tgl2."'");
                                                         @endphp
+                                                        <tr>
+                                                            <td colspan="11"> <b> Jumlah Data = {{count($detail)}} </b></td>
+                                                        </tr>
                                                         <tr class="bg-info">
                                                             <td>No</td>
                                                             <td>Kode</td>
@@ -103,17 +117,30 @@
                                                         @endphp
                                                         @foreach ($detail as $colect)
                                                         @php
+                                                            $dhpp=DB::table('barang')->select(DB::raw('harga'))->where('kode_barang',$colect->skuindex)->first();
+                                                            if(empty($dhpp->harga)){
+                                                                $hrg=0;
+                                                            }else{
+                                                                $hrg=$dhpp->harga;
+                                                            }
                                                             $total=$total+$colect->total;
                                                             $qty=$qty+$colect->jumlah;
-                                                            $thp=$colect->hpp*$colect->jumlah;
+                                                            $thp=$hrg*$colect->jumlah;
                                                             $tjual=$colect->harga*$colect->jumlah;
-                                                            $tunt=($colect->harga*$colect->jumlah)-($colect->hpp*$colect->jumlah);
+                                                            $tunt=($colect->harga*$colect->jumlah)-($hrg*$colect->jumlah);
                                                             $tothp=$tothp+$thp;
                                                             $tojual=$tojual+$tjual;
                                                             $tount=$tount+$tunt;
 
                                                         @endphp
-                                                            <tr>
+                                                            @if ($hrg==0)
+                                                                <tr>
+                                                                    <td colspan="14">Non Stok</td>
+                                                                </tr>
+                                                                <tr class="bg-danger">
+                                                            @else
+                                                                <tr>
+                                                            @endif
                                                                 <td>{{$nt++}}</td>
                                                                 <td>{{$colect->skuindex}}</td>
                                                                 <td>{{$colect->jenis}}</td>
@@ -123,12 +150,11 @@
                                                                 <td>{{$colect->barang}}</td>
                                                                 <td>{{$colect->varian}}</td>
                                                                 <td>{{$colect->jumlah}}</td>
-                                                                <td>{{$colect->hpp}}</td>
+                                                                <td>{{$hrg}}</td>
                                                                 <td>{{$colect->harga}}</td>
                                                                 <td>{{$thp}}</td>
                                                                 <td>{{$tjual}}</td>
                                                                 <td>{{$tunt}}</td>
-                                                                {{-- <td>{{number_format($colect->harga,0,',','.')}}</td> --}}
                                                             </tr>
                                                         @endforeach
                                                         <tr>
@@ -185,7 +211,7 @@
             // get data table
             $('#tablereport').tableExport({
                format:'xls',
-               filename:'report-'+tgl1+'-'+tgl2,
+               filename:'laporan Transaksi-'+tgl1+'-'+tgl2,
             });
         }
 

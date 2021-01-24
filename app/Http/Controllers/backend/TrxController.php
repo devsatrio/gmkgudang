@@ -316,6 +316,8 @@ class TrxController extends Controller
             // kurangi stok
             $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
             }
+            //  validasi cek sudah input
+
             $in=DB::table('barang_trx')->insert($data);
             if($in){
                 $kr=temp_import::whereIn('id',$arr)->update([
@@ -581,8 +583,10 @@ class TrxController extends Controller
     {
         $tgl=date('Y-m-d');
         // $data=barang_trx::where('tgl',$tgl)->get();a
-        $data=barang_trx::select(DB::raw('admin'))->groupBy('admin')->get();
+        $dataus=User::select(DB::raw('name'))->whereNotIn('id',['1','8'])->get();
+        $data=User::select(DB::raw('name'))->whereNotIn('id',['1','8'])->get();
         $print=[
+            'user'=>$dataus,
             'data'=>$data,
             'tgl1'=>$tgl,
             'tgl2'=>$tgl,
@@ -593,11 +597,18 @@ class TrxController extends Controller
     {
         $tgl1=$request->tgl1;
         $tgl2=$request->tgl2;
-        $data=barang_trx::select(DB::raw('admin'))->groupBy('admin')->get();
+        $adm=$request->admin;
+        $dataus=User::select(DB::raw('name'))->whereNotIn('id',['1','8'])->get();
+        if ($adm=='all') {
+            $data=User::select(DB::raw('name'))->whereNotIn('id',['1','8'])->get();
+        }else{
+            $data=User::select(DB::raw('name'))->where('name',$adm)->whereNotIn('id',['1','8'])->get();
+        }
         $print=[
             'data'=>$data,
             'tgl1'=>$tgl1,
             'tgl2'=>$tgl2,
+            'user'=>$dataus,
         ];
         return view('backend.import_barang.data_trx',$print);
     }
@@ -623,6 +634,7 @@ class TrxController extends Controller
         ];
         return view('backend.import_barang.data_laporantrx',$print);
     }
+
     public function cariNoresi($norm)
     {
         $data=barang_trx::where('noresi','like','%'. $norm  .'%')->where('stts','!=','batal')->get();
@@ -839,7 +851,7 @@ class TrxController extends Controller
     // lap scan
     public function lapscan()
     {
-        $data=[];
+        $data=User::select(DB::raw('name'))->whereNotIn('id',['1','8'])->get();
         $print=[
             'data'=>$data,
             'tgl1'=>date('Y-m-d'),
@@ -861,7 +873,7 @@ class TrxController extends Controller
         // }else{
         //     // $data=model_barang_scan::whereBetween('tgl',[$tgl1,$tgl2])->where('stts',$pil)->get();
         // }
-        $data=model_barang_scan::select(DB::raw('admin'))->groupBy('admin')->get();
+        $data=User::select(DB::raw('name'))->whereNotIn('id',['1','8'])->get();
         $print=[
             'data'=>$data,
             'tgl1'=>$tgl1,

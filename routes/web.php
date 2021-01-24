@@ -66,6 +66,7 @@ Route::prefix('import-data')->group(function(){
     // laporan TRX
     Route::get('list-trx','backend\TrxController@ListTrx')->name('list.trx');
     Route::get('cari-list-trx/{tgl1}/{tgl2}','backend\TrxController@cariListTrx');
+
     Route::get('data-trx','backend\TrxController@DataTrx')->name('data.trx');
     Route::get('cari-trx','backend\TrxController@CariTrx')->name('cari.data.trx');
     Route::post('batal-trx','backend\TrxController@batalTrx');

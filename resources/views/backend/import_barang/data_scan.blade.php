@@ -3,7 +3,7 @@
         @foreach ($data as $itm)
             <tr>
                 <td class="bg-primary">Toko</td>
-                <td class="bg-primary" colspan="11">{{$itm->admin}}</td>
+                <td class="bg-primary" colspan="11">{{$itm->name}}</td>
                 @php
                     if($pil=="pending"){
                         $temp=DB::table('barang_scan')->get();
@@ -11,9 +11,9 @@
                         foreach($temp as $gl){
                             $resi[]=$gl->noresi;
                         }
-                        $dtl=DB::table('temp_import')->whereBetween('tgl',[$tgl1,$tgl2])->where(['admin'=>$itm->admin])->whereNotIn('noresi',$resi)->get();
+                        $dtl=DB::table('temp_import')->whereBetween('tgl',[$tgl1,$tgl2])->where(['admin'=>$itm->name])->whereNotIn('noresi',$resi)->get();
                     }else{
-                        $dtl=DB::table('barang_scan')->whereBetween('tgl',[$tgl1,$tgl2])->where(['admin'=>$itm->admin])->get();
+                        $dtl=DB::table('barang_scan')->whereBetween('tgl',[$tgl1,$tgl2])->where(['admin'=>$itm->name])->get();
                     }
                     $no=1;
                 @endphp
