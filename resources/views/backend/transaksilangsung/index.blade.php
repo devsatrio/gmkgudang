@@ -31,7 +31,8 @@
                 @endif
             </div>
         </div>
-        <form method="POST" class="row pl-4 pr-4" enctype="multipart/form-data" onsubmit="return validform()" action="{{url('transaksi-manual')}}">
+        <form method="POST" class="row pl-4 pr-4" enctype="multipart/form-data" onsubmit="return validform()"
+            action="{{url('transaksi-manual')}}">
             <div class="col-md-5">
                 <div class="card card-outline card-primary" id="panelnya">
                     @csrf
@@ -42,14 +43,38 @@
                                     <label for="exampleInputEmail1">No. Resi</label>
                                     <input type="text" class="form-control" name="resi" id="resi" required autofocus>
                                     <input type="hidden" name="admin" value="{{Auth::user()->id}}" id="admin">
-                                    <input type="hidden" name="statusadmin" value="{{Auth::user()->level}}" id="statusadmin">
+                                    <input type="hidden" name="statusadmin" value="{{Auth::user()->level}}"
+                                        id="statusadmin">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Admin</label>
-                                    <input type="text" class="form-control" name="admin" value="{{Auth::user()->username}}" readonly>
-                            
+                                    <input type="text" class="form-control" name="admin"
+                                        value="{{Auth::user()->username}}" readonly>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Penerima</label>
+                                    <input type="text" class="form-control" name="penerima" id="penerima" required>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">No. Pesanan</label>
+                                    <input type="text" class="form-control" name="nopesanan" id="nopesanan" required>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Kurir</label>
+                                    <input type="text" class="form-control" name="kurir" id="kurir" required>
                                 </div>
                             </div>
                         </div>
@@ -61,14 +86,15 @@
                                         <option value="shopee">Shoope</option>
                                         <option value="lazada">Lazada</option>
                                     </select>
-                                    <input type="text" id="displaytipetrx" class="form-control" style="display:none;" readonly>
+                                    <input type="text" id="displaytipetrx" class="form-control" style="display:none;"
+                                        readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tanggal</label>
-                                    <input type="date" class="form-control" name="tgl" id="tgltrx" value="{{date('Y-m-d')}}"
-                                        required>
+                                    <input type="date" class="form-control" name="tgl" id="tgltrx"
+                                        value="{{date('Y-m-d')}}" required>
                                 </div>
                             </div>
                         </div>
@@ -94,27 +120,35 @@
 
                         </div>
                         <div class="row mt-3">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label>Stok</label>
                                 <div class="nk-int-st">
                                     <input type="number" readonly class="form-control" name="stok" id="stok">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label>Jumlah</label>
                                 <div class="nk-int-st">
                                     <input type="number" min="0" class="form-control" id="jumlah" name="jumlah">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
                                 <label>Harga</label>
                                 <div class="nk-int-st">
                                     <input type="number" class="form-control" name="harga" id="harga">
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <label>Varian</label>
+                                <div class="nk-int-st">
+                                    <input type="text" class="form-control" name="varian" id="varian">
+                                </div>
+                            </div>
                         </div>
                         <div class="row mt-5">
-                        <div class="col-md-6">
+                            <div class="col-md-6">
                                 <label>SKU Induk</label>
                                 <div class="nk-int-st">
                                     <input type="text" readonly class="form-control" name="sku_induk" id="sku_induk">
@@ -149,6 +183,8 @@
                                         <th>SKU</th>
                                         <th>SKU Induk</th>
                                         <th>Produk</th>
+                                        <th>Varian</th>
+                                        <th>Kurir</th>
                                         <th>Harga</th>
                                         <th class="text-center">Qty</th>
                                         <th>Subtotal</th>
@@ -160,7 +196,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="4"><b>Total</b></td>
+                                        <td colspan="6"><b>Total</b></td>
                                         <td class="text-center"><span id="totalpcs"></span></td>
                                         <td class="text-right"><span id="total"></span></td>
                                         <td></td>

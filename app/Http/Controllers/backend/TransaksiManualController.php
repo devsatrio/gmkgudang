@@ -7,6 +7,7 @@ use App\Imports\BarangKeluarImport;
 use Illuminate\Http\Request;
 use App\models\Barang;
 use App\models\barang_trx;
+use App\models\temp_import;
 use DataTables;
 use Excel;
 use DB;
@@ -55,6 +56,10 @@ class TransaksiManualController extends Controller
             'sku'=>$request->sku,
             'resi'=>$request->resi,
             'kode_barang'=>$request->kode,
+            'varian'=>$request->varian,
+            'kurir'=>$request->kurir,
+            'penerima' => $request->penerima,
+            'nopesanan'=>$request->nopesanan,
             'sku_induk'=>$request->sku_induk,
         ]);
     }
@@ -67,23 +72,30 @@ class TransaksiManualController extends Controller
         foreach($data as $row){
             $data_input[]=[
                 'noresi'=>$request->resi,
+                'nopesan'=>$request->nopesanan,
                 'sku'=>$row->sku,
+                'kurir'=>$row->kurir,
+                'varian'=>$row->varian,
                 'skuindex'=>$row->sku_induk,
                 'barang'=>$row->barang,
                 'tgl'=>$request->tgl,
                 'jumlah'=>$row->jumlah,
                 'harga'=>$row->harga,
+                'penerima'=>$row->penerima,
                 'total'=>$row->subtotal,
                 'jenis'=>$request->tipe,
                 'admin'=>$request->admin,
-                'stts'=>'sended'
+                'sts_kirim'=>'belum',
+                'sts_valid'=>'belum',
+                'created_at'=>date('Y-m-d H:i:s'),
+                'updated_at'=>date('Y-m-d H:i:s'),
             ];
             $databarang = DB::table('barang')->where('id',$row->kode_barang)->get();
             foreach($databarang as $dtb){
                 DB::table('barang')->where('id',$row->kode_barang)->update(['stok'=>$dtb->stok-$row->jumlah]);
             }
         }
-        barang_trx::insert($data_input);
+        temp_import::insert($data_input);
         return redirect('/transaksi-manual')->with('status','Sukses menyimpan data');
     }
 
