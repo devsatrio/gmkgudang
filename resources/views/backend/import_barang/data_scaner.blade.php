@@ -20,9 +20,14 @@
             @foreach ($data as $item)
                 <tr>
                     <td>{{$no++}}</td>
+                    @if($jn!="pending")
                     <td>{{$item->tgl.' '.$item->jam}}</td>
+                    @endif
                     @if($jn=="pending")
-                    <td>Pending</td>
+                    <td>
+                        Pending
+                        -{{$item->tgl}}
+                    </td>
                     @else
                     <td>{{$item->stts}}</td>
                     @endif

@@ -19,7 +19,6 @@ class TempExportSp implements FromCollection, WithHeadings, ShouldAutoSize
         $admin=Auth::user()->name;
         $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'sudah','jenis'=>'shopee'])
         ->select(DB::raw('skuindex,sku,barang,varian'))
-        ->where('admin',$admin)
         ->get();
        return $data;
     }

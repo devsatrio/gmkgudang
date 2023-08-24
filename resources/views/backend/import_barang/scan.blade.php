@@ -1,6 +1,6 @@
 @extends('layouts/base')
 @section('token')
-<meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('title')
     Scanner Paket
@@ -22,11 +22,11 @@
     <div class="content">
         <div class="container">
             @if (session('status'))
-            <div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4>Info!</h4>
-                {{ session('status') }}
-            </div>
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>Info!</h4>
+                    {{ session('status') }}
+                </div>
             @endif
             <div class="row">
                 <div class="col-12">
@@ -34,10 +34,12 @@
                         <div class="card-header">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a href="#navscan" onclick="getDataScan('scan','container_scan')" data-toggle="pill" class="nav-link active" role="tab">Scan Paket</a>
+                                    <a href="#navscan" data-toggle="pill" class="nav-link active" role="tab">Input Resi
+                                        <div class="badge badge-info"><span id="n-navscan">0</span></div></a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#navscaned" onclick="getDataScan('terkirim','container_terkirim')" data-toggle="pill" class="nav-link" role="tab">Data Paket Terkirim</a>
+                                    <a href="#navscaned" data-toggle="pill" class="nav-link" role="tab">Data Paket
+                                        Terkirim <div class="badge badge-info"><span id="n-navscaned">0</span></div></a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#navpending" onclick="getDataScan('pending','container_pending')" data-toggle="pill" class="nav-link" role="tab">Data Paket Pending</a>
@@ -78,7 +80,8 @@
                                                         <label for="" class="mr-2">Masukan / Scan Kode</label>
                                                     </div>
                                                     <div class="form-group mr-2">
-                                                        <input type="text" style="widht:500px" class="form-control" id="scn" placeholder="Input Nomer Resi atau Barcode ">
+                                                        <input type="text" style="widht:500px" class="form-control"
+                                                            id="scn" placeholder="Input Nomer Resi atau Barcode ">
                                                     </div>
                                                     <div class="form-group mr-2">
                                                         <input type="text" style="widht:500px" class="form-control mr-2" id="cresi" placeholder="Input Nomer Resi atau Barcode ">
@@ -143,6 +146,19 @@
         $(document).ready(function(){
             getDataScan('scan','container_scan');
         });
+        $(document).ready(function() {
+            // getData();
+            ambilSemua();
+        });
+
+        function ambilSemua() {
+            setJenis('belum');
+            setJenis('pending');
+            setJenis('terkirim');
+            setJenis('batal');
+            setJenis('retur');
+            listHitung();
+        }
         // sweetalert
         const Toast = Swal.mixin({
             toast: true,
@@ -151,13 +167,13 @@
             timer: 3000
         });
         $(function() {
-            $(document).on('keypress',function(){
+            $(document).on('keypress', function() {
                 $('#scn').focus();
             });
         });
         $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
         // download KIriman
@@ -349,3 +365,4 @@
         }
     </script>
 @endpush
+

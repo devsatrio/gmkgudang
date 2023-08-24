@@ -79,7 +79,7 @@ function upstat(Request $request){
             ];
         }else{
             if($mda->admin==$admin){
-                $data=temp_import::where('noresi',$nresi)->get();
+                $data=temp_import::where('noresi',$nresi)->take(1)->get();
                 foreach($data as $item){
                     $dt[]=[
                         'noresi'=>$item->noresi,
@@ -87,6 +87,7 @@ function upstat(Request $request){
                         'kurir'=>$item->kurir,
                         'tgl'=>date('Y-m-d'),
                         'jam'=>date('H:i:s'),
+                        'tgl_scan'=>date('Y-m-d H:i:s'),
                         'skuinduk'=>$item->skuindex,
                         'sku'=>$item->sku,
                         'barang'=>$item->barang,
@@ -125,7 +126,8 @@ function uptarik(Request $req){
     $data=DB::table('barang_scan')
     ->where('noresi',$kod)
     ->update([
-        'stts'=>'batal'
+        'stts'=>'batal',
+        'tgl_batal'=>date('Y-m-d H:i:s'),
     ]);
     if($data){
         return response()->json(['msg'=>'Berhasil Ditarik']);

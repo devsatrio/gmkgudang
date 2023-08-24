@@ -214,50 +214,5 @@
                 }
             }
         }
-        function hapus() {
-            var allVals=[];
-            $('.subck:checked').each(function() {
-                allVals.push($(this).attr('data-id'))
-            });
-            if(allVals.length<=0){
-                alert('Pilih Salah Satu Data');
-            }else{
-                console.log(allVals);
-                // var conf=confirm("Apakah anda ingin Proses Data ini?");
-                Swal.fire({
-                    type:'warning',
-                    title:'Peringatan!',
-                    text:'Apakah Anda Yakin Menghapus Data Ini ? ',
-                    showCancelButton:true,
-                    cancelButtonColor:'#d33',
-                    confirmButtonColor:'#3085d6',
-                    confirmButtonText:'Proses'
-                }).then(function(result){
-                    if(result.value){
-                        // acc pasien
-                        var join_selected=allVals.join(",");
-                        $.ajax({
-                            url:"{{route('del.temp')}}",
-                            type:'post',
-                            data:{norawat:join_selected},
-                            success:function(response){
-                                if(response.sts="1"){
-                                    Toast.fire({
-                                        type: 'success',
-                                        title: response.msg
-                                    });
-                                    location.reload();
-                                }else{
-                                    Toast.fire({
-                                        type: 'error',
-                                        title: response.msg
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
-            }
-        }
     </script>
 @endpush

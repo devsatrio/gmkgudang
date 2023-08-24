@@ -55,6 +55,15 @@ Route::prefix('import-data')->group(function(){
     Route::post('import-lazada','backend\TrxController@actimportlazada')->name('importlazada');
     Route::get('data-lazada/{jns}','backend\TrxController@datalazada')->name('datalazada');
     Route::post('acc-lazada','backend\TrxController@acclazada');
+    // import tiktok
+    Route::get('v-tiktok','backend\TrxController@importtiktok')->name('im.tiktok');
+    Route::post('import-tiktok','backend\TrxController@actimporttiktok')->name('importtiktok');
+    Route::get('data-tiktok/{jns}','backend\TrxController@datatiktok')->name('tk.data');
+    Route::get('export-nonstok-tiktok/{jns}','backend\TrxController@exportNonStokTK')->name('exp.nostok.tiktok');
+    Route::post('acc-tiktok','backend\TrxController@accTiktok');
+    // import tiktok2
+    Route::get('v-tiktok2','backend\TrxController@importtiktok2')->name('im.tiktok2');
+    Route::post('import-tiktok2','backend\TrxController@actimporttiktok2')->name('importtiktok2');
     // export barang non stok
     Route::get('export-nonstok-lazada/{jns}','backend\TrxController@exportNonStok')->name('exp.nostok.lazada');
     // barang Tidak lengkap
@@ -77,12 +86,15 @@ Route::prefix('import-data')->group(function(){
     Route::get('cari-scan-data/{cari}','backend\TrxController@CariscData');
     Route::get('up-scan-admin/{ids}/{adm}','backend\TrxController@upScAdmin');
     Route::get('batal-scan/{noresi}','backend\TrxController@batalscData');
+    Route::get('retur-scan/{noresi}','backend\TrxController@returscData');
     Route::post('simpan-scan','backend\TrxController@scSimpan');
     Route::get('lap-scan','backend\TrxController@lapscan')->name('lap.sc');
     Route::get('cari-list-scan/{tgl1}/{tgl2}/{pil}','backend\TrxController@cariLscan')->name('clistscan');
     // Route::get('dn-list-scan/{tgl1}/{tgl2}','backend\TrxController@DnSckirim')->name('dn.sckirim');
     // acc scan
     Route::get('data-acc-scan','backend\TrxController@dataAccScan')->name('data.acc.sc');
+    Route::get('data-barang-scan/{jenis}/{tgl1}/{tgl2}','backend\TrxController@dataBarangScan');
+    Route::get('hitung-barang-scan/{tgl1}/{tgl2}','backend\TrxController@hitungByExp');
     Route::post('acc-scanan','backend\TrxController@accScan');
     // hapus temp_barang
     Route::post('hapus-temp','backend\TrxController@hapusTemp')->name('del.temp');

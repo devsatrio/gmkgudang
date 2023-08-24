@@ -117,12 +117,6 @@
                                                         @endphp
                                                         @foreach ($detail as $colect)
                                                         @php
-                                                            $dhpp=DB::table('barang')->select(DB::raw('harga'))->where('kode_barang',$colect->skuindex)->first();
-                                                            if(empty($dhpp->harga)){
-                                                                $hrg=0;
-                                                            }else{
-                                                                $hrg=$dhpp->harga;
-                                                            }
                                                             $total=$total+$colect->total;
                                                             $qty=$qty+$colect->jumlah;
                                                             $thp=$hrg*$colect->jumlah;

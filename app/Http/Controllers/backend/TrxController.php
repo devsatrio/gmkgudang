@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Imports\BarangNonLengkap;
 use App\Imports\ShopeeImport;
 use App\Imports\LazadaImport;
+use App\Imports\TiktokImport;
+use App\Imports\TiktokImport2;
 use App\models\Barang;
 use App\models\barang_trx;
 use App\models\BarangKey;
@@ -25,6 +27,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\File;
 use DataTables;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
 class TrxController extends Controller
 {
@@ -400,6 +403,239 @@ class TrxController extends Controller
             return Excel::download(new TempExportSp_Non_Lengkap(), $namafile);
         }
     }
+    // ======================= Tiktok ==================================================================================
+    public function importtiktok()
+    {
+        $br=Barang::get();
+        foreach ($br as  $item) {
+            $kode[]=$item->kode_barang;
+        }
+        $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'tiktok'])
+            ->whereIn('skuindex',$kode)
+            ->get();
+        $sed=[
+            'data'=>$data,
+            'desk'=>'Barang Sudah Fix',
+        ];
+        return view('backend.import_barang.import_tiktok',$sed);
+    }
+    public function importtiktok2()
+    {
+        $br=Barang::get();
+        foreach ($br as  $item) {
+            $kode[]=$item->kode_barang;
+        }
+        $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'valid','jenis'=>'tiktok'])
+            ->whereIn('skuindex',$kode)
+            ->get();
+        $sed=[
+            'data'=>$data,
+            'desk'=>'Barang Sudah Fix',
+        ];
+        return view('backend.import_barang.import_tiktok_2',$sed);
+    }
+    public function datatiktok($jn)
+    {
+        $sku=[];
+        $skuindex=[];
+        $bar=[];
+        $varian=[];
+        $admin=Auth::user()->name;
+        $br=Barang::get();
+         foreach ($br as  $item) {
+             $kode[]=$item->kode_barang;
+         }
+        if($jn=="Sudah-Lengkap"){
+            $keb=BarangKey::get();
+            foreach ($keb as $key => $val) {
+                $sku[]=$val->sku;
+                $skuindex[]=$val->skuindex;
+                $bar[]=$val->barang;
+                $varian[]=$val->varian;
+            }
+            $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'tiktok'])
+                // ->whereIn('varian',$varian)
+                // ->orWhereIn('barang',$bar)
+                ->whereExists(function($query){
+                    $query->select(DB::raw(1))
+                    ->from('barangkey')
+                    ->whereColumn('barangkey.varian','temp_import.varian')
+                    ->whereColumn('barangkey.key_barang','temp_import.barang');
+                })
+                ->where('admin',$admin)
+                ->get();
+            // $ktg="Lengkap";
+        }else{
+            $data=temp_import::where(['sts_kirim'=>'belum','sts_valid'=>'belum','jenis'=>'tiktok'])
+            ->whereNotExists(function($query){
+                $query->select(DB::raw(1))
+                ->from('barangkey')
+                ->whereColumn('barangkey.varian','temp_import.varian')
+                ->whereColumn('barangkey.key_barang','temp_import.barang');
+            })
+            ->where('admin',$admin)
+            ->get();
+            // $$ktg="NonLengkap";
+        }
+        $sed=[
+            'data'=>$data,
+            'desk'=>'Barang Sudah Fix',
+            'jn'=>$jn,
+        ];
+        return view('backend.import_barang.data_tiktok',$sed);
+    }
+    public function actimporttiktok(Request $request)
+    {
+        if($request->hasFile('file')){
+            $import=Excel::import(new TiktokImport(), request()->file('file'));
+            // delete file
+            // File::delete($pathi,$nama_file);
+            if($import){
+                return redirect()->route('im.tiktok')->with('status','Data Berhasil DiImport');
+            }else{
+                return redirect()->route('im.tiktok')->with('status','Data Gagal DiImport');
+            }
+        }
+
+    }
+    public function actimporttiktok2(Request $request)
+    {
+        if($request->hasFile('file')){
+            $import=Excel::import(new TiktokImport2(), request()->file('file'));
+            // delete file
+            // File::delete($pathi,$nama_file);
+            if($import){
+                return redirect()->route('im.tiktok2')->with('status','Data Berhasil DiImport');
+            }else{
+                return redirect()->route('im.tiktok2')->with('status','Data Gagal DiImport');
+            }
+        }
+
+    }
+    public function acctiktok(Request $request)
+    {
+        $jns=$request->jns;
+        $ids=$request->ids;
+        $arr=explode(',',$ids);
+        $tglk=date('Y-m-d');
+
+        if($jns=="fix"){
+            // // update stts kirim
+
+            for($i=0;$i<count($arr);$i++){
+                // get data barang_temp
+                $dtr=temp_import::where('id',$arr[$i])->first();
+               // get barang key
+            $bkey=BarangKey::where([
+                // 'sku'=>$dtr->sku,
+                // 'skuinduk'=>$dtr->skuindex,
+                'varian'=>$dtr->varian,
+                'key_barang'=>$dtr->barang,
+                ])
+                ->first();
+
+            $data[]=[
+                'noresi'=>$dtr->noresi,
+                'nopesan'=>$dtr->nopesan,
+                'kurir'=>$dtr->kurir,
+                'varian'=>$dtr->varian,
+                'sku'=>$dtr->sku,
+                'skuindex'=>$bkey->kode_barang,
+                'barang'=>$dtr->barang,
+                'tgl'=>$tglk,
+                'jumlah'=>$dtr->jumlah,
+                'harga'=>$dtr->harga,
+                'total'=>$dtr->total,
+                'admin'=>$dtr->admin,
+                'jenis'=>$dtr->jenis,
+            ];
+            // kurangi stok
+            $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
+            }
+            //  validasi cek sudah input
+
+            $in=DB::table('barang_trx')->insert($data);
+            if($in){
+                $kr=temp_import::whereIn('id',$arr)->update([
+                    'sts_kirim'=>'sudah',
+                    'sts_valid'=>'valid'
+                ]);
+                // update Stok
+
+                $print=[
+                    'sts'=>'1',
+                    'msg'=>'Berhasil Disimpan'
+                ];
+            }else{
+                $print=[
+                    'sts'=>'0',
+                    'msg'=>'Gagal Disimpan'
+                ];
+            }
+            return response()->json($print);
+        }elseif($jns=="keyword"){
+
+            for($i=0;$i<count($arr);$i++){
+
+                // get data barang_temp
+                $dtr=temp_import::where('id',$arr[$i])->first();
+                // get barang key
+                $bkey=BarangKey::where([
+                    // 'sku'=>$dtr->sku,
+                    // 'skuinduk'=>$dtr->skuindex,
+                    'key_barang'=>$dtr->barang,
+                    ])
+                    ->first();
+                // dd($bkey->kode_barang);
+                $data[]=[
+                    'noresi'=>$dtr->noresi,
+                    'nopesan'=>$dtr->nopesan,
+                    'kurir'=>$dtr->kurir,
+                    'varian'=>$dtr->varian,
+                    'sku'=>$dtr->sku,
+                    'skuindex'=>$bkey->kode_barang,
+                    'barang'=>$dtr->barang,
+                    'tgl'=>$tglk,
+                    'jumlah'=>$dtr->jumlah,
+                    'harga'=>$dtr->harga,
+                    'total'=>$dtr->total,
+                    'admin'=>$dtr->admin,
+                    'jenis'=>$dtr->jenis,
+                ];
+                // kurangi stok
+                $upstk=DB::update("Update barang set stok=stok - ". $dtr->jumlah ." where kode_barang = '". $bkey->kode_barang ."'");
+            }
+            $in=DB::table('barang_trx')->insert($data);
+            if($in){
+                $kr=temp_import::whereIn('id',$arr)->update([
+                    'sts_kirim'=>'sudah',
+                    'sts_valid'=>'valid'
+                ]);
+                // update Stok
+
+                $print=[
+                    'sts'=>'1',
+                    'msg'=>'Berhasil Disimpan'
+                ];
+            }else{
+                $print=[
+                    'sts'=>'0',
+                    'msg'=>'Gagal Disimpan'
+                ];
+            }
+            return response()->json($print);
+        }
+    }
+    public function exportNonStokTK($pram)
+    {
+        if ($pram=="Non-Stok") {
+            $namafile = "Data_Barang_Tiktok_non-stok.xls";
+            return Excel::download(new TempExportSp(), $namafile);
+        }else{
+            $namafile = "Data_Barang_Tiktok_non-Lengkap.xls";
+            return Excel::download(new TempExportSp_Non_Lengkap(), $namafile);
+        }
+    }
 
 
     // barang non lengkap====================================================================================
@@ -684,7 +920,6 @@ class TrxController extends Controller
     }
     public function scData($jn,$tg1,$tg2)
     {
-
         $admin=Auth::user()->name;
         $users=User::select(DB::raw('name'))->get();
         $tgl=date('Y-m-d');
@@ -696,12 +931,12 @@ class TrxController extends Controller
             }elseif($jn=="batal"){
                 $data=model_barang_scan::where(['stts'=>'batal'])->whereBetween('tgl',[$tg1,$tg2])->orderBy('id','DESC')->get();
             }elseif($jn=="pending"){
-                $temp=DB::table('temp_import')->get();
-                $resi=[];
-                foreach($temp as $gl){
-                    $resi[]=$gl->noresi;
-                }
-                $data=model_barang_scan::whereBetween('tgl',[$tg1,$tg2])->whereIn('noresi',$resi)->get();
+                $data=DB::table('temp_import')->where('sts_kirim','belum')->get();
+            //     $resi=[];
+            //     foreach($temp as $gl){
+            //         $resi[]=$gl->noresi;
+            //     }
+            //     $data=model_barang_scan::whereBetween('tgl',[$tg1,$tg2])->whereIn('noresi',$resi)->get();
             }
 
             $print=[
@@ -718,12 +953,12 @@ class TrxController extends Controller
             }elseif($jn=="batal"){
                 $data=model_barang_scan::where(['stts'=>'batal'])->whereBetween('tgl',[$tg1,$tg2])->where('admin',$admin)->orderBy('id','DESC')->get();
             }elseif($jn=="pending"){
-                $temp=DB::table('barang_scan')->get();
-                $resi=[];
-                foreach($temp as $gl){
-                    $resi[]=$gl->noresi;
-                }
-                $data=temp_import::whereBetween('tgl',[$tg1,$tg2])->where(['admin'=>$admin])->whereNotIn('noresi',$resi)->get();
+                $data=DB::table('temp_import')->where('sts_kirim','belum')->get();
+                // $resi=[];
+                // foreach($temp as $gl){
+                //     $resi[]=$gl->noresi;
+                // }
+                // $data=temp_import::whereBetween('tgl',[$tg1,$tg2])->where(['admin'=>$admin])->whereNotIn('noresi',$resi)->get();
             }
 
             $print=[
@@ -788,7 +1023,7 @@ class TrxController extends Controller
             }else{
                 // cek scan per admin
                 if($mda->admin==$admin){
-                    $data=temp_import::where('noresi',$nresi)->get();
+                    $data=temp_import::where('noresi',$nresi)->take(1)->get();
                     foreach($data as $item){
                         $dt[]=[
                             'noresi'=>$item->noresi,
@@ -796,6 +1031,7 @@ class TrxController extends Controller
                             'kurir'=>$item->kurir,
                             'tgl'=>date('Y-m-d'),
                             'jam'=>date('H:i:s'),
+                            'tgl_scan'=>date('Y-m-d H:i:s'),
                             'skuinduk'=>$item->skuindex,
                             'sku'=>$item->sku,
                             'barang'=>$item->barang,
@@ -834,6 +1070,11 @@ class TrxController extends Controller
     {
         $btl=model_barang_scan::where('noresi',$noresi)->update([
             'stts'=>'batal',
+            'tgl_batal'=>date('Y-m-d H:i:s')
+
+        ]);
+        barang_trx::where('noresi',$noresi)->update([
+            'stts'=>'batal',
         ]);
         if($btl){
             $print=[
@@ -844,6 +1085,28 @@ class TrxController extends Controller
             $print=[
                 'sts'=>'0',
                 'msg'=>'Data Gagal Dibatalkan',
+            ];
+        }
+        return response()->json($print);
+    }
+    public function returscData($noresi)
+    {
+        $btl=model_barang_scan::where('noresi',$noresi)->update([
+            'stts'=>'retur',
+            'tgl_retur'=>date('Y-m-d H:i:s')
+        ]);
+        // barang_trx::where('noresi',$noresi)->update([
+        //     'stts'=>'batal',
+        // ]);
+        if($btl){
+            $print=[
+                'sts'=>'1',
+                'msg'=>'Data Berhasil Diretur',
+            ];
+        }else{
+            $print=[
+                'sts'=>'0',
+                'msg'=>'Data Gagal Diretur',
             ];
         }
         return response()->json($print);
@@ -982,5 +1245,111 @@ class TrxController extends Controller
             ];
         }
         return response()->json($print);
+    }
+    function dataBarangScan($jenis,$tgl1,$tgl2) {
+        $admin=Auth::user()->name;
+        if($jenis=="pending"){    
+            $data=DB::table('temp_import')->where('admin',$admin)->whereBetween('tgl',[$tgl1,$tgl2])->where('sts_kirim','belum')->get();
+        }else if($jenis=="belum"){
+            // $data=model_barang_scan::where('stts','!=','batal')->whereBetween('tgl',[$tgl1,$tgl2])->where('admin',$admin)->orderBy('id','DESC')->get();
+            $data=DB::table('temp_import')->where('admin',$admin)->where('sts_kirim','!=','batal')->whereBetween('tgl',[$tgl1,$tgl2])->orderBy('id','DESC')->get();
+        }
+        else{
+            $data=model_barang_scan::select(DB::raw('tgl,tgl_scan,tgl_batal,tgl_retur,admin,stts,nopesan,noresi '))
+            ->where('admin',$admin);
+            // $data=model_barang_scan::where(['stts'=>$jenis]);
+                $tgls1=$tgl1.' 00:00:00';
+                $tgls2=$tgl2.' 23:59:59';
+            if($jenis=="terkirim"){
+                $data->where(['stts'=>$jenis])
+                ->whereBetween('tgl',[$tgl1,$tgl2]);
+            }
+            else if($jenis=="batal"){
+                $data->where(['stts'=>$jenis])
+                ->whereBetween('tgl_batal',[$tgls1,$tgls2]);
+            }
+            else if($jenis=="retur"){
+                $data->where(['stts'=>$jenis])
+                ->whereBetween('tgl_retur',[$tgls1,$tgls2]);
+            }
+            $data->orderBy('id','DESC')->get();
+            // $data->groupBy('noresi')->get();
+        }
+        return FacadesDataTables::of($data)->make(true);
+    }
+    function hitungByExp($tgl1,$tgl2) {
+        $JNT=['JP','JX'];
+        $SPE=['SPXID'];
+        $JNE=['JT','CM'];
+        $SCP=['00'];
+        $NJA=['NLIDAP'];
+        $admin=Auth::user()->name;
+        $tgl1=$tgl1.' 00:00:00';
+        $tgl2=$tgl2.' 23:59:59';
+        $cjnt = model_barang_scan::Where(function ($query) use($JNT) {
+             for ($i = 0; $i < count($JNT); $i++){
+                $query->orwhere('noresi', 'like',  '%' . $JNT[$i] .'%');
+             }      
+        })
+        ->whereBetween('tgl_scan',[$tgl1,$tgl2])
+        ->where('admin',$admin)
+        ->where('tgl_batal',null)
+        ->where('tgl_retur',null)
+        // ->groupBy('noresi')
+        ->count();
+       
+        $cspe= model_barang_scan::Where(function ($query) use($SPE) {
+             for ($i = 0; $i < count($SPE); $i++){
+                $query->orwhere('noresi', 'like',  '%' . $SPE[$i] .'%');
+             }      
+        })
+        ->whereBetween('tgl_scan',[$tgl1,$tgl2])
+        ->where('admin',$admin)
+        ->where('tgl_batal',null)
+        ->where('tgl_retur',null)
+        // ->groupBy('noresi')
+        ->count();
+        $cjne = model_barang_scan::Where(function ($query) use($JNE) {
+             for ($i = 0; $i < count($JNE); $i++){
+                $query->orwhere('noresi', 'like',  '%' . $JNE[$i] .'%');
+             }      
+        })
+        ->whereBetween('tgl_scan',[$tgl1,$tgl2])
+        ->where('admin',$admin)
+        ->where('tgl_batal',null)
+        ->where('tgl_retur',null)
+        // ->groupBy('noresi')
+        ->count();
+        $cscp = model_barang_scan::Where(function ($query) use($SCP) {
+             for ($i = 0; $i < count($SCP); $i++){
+                $query->orwhere('noresi', 'like',  $SCP[$i] .'%');
+             }      
+        })
+        ->whereBetween('tgl_scan',[$tgl1,$tgl2])
+        ->where('admin',$admin)
+        ->where('tgl_batal',null)
+        ->where('tgl_retur',null)
+        // ->groupBy('noresi')
+        ->count();
+        $cnja = model_barang_scan::Where(function ($query) use($NJA) {
+            for ($i = 0; $i < count($NJA); $i++){
+               $query->orwhere('noresi', 'like',  '%' . $NJA[$i] .'%');
+            }      
+       })
+       ->whereBetween('tgl_scan',[$tgl1,$tgl2])
+       ->where('admin',$admin)
+       ->where('tgl_batal',null)
+       ->where('tgl_retur',null)
+    //    ->groupBy('noresi')
+       ->count();
+
+       $print=[
+        'JNT'=>$cjnt,
+        'SHOPEE'=>$cspe,
+        'JNE'=>$cjne,
+        'SICEPAT'=>$cscp,
+        'NINJA'=>$cnja,
+       ];
+       return response()->json($print);
     }
 }
